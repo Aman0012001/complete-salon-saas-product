@@ -113,20 +113,19 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AnimatePresence mode="wait">
-        {isInitialLoading && <SiteLoader key="loader" />}
-      </AnimatePresence>
-      <AuthProvider>
-        <NewsletterPopup />
-        <SuperAdminProvider>
-
-          <SalonProvider>
-            <CartProvider>
-              <TooltipProvider>
-                <Toaster />
-                <Sonner />
-                <PWAInstallPrompt />
-                <BrowserRouter>
+      <BrowserRouter>
+        <AnimatePresence mode="wait">
+          {isInitialLoading && <SiteLoader key="loader" />}
+        </AnimatePresence>
+        <AuthProvider>
+          <NewsletterPopup />
+          <SuperAdminProvider>
+            <SalonProvider>
+              <CartProvider>
+                <TooltipProvider>
+                  <Toaster />
+                  <Sonner />
+                  <PWAInstallPrompt />
                   <ScrollToTop />
                   <Routes>
                     <Route path="/" element={<AllServicesSimple />} />
@@ -420,12 +419,12 @@ const App = () => {
                     <Route path="/cookies" element={<CookiePolicy />} />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
-                </BrowserRouter>
-              </TooltipProvider>
-            </CartProvider>
-          </SalonProvider>
-        </SuperAdminProvider>
-      </AuthProvider>
+                </TooltipProvider>
+              </CartProvider>
+            </SalonProvider>
+          </SuperAdminProvider>
+        </AuthProvider>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 };

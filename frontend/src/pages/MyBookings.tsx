@@ -14,6 +14,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, Di
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import Footer from "@/components/Footer";
+import { getImageUrl } from "@/utils/imageUrl";
 
 
 interface Booking {
@@ -31,6 +32,7 @@ interface Booking {
   salon_address: string;
   salon_city: string;
   category: string;
+  image_url?: string;
 }
 
 const MyBookings = () => {
@@ -69,63 +71,6 @@ const MyBookings = () => {
       }
     }
     setReviewedBookings(reviewed);
-  };
-
-  const getServiceImage = (category: string, serviceName?: string) => {
-    const cat = (category || '').trim().toLowerCase();
-    const name = (serviceName || '').trim().toLowerCase();
-    const combined = `${cat} ${name}`;
-
-    if (combined.includes('spa')) {
-      const spaImages: Record<string, string> = {
-        'hot stone': 'https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop',
-        'aromatherapy': 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&auto=format&fit=crop',
-        'swedish': 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800&auto=format&fit=crop',
-        'deep tissue': 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop',
-        'thai': 'https://images.unsplash.com/photo-1596178060671-7a80dc8059ea?w=800&auto=format&fit=crop',
-        'body wrap': 'https://images.unsplash.com/photo-1570172234445-09a5ad5af4ee?w=800&auto=format&fit=crop',
-        'reflexology': 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=800&auto=format&fit=crop',
-      };
-      for (const [key, img] of Object.entries(spaImages)) {
-        if (combined.includes(key)) return img;
-      }
-      return 'https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop';
-    }
-
-    const keywordMap: Array<{ keywords: string[], image: string }> = [
-      {
-        keywords: ['hair', 'cut', 'style', 'color', 'highlight', 'balayage', 'barber'],
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['nail', 'manicure', 'pedicure', 'gel', 'acrylic', 'polish'],
-        image: 'https://images.unsplash.com/photo-1604654894610-df4906687103?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['facial', 'face', 'skincare', 'cleanse', 'peel'],
-        image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc206e?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['makeup', 'bridal', 'wedding', 'cosmetic'],
-        image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['massage', 'body', 'therapy', 'rub'],
-        image: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['wax', 'thread', 'laser', 'epilat'],
-        image: 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&auto=format&fit=crop'
-      }
-    ];
-
-    for (const mapping of keywordMap) {
-      if (mapping.keywords.some(k => combined.includes(k))) {
-        return mapping.image;
-      }
-    }
-
-    return 'https://images.unsplash.com/photo-1521590832896-76c0f2956662?w=800&auto=format&fit=crop';
   };
 
   const fetchBookings = async () => {
@@ -282,7 +227,7 @@ const MyBookings = () => {
                         <div className="flex items-start gap-5 flex-grow min-w-0">
                           <div className="w-16 h-16 md:w-20 md:h-20 bg-slate-100 rounded-3xl flex-shrink-0 relative overflow-hidden group-hover:scale-105 transition-transform duration-500">
                             <img
-                              src={getServiceImage(booking.category, booking.service_name)}
+                              src={getImageUrl(booking.image_url, 'service', booking.id)}
                               alt={booking.service_name}
                               className="w-full h-full object-cover"
                             />

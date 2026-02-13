@@ -114,9 +114,9 @@ export default function ProductDetails() {
                                     className="w-full h-full object-contain"
                                 />
 
-                                <button className="absolute top-8 right-8 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-shadow text-[#1A1A1A]">
+                                {/* <button className="absolute top-8 right-8 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-shadow text-[#1A1A1A]">
                                     <Search className="w-5 h-5" />
-                                </button>
+                                </button> */}
                             </div>
                         </div>
 

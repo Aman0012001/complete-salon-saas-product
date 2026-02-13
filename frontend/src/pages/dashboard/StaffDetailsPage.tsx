@@ -18,7 +18,10 @@ import {
     ArrowLeft,
     Eye,
     EyeOff,
-    Trash2
+    Trash2,
+    Check,
+    X,
+    Info
 } from "lucide-react";
 import {
     AlertDialog,
@@ -81,6 +84,10 @@ export default function StaffDetailsPage() {
     });
     const [allServices, setAllServices] = useState<any[]>([]);
     const [showPassword, setShowPassword] = useState(false);
+
+    const [selectedLeave, setSelectedLeave] = useState<any>(null);
+    const [isDetailsDialogOpen, setIsDetailsDialogOpen] = useState(false);
+    const [isStatusUpdating, setIsStatusUpdating] = useState(false);
 
     const fetchProfileData = useCallback(async () => {
         if (!id) return;
@@ -151,6 +158,26 @@ export default function StaffDetailsPage() {
             assigned_services: staff.assigned_services || []
         });
         setIsEditDialogOpen(true);
+    };
+
+    const handleLeaveStatusUpdate = async (leaveId: string, status: string) => {
+        setIsStatusUpdating(true);
+        try {
+            await api.staff.updateLeaveStatus(leaveId, status);
+            toast({
+                title: "Status Synchronized",
+                description: `The absence request has been marked as ${status}.`
+            });
+            fetchProfileData();
+        } catch (error: any) {
+            toast({
+                title: "Sync Failed",
+                description: error.message || "Failed to update leave status.",
+                variant: "destructive"
+            });
+        } finally {
+            setIsStatusUpdating(false);
+        }
     };
 
     const handleEditSubmit = async (e: React.FormEvent) => {
@@ -688,51 +715,106 @@ export default function StaffDetailsPage() {
                                                     <h4 className="text-2xl font-black text-slate-900 tracking-tight uppercase">Absence Dossier</h4>
                                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Registry of time-off allocations and pending requests.</p>
                                                 </div>
-                                                {/* <Button className="h-14 px-10 bg-slate-900 hover:bg-slate-800 text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-2xl transition-all active:scale-95 flex items-center gap-4">
-                                                    <Plus className="w-5 h-5" /> Initialize New Lock-off
-                                                </Button> */}
                                             </div>
 
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                            <motion.div
+                                                initial={{ opacity: 0, scale: 0.95 }}
+                                                animate={{ opacity: 1, scale: 1 }}
+                                                transition={{ duration: 0.4 }}
+                                                className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+                                            >
                                                 {leaves.map((leave, i) => (
                                                     <motion.div
-                                                        key={i}
-                                                        initial={{ opacity: 0, scale: 0.9 }}
-                                                        animate={{ opacity: 1, scale: 1 }}
+                                                        key={leave.id || i}
+                                                        initial={{ opacity: 0, y: 20 }}
+                                                        animate={{ opacity: 1, y: 0 }}
                                                         transition={{ delay: i * 0.1 }}
+                                                        className="group relative"
                                                     >
-                                                        <Card className="rounded-[2.5rem] border-none shadow-sm bg-white overflow-hidden group hover:shadow-2xl transition-all duration-300">
-                                                            <div className={cn("h-3 w-full", leave.status === 'approved' ? 'bg-emerald-500' : 'bg-amber-500')} />
-                                                            <CardContent className="p-10">
-                                                                <div className="flex items-center justify-between mb-8">
-                                                                    <Badge className={cn("rounded-full px-5 py-1.5 text-[9px] font-black uppercase tracking-widest border-none shadow-sm", getLeaveBadgeColor(leave.status))}>
+                                                        <Card className="rounded-[2.5rem] border-none shadow-sm bg-white overflow-hidden hover:shadow-2xl hover:shadow-slate-200/50 transition-all duration-500 group-hover:-translate-y-2 h-full border border-slate-100/50">
+                                                            <div className={cn(
+                                                                "absolute top-0 left-0 w-full h-1.5 transition-all duration-500",
+                                                                leave.status === 'approved' ? 'bg-emerald-500' :
+                                                                    leave.status === 'pending' ? 'bg-amber-500' : 'bg-rose-500'
+                                                            )} />
+
+                                                            <CardContent className="p-8 space-y-8 flex flex-col h-full relative">
+                                                                <div className="flex items-center justify-between">
+                                                                    <Badge className={cn(
+                                                                        "rounded-full px-4 py-1.5 text-[8px] font-black uppercase tracking-widest border-none shadow-sm",
+                                                                        getLeaveBadgeColor(leave.status)
+                                                                    )}>
                                                                         {leave.status}
                                                                     </Badge>
-                                                                    <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{leave.leave_type}</span>
-                                                                </div>
-
-                                                                <div className="flex items-center justify-between p-6 bg-slate-50 rounded-[2rem] border border-slate-100 mb-8">
-                                                                    <div className="text-center">
-                                                                        <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-2">Departure</p>
-                                                                        <p className="text-sm font-black text-slate-900">{format(new Date(leave.start_date), "MMM dd, yy")}</p>
-                                                                    </div>
-                                                                    <ArrowRightLeft className="w-6 h-6 text-slate-200" />
-                                                                    <div className="text-center">
-                                                                        <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest mb-2">Return</p>
-                                                                        <p className="text-sm font-black text-slate-900">{format(new Date(leave.end_date), "MMM dd, yy")}</p>
+                                                                    <div className="flex items-center gap-3">
+                                                                        <div className="w-8 h-8 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-100/50">
+                                                                            <Calendar className="w-4 h-4 text-slate-400" />
+                                                                        </div>
+                                                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{leave.leave_type}</span>
                                                                     </div>
                                                                 </div>
 
-                                                                <div className="space-y-3">
-                                                                    <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Reason Narrative</p>
-                                                                    <p className="text-xs font-bold text-slate-600 leading-relaxed bg-slate-50/50 p-4 rounded-2xl italic border border-slate-100/50">
-                                                                        "{leave.reason || "Operational narrative not provided for this specific deployment pause."}"
-                                                                    </p>
+                                                                <div className="flex items-center justify-around py-8 bg-slate-50/30 rounded-[2.5rem] border border-slate-100/50 relative overflow-hidden">
+                                                                    <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-transparent pointer-events-none" />
+                                                                    <div className="text-center relative z-10">
+                                                                        <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mb-2">Departure</p>
+                                                                        <p className="text-base font-black text-slate-900 tracking-tight">{format(new Date(leave.start_date), "MMM dd, yy")}</p>
+                                                                    </div>
+
+                                                                    <div className="relative z-10">
+                                                                        <div className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-xl shadow-slate-200/50 border border-slate-50 group-hover:scale-110 transition-transform duration-500">
+                                                                            <ArrowRightLeft className="w-5 h-5 text-[#F2A93B]" />
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div className="text-center relative z-10">
+                                                                        <p className="text-[9px] font-black text-slate-300 uppercase tracking-[0.2em] mb-2">Return</p>
+                                                                        <p className="text-base font-black text-slate-900 tracking-tight">{format(new Date(leave.end_date), "MMM dd, yy")}</p>
+                                                                    </div>
                                                                 </div>
 
-                                                                <div className="mt-8 flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                    <Button variant="ghost" className="flex-1 h-10 text-[9px] font-black uppercase text-slate-400 hover:text-rose-500 rounded-xl">Revoke</Button>
-                                                                    <Button variant="ghost" className="flex-1 h-10 text-[9px] font-black uppercase text-slate-400 hover:text-slate-900 rounded-xl">Details</Button>
+                                                                <div className="space-y-4 flex-grow">
+                                                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] pl-1">Deployment Abstract</p>
+                                                                    <div className="relative bg-slate-50/50 p-6 rounded-[1.5rem] border border-slate-100/30 group-hover:bg-slate-50 transition-colors duration-500">
+                                                                        <div className="absolute left-0 top-6 w-1 h-8 bg-[#F2A93B] rounded-r-full" />
+                                                                        <p className="text-[12px] font-bold text-slate-600 leading-relaxed italic line-clamp-3 pl-2">
+                                                                            "{leave.reason || "Operational narrative not provided for this specific deployment pause."}"
+                                                                        </p>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div className="pt-2 flex items-center gap-3">
+                                                                    {leave.status === 'pending' && isOwner && (
+                                                                        <Button
+                                                                            onClick={() => handleLeaveStatusUpdate(leave.id, 'approved')}
+                                                                            disabled={isStatusUpdating}
+                                                                            className="h-14 flex-[2] bg-slate-900 hover:bg-black text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-slate-900/20 transition-all hover:scale-[1.02] active:scale-95 group-hover:shadow-[#F2A93B]/10"
+                                                                        >
+                                                                            <Check className="w-4 h-4 mr-2" /> Approve
+                                                                        </Button>
+                                                                    )}
+
+                                                                    {(leave.status === 'pending' || leave.status === 'approved') && isOwner && (
+                                                                        <Button
+                                                                            onClick={() => handleLeaveStatusUpdate(leave.id, 'revoked')}
+                                                                            disabled={isStatusUpdating}
+                                                                            variant="ghost"
+                                                                            className="h-14 flex-1 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-rose-500 hover:bg-rose-50/50 transition-all"
+                                                                        >
+                                                                            <X className="w-4 h-4 mr-2" /> Revoke
+                                                                        </Button>
+                                                                    )}
+
+                                                                    <Button
+                                                                        onClick={() => {
+                                                                            setSelectedLeave(leave);
+                                                                            setIsDetailsDialogOpen(true);
+                                                                        }}
+                                                                        variant="ghost"
+                                                                        className="h-14 flex-1 rounded-2xl text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900 hover:bg-slate-100 border border-transparent hover:border-slate-200 transition-all"
+                                                                    >
+                                                                        <Info className="w-4 h-4 mr-2" /> Details
+                                                                    </Button>
                                                                 </div>
                                                             </CardContent>
                                                         </Card>
@@ -740,20 +822,21 @@ export default function StaffDetailsPage() {
                                                 ))}
 
                                                 {leaves.length === 0 && (
-                                                    <div className="col-span-full py-32 text-center space-y-6 rounded-[3rem] border-4 border-dashed border-slate-100 bg-white/50">
-                                                        <div className="w-20 h-20 bg-slate-50 rounded-[2rem] flex items-center justify-center mx-auto shadow-inner">
+                                                    <motion.div
+                                                        initial={{ opacity: 0, y: 40 }}
+                                                        animate={{ opacity: 1, y: 0 }}
+                                                        className="col-span-full py-32 text-center space-y-6 rounded-[3rem] border-4 border-dashed border-slate-100 bg-white/50 backdrop-blur-sm"
+                                                    >
+                                                        <div className="w-24 h-24 bg-white/80 rounded-[2.5rem] flex items-center justify-center mx-auto shadow-2xl shadow-slate-200/50 border border-white">
                                                             <Calendar className="w-10 h-10 text-slate-200" />
                                                         </div>
                                                         <div>
-                                                            <p className="text-lg font-black text-slate-900 uppercase tracking-tight">Zero Registry</p>
-                                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">No absence deployments synchronized for this staff operative.</p>
+                                                            <h5 className="text-xl font-black text-slate-900 uppercase tracking-tight">Zero Registry</h5>
+                                                            <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">No absence deployments synchronized for this staff operative.</p>
                                                         </div>
-                                                        {/* <Button variant="outline" className="h-12 px-8 border-slate-200 text-slate-600 font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-white transition-all">
-                                                            Pre-authorize Absences
-                                                        </Button> */}
-                                                    </div>
+                                                    </motion.div>
                                                 )}
-                                            </div>
+                                            </motion.div>
                                         </TabsContent>
 
                                         <TabsContent value="customers" className="m-0 animate-in fade-in slide-in-from-bottom-2 duration-500">
@@ -1011,6 +1094,104 @@ export default function StaffDetailsPage() {
                             </Button>
                         </DialogFooter>
                     </form>
+                </DialogContent>
+            </Dialog>
+            {/* Absence Details Dialog */}
+            <Dialog open={isDetailsDialogOpen} onOpenChange={setIsDetailsDialogOpen}>
+                <DialogContent className="max-w-2xl rounded-[3rem] border-none shadow-2xl p-0 bg-white overflow-hidden">
+                    {selectedLeave && (
+                        <div className="flex flex-col h-full">
+                            <div className="p-10 pb-8 bg-slate-900 relative h-48 flex items-end">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-[#F2A93B]/10 blur-3xl rounded-full -mr-20 -mt-20" />
+                                <div className="absolute top-8 right-8">
+                                    <div className="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-xl flex items-center justify-center border border-white/10 shadow-2xl">
+                                        <Calendar className="w-7 h-7 text-[#F2A93B]" />
+                                    </div>
+                                </div>
+                                <div className="relative z-10 w-full">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.3em]">Operational Pause Analysis</span>
+                                    </div>
+                                    <DialogTitle className="text-4xl font-black text-white tracking-tight uppercase">Absence Dossier</DialogTitle>
+                                    <DialogDescription className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-2">Registry of time-off allocations and node metadata.</DialogDescription>
+                                </div>
+                            </div>
+
+                            <div className="p-10 space-y-10">
+                                <div className="grid grid-cols-2 gap-8">
+                                    <div className="space-y-4">
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Temporal Window</p>
+                                        </div>
+                                        <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 space-y-6 relative overflow-hidden group">
+                                            <div className="absolute inset-0 bg-gradient-to-br from-white to-transparent opacity-50" />
+                                            <div className="flex justify-between items-center relative z-10">
+                                                <span className="text-[11px] font-black text-slate-400 uppercase">Departure</span>
+                                                <span className="text-sm font-black text-slate-900 uppercase tracking-tight">{selectedLeave.start_date ? format(new Date(selectedLeave.start_date), "MMM dd, yyyy") : 'N/A'}</span>
+                                            </div>
+                                            <div className="h-px bg-slate-200 relative z-10">
+                                                <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border border-slate-100 flex items-center justify-center shadow-sm">
+                                                    <ArrowRightLeft className="w-3 h-3 text-[#F2A93B]" />
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between items-center relative z-10">
+                                                <span className="text-[11px] font-black text-slate-400 uppercase">Return</span>
+                                                <span className="text-sm font-black text-slate-900 uppercase tracking-tight">{selectedLeave.end_date ? format(new Date(selectedLeave.end_date), "MMM dd, yyyy") : 'N/A'}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="space-y-4">
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Node Metadata</p>
+                                        <div className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 space-y-8 h-full">
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[11px] font-black text-slate-400 uppercase">Type</span>
+                                                <Badge variant="outline" className="rounded-xl border-slate-200 text-[10px] font-black uppercase text-slate-900 px-4 py-1.5 bg-white shadow-sm">{selectedLeave.leave_type}</Badge>
+                                            </div>
+                                            <div className="flex justify-between items-center">
+                                                <span className="text-[11px] font-black text-slate-400 uppercase">Current State</span>
+                                                <Badge className={cn("rounded-xl border-none text-[10px] font-black uppercase px-4 py-1.5 shadow-sm", getLeaveBadgeColor(selectedLeave.status))}>{selectedLeave.status}</Badge>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Reason Narrative</p>
+                                    <div className="p-10 rounded-[2.5rem] bg-slate-900 text-white min-h-32 text-sm font-bold leading-relaxed shadow-3xl shadow-slate-900/40 italic relative overflow-hidden flex items-center group">
+                                        <div className="absolute bottom-0 right-0 w-48 h-48 bg-[#F2A93B]/5 blur-3xl rounded-full -mb-24 -mr-24 group-hover:bg-[#F2A93B]/10 transition-colors duration-500" />
+                                        <div className="absolute left-0 top-0 w-1.5 h-full bg-[#F2A93B] opacity-50 group-hover:opacity-100 transition-opacity" />
+                                        <span className="relative z-10 pl-4 block text-slate-300">
+                                            "{selectedLeave.reason || "The operative has not provided a specific narrative for this deployment lock-off."}"
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <DialogFooter className="pt-4 gap-4">
+                                    <Button
+                                        variant="ghost"
+                                        onClick={() => setIsDetailsDialogOpen(false)}
+                                        className="h-16 flex-1 rounded-[1.5rem] font-black text-[11px] uppercase tracking-[0.2em] text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all border border-slate-100"
+                                    >
+                                        Close Dossier
+                                    </Button>
+                                    {isOwner && selectedLeave.status === 'pending' && (
+                                        <Button
+                                            onClick={() => {
+                                                handleLeaveStatusUpdate(selectedLeave.id, 'approved');
+                                                setIsDetailsDialogOpen(false);
+                                            }}
+                                            disabled={isStatusUpdating}
+                                            className="h-16 flex-1 bg-slate-900 hover:bg-black text-white font-black text-[11px] uppercase tracking-[0.2em] rounded-[1.5rem] shadow-2xl shadow-slate-900/20 transition-all hover:scale-[1.02]"
+                                        >
+                                            Approve Deployment Pause
+                                        </Button>
+                                    )}
+                                </DialogFooter>
+                            </div>
+                        </div>
+                    )}
                 </DialogContent>
             </Dialog>
         </ResponsiveDashboardLayout>

@@ -17,22 +17,19 @@ export const getImageUrl = (
     type: 'cover' | 'logo' | 'service' = 'cover',
     id: string = 'default'
 ): string => {
-    // Deterministic fallback based on ID
+    // Deterministic fallback based on ID - Simplified to high-quality salon placeholders
     const getFallback = () => {
         const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
 
         const coverFallbacks = [
-            "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=800&auto=format&fit=crop",
-            "https://images.unsplash.com/photo-1600948836101-f9ffda59d250?w=800&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=1200&auto=format&fit=crop&q=80",
+            "https://images.unsplash.com/photo-1562322140-8baeececf3df?w=1200&auto=format&fit=crop&q=80",
         ];
 
         const logoFallbacks = [
-            "https://images.unsplash.com/photo-1620331311520-246422ff8347?w=120&h=120&fit=crop",
-            "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=120&h=120&fit=crop",
-            "https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=120&h=120&fit=crop",
-            "https://images.unsplash.com/photo-1585747860715-2ba37e788b70?w=120&h=120&fit=crop",
+            "https://images.unsplash.com/photo-1633681926022-84c23e8cb2d6?w=200&h=200&fit=crop",
+            "https://images.unsplash.com/photo-1620331311520-246422ff8347?w=200&h=200&fit=crop",
         ];
 
         if (type === 'logo') return logoFallbacks[hash % logoFallbacks.length];
@@ -41,10 +38,19 @@ export const getImageUrl = (
 
     if (!path || path === 'placeholder.svg' || path === '/placeholder.svg') return getFallback();
 
-    // 1. If it's already a full absolute URL (e.g., from a CDN), return it as is
-    if (path.startsWith('http://') || path.startsWith('https://') || path.startsWith('data:')) {
+    // 1. If it's already a full absolute URL (e.g., from Cloudinary CDN)
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+        // Apply Cloudinary optimizations if it's a cloudinary URL
+        if (path.includes('cloudinary.com')) {
+            // Add automatic format and quality if not present
+            if (!path.includes('f_auto')) {
+                return path.replace('/upload/', '/upload/f_auto,q_auto,c_fill/');
+            }
+        }
         return path;
     }
+
+    if (path.startsWith('data:')) return path;
 
     // 2. Clean up leading slashes
     let cleanPath = path.startsWith('/') ? path.substring(1) : path;

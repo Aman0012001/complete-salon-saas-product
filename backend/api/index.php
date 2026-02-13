@@ -376,6 +376,9 @@ try {
         case 'coins':
             require_once __DIR__ . '/routes/coins.php';
             break;
+        case 'coupons':
+            require_once __DIR__ . '/routes/coupons.php';
+            break;
         default:
             sendResponse([
                 'error' => 'Route not found',

@@ -220,66 +220,6 @@ const AllServicesSimple = () => {
   };
 
 
-  const getServiceImage = (category: string, serviceName?: string) => {
-    const cat = (category || '').trim().toLowerCase();
-    const name = (serviceName || '').trim().toLowerCase();
-    const combined = `${cat} ${name}`;
-
-    // 1. Spa Special Handling (Specific keywords in name)
-    if (combined.includes('spa')) {
-      const spaImages: Record<string, string> = {
-        'hot stone': 'https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop',
-        'aromatherapy': 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&auto=format&fit=crop',
-        'swedish': 'https://images.unsplash.com/photo-1519823551278-64ac92734fb1?w=800&auto=format&fit=crop',
-        'deep tissue': 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=800&auto=format&fit=crop',
-        'thai': 'https://images.unsplash.com/photo-1596178060671-7a80dc8059ea?w=800&auto=format&fit=crop',
-        'body wrap': 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop',
-        'reflexology': 'https://images.unsplash.com/photo-1519824145371-296894a0daa9?w=800&auto=format&fit=crop',
-      };
-      for (const [key, img] of Object.entries(spaImages)) {
-        if (combined.includes(key)) return img;
-      }
-      return 'https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop';
-    }
-
-    // 2. Keyword based mapping for best match
-    const keywordMap: Array<{ keywords: string[], image: string }> = [
-      {
-        keywords: ['hair', 'cut', 'style', 'color', 'highlight', 'balayage', 'barber'],
-        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['nail', 'manicure', 'pedicure', 'gel', 'acrylic', 'polish'],
-        image: 'https://images.unsplash.com/photo-1604654894610-df4906687103?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['facial', 'face', 'skincare', 'cleanse', 'peel'],
-        image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc206e?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['makeup', 'bridal', 'wedding', 'cosmetic'],
-        image: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['massage', 'body', 'therapy', 'rub'],
-        image: 'https://images.unsplash.com/photo-1600334129128-685c5582fd35?w=800&auto=format&fit=crop'
-      },
-      {
-        keywords: ['wax', 'thread', 'laser', 'epilat'],
-        image: 'https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&auto=format&fit=crop'
-      }
-    ];
-
-    for (const mapping of keywordMap) {
-      if (mapping.keywords.some(k => combined.includes(k))) {
-        return mapping.image;
-      }
-    }
-
-    // 3. Absolute Fallback
-    return 'https://images.unsplash.com/photo-1521590832896-76c0f2956662?w=800&auto=format&fit=crop';
-  };
-
   return (
     <div className="min-h-screen bg-[#FDFCFB]">
       <Navbar />
@@ -393,12 +333,9 @@ const AllServicesSimple = () => {
                       >
                         <div className="relative h-48 overflow-hidden bg-slate-100">
                           <img
-                            src={service.image_url ? getImageUrl(service.image_url, 'service', service.id) : getServiceImage(service.category || 'Other', service.name)}
+                            src={getImageUrl(service.image_url, 'service', service.id)}
                             alt={service.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            onError={(e) => {
-                              e.currentTarget.src = getServiceImage(service.category || 'Other', service.name);
-                            }}
                           />
                           <div className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-md text-xs font-bold text-slate-900 shadow-sm">
                             RM {service.price}

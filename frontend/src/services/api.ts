@@ -589,6 +589,13 @@ export const staffProfilesAPI = {
         });
     },
 
+    async updateLeaveStatus(leaveId: string, status: string) {
+        return await fetchWithAuth(`/staff/leaves/${leaveId}`, {
+            method: 'PUT',
+            body: JSON.stringify({ status }),
+        });
+    },
+
     async checkIn(salonId: string) {
         return await fetchWithAuth('/staff/attendance/check-in', {
             method: 'POST',
@@ -621,7 +628,15 @@ export const staffProfilesAPI = {
     },
 
     async getAvailableSpecialists(params: { salon_id: string; service_id?: string; date?: string; time?: string }) {
-        const query = new URLSearchParams(params as any);
+        // Filter out null or undefined values
+        const filteredParams = Object.entries(params).reduce((acc, [key, value]) => {
+            if (value !== null && value !== undefined && value !== '') {
+                acc[key] = value;
+            }
+            return acc;
+        }, {} as any);
+
+        const query = new URLSearchParams(filteredParams);
         const data = await fetchWithAuth(`/staff/available-specialists?${query}`);
         return toArray(data, 'specialists');
     },
@@ -902,6 +917,9 @@ export const api = {
             method: 'POST',
             body: JSON.stringify({ salon_id: salonId, reward_id: rewardId }),
         }),
+    },
+    coupons: {
+        validate: (code: string) => fetchWithAuth(`/coupons/validate/${code}`),
     }
 };
 

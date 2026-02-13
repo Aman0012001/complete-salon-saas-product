@@ -1,5 +1,5 @@
 <?php
-// Staff routes
+// Staff routes (NEW TXT)
 
 // GET /api/staff?salon_id=xxx - Get salon staff members
 if ($method === 'GET' && empty($uriParts[1])) {
@@ -217,8 +217,41 @@ if ($method === 'POST' && empty($uriParts[1])) {
     }
 }
 
+// PUT /api/staff/leaves/:leave_id - Update leave status (approve/revoke)
+if ($method === 'PUT' && ($uriParts[1] ?? '') === 'leaves' && !empty($uriParts[2])) {
+    $leaveId = $uriParts[2];
+    $userData = protectRoute(['owner', 'manager']);
+    $data = getRequestBody();
+
+    if (empty($data['status'])) {
+        sendResponse(['error' => 'status is required'], 400);
+    }
+
+    $stmt = $db->prepare("SELECT salon_id FROM staff_leaves WHERE id = ?");
+    $stmt->execute([$leaveId]);
+    $leave = $stmt->fetch();
+
+    if (!$leave) {
+        sendResponse(['error' => 'Leave record not found'], 404);
+    }
+
+    // Verify user belongs to this salon
+    $stmt = $db->prepare("SELECT role FROM user_roles WHERE user_id = ? AND salon_id = ?");
+    $stmt->execute([$userData['user_id'], $leave['salon_id']]);
+    $userRole = $stmt->fetch();
+
+    if (!$userRole || !in_array($userRole['role'], ['owner', 'manager'])) {
+        sendResponse(['error' => 'Forbidden - You do not have management permissions for this salon'], 403);
+    }
+
+    $stmt = $db->prepare("UPDATE staff_leaves SET status = ? WHERE id = ?");
+    $stmt->execute([$data['status'], $leaveId]);
+
+    sendResponse(['message' => 'Leave status updated successfully']);
+}
+
 // PUT /api/staff/:id - Update staff member
-if ($method === 'PUT' && !empty($uriParts[1])) {
+if ($method === 'PUT' && !empty($uriParts[1]) && $uriParts[1] !== 'leaves') {
     $staffId = $uriParts[1];
 
     // Get staff record to find salon_id

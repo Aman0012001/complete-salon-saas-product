@@ -179,13 +179,13 @@ const BookAppointment = () => {
 
   useEffect(() => {
     const fetchAvailableStaff = async () => {
-      if (!salonId || !selectedDate || !selectedTime || (selectedServices.length === 0 && bookingType === 'service')) {
+      if (!salonId) {
         setAvailableStaff([]);
         return;
       }
       setLoadingStaff(true);
       try {
-        const dateStr = format(selectedDate, "yyyy-MM-dd");
+        const dateStr = selectedDate ? format(selectedDate, "yyyy-MM-dd") : undefined;
         const staff = await api.staff.getAvailableSpecialists({
           salon_id: salonId,
           service_id: selectedServices[0]?.id,
@@ -271,7 +271,9 @@ const BookAppointment = () => {
 
     setBooking(true);
     try {
-      const subtotal = calculateTotal();
+      const subtotal = calculateSubtotal();
+      const discount = appliedCoupon ? appliedCoupon.discount : 0;
+      const finalPrice = Math.max(0, subtotal - discount);
 
       const bookingPayload = {
         user_id: user?.id,
@@ -282,22 +284,28 @@ const BookAppointment = () => {
         notes: `[GUEST: ${memberDetails.fullName} | ${memberDetails.phone}] ${notes}`.trim(),
         status: "pending",
         use_coins: bookingType === 'decide_later' ? false : useCoins,
-        price_paid: subtotal,
-        discount_amount: 0
+        price_paid: finalPrice,
+        discount_amount: discount,
+        coupon_code: appliedCoupon?.code
       };
 
       if (bookingType === 'decide_later' || (selectedServices.length === 0 && selectedAddOns.length === 0)) {
         await api.bookings.create({
           ...bookingPayload,
           service_id: selectedServices[0]?.id || null, // Default to first service if available, else null
-          price_paid: subtotal || 0
+          price_paid: finalPrice || 100 // Default price for decide_later if not specified
         });
       } else {
-        for (const service of [...selectedServices, ...selectedAddOns]) {
+        // Distribute discount proportionally if multiple services (simplified: apply to first)
+        const totalItems = [...selectedServices, ...selectedAddOns];
+        for (let i = 0; i < totalItems.length; i++) {
+          const service = totalItems[i];
+          const serviceDiscount = i === 0 ? discount : 0;
           await api.bookings.create({
             ...bookingPayload,
             service_id: service.id,
-            price_paid: service.price
+            price_paid: Math.max(0, Number(service.price) - serviceDiscount),
+            discount_amount: serviceDiscount
           });
         }
       }
@@ -321,24 +329,24 @@ const BookAppointment = () => {
     }
 
     try {
-      // Call API to validate coupon
-      const response = await api.get(`/coupons/validate/${couponCode}`);
-      const coupon = response.data;
+      // Call API to validate coupon using the newly added service
+      const coupon = await api.coupons.validate(couponCode);
 
       if (coupon && coupon.is_active) {
+        const subtotal = calculateSubtotal();
+        const discountAmount = coupon.discount_type === 'percentage'
+          ? (subtotal * coupon.discount_value / 100)
+          : coupon.discount_value;
+
         setAppliedCoupon({
           code: coupon.code,
-          discount: coupon.discount_type === 'percentage'
-            ? (calculateTotal() * coupon.discount_value / 100)
-            : coupon.discount_value,
+          discount: discountAmount,
           type: coupon.discount_type
         });
         setCouponError("");
         toast({
           title: "Coupon Applied!",
-          description: `You saved RM ${coupon.discount_type === 'percentage'
-            ? (calculateTotal() * coupon.discount_value / 100).toFixed(2)
-            : coupon.discount_value.toFixed(2)}`,
+          description: `You saved RM ${discountAmount.toFixed(2)}`,
         });
       } else {
         setCouponError("Invalid or expired coupon code");
@@ -350,10 +358,16 @@ const BookAppointment = () => {
     }
   };
 
-  const calculateTotal = () => {
+  const calculateSubtotal = () => {
     if (bookingType === 'decide_later') return 100;
     const subtotal = [...selectedServices, ...selectedAddOns].reduce((sum, s) => sum + Number(s.price), 0);
     return subtotal;
+  };
+
+  const calculateTotal = () => {
+    const subtotal = calculateSubtotal();
+    const discount = appliedCoupon ? appliedCoupon.discount : 0;
+    return Math.max(0, subtotal - discount);
   };
 
   const validateMemberDetails = () => {
