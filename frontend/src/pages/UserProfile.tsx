@@ -36,6 +36,7 @@ export default function UserProfile() {
         totalBookings: 0,
         upcomingBookings: 0,
         completedBookings: 0,
+        points: 0
     });
     const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
@@ -60,10 +61,20 @@ export default function UserProfile() {
             const upcoming = bookings.filter((b: any) => b.status === "pending" || b.status === "confirmed");
             const completed = bookings.filter((b: any) => b.status === "completed");
 
+            // Fetch real coin balance
+            let points = 0;
+            try {
+                const coinData = await api.coins.getBalance();
+                points = Number(coinData.balance || 0);
+            } catch (error) {
+                console.error("Error fetching coin balance:", error);
+            }
+
             setStats({
                 totalBookings: bookings.length,
                 upcomingBookings: upcoming.length,
                 completedBookings: completed.length,
+                points: points
             });
 
             if (upcoming.length === 0 && completed.length > 0) {
@@ -131,7 +142,7 @@ export default function UserProfile() {
                     {[
                         { label: "Total Visits", value: stats.totalBookings, icon: History, color: "bg-blue-50 text-blue-600" },
                         { label: "Upcoming", value: stats.upcomingBookings, icon: Calendar, color: "bg-orange-50 text-orange-600" },
-                        { label: "Points", value: stats.completedBookings * 10, icon: Star, color: "bg-yellow-50 text-yellow-600" }
+                        { label: "Points", value: stats.points, icon: Star, color: "bg-yellow-50 text-yellow-600" }
                     ].map((stat, i) => (
                         <motion.div
                             key={stat.label}
