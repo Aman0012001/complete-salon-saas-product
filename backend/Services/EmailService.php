@@ -10,7 +10,8 @@ use PHPMailer\PHPMailer\SMTP;
 // Check multiple locations for PHPMailer (Composer or Manual)
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     require_once __DIR__ . '/../vendor/autoload.php';
-} else if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
+}
+else if (file_exists(__DIR__ . '/../../vendor/autoload.php')) {
     require_once __DIR__ . '/../../vendor/autoload.php';
 }
 
@@ -54,6 +55,10 @@ class EmailService
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption
             $mail->Port = SMTP_PORT;
 
+            // ⏲️ FASTER FAIL: Set aggressive timeouts (in seconds)
+            $mail->Timeout = 5; // Connection timeout
+            $mail->Timelimit = 10; // Total time limit for SMTP commands
+
             // Recipients
             $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
             $mail->addAddress($to);
@@ -66,7 +71,8 @@ class EmailService
 
             $mail->send();
             return ['success' => true, 'message' => 'Email sent successfully'];
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             error_log("PHPMailer Error: {$mail->ErrorInfo}");
             return ['success' => false, 'error' => "Message could not be sent. Mailer Error: {$mail->ErrorInfo}"];
         }

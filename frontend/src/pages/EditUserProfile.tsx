@@ -32,7 +32,7 @@ export default function EditUserProfile() {
         avatar_url: "",
         avatar_public_id: "",
     });
-    const [countryCode, setCountryCode] = useState("+60");
+    const [countryCode, setCountryCode] = useState("Malaysia-+60");
 
     useEffect(() => {
         if (!authLoading && !user) {
@@ -61,7 +61,10 @@ export default function EditUserProfile() {
                 avatar_url: (user as any).avatar_url || "",
                 avatar_public_id: (user as any).avatar_public_id || "",
             });
-            setCountryCode(detectedCode);
+
+            // Set the country code as unique string
+            const countryObj = countryCodes.find(c => c.code === detectedCode);
+            setCountryCode(countryObj ? `${countryObj.country}-${countryObj.code}` : "Malaysia-+60");
         }
     }, [user, authLoading, navigate]);
 
@@ -85,7 +88,8 @@ export default function EditUserProfile() {
         e.preventDefault();
         setSaving(true);
         try {
-            const fullPhone = formData.phone ? `${countryCode}${formData.phone}` : "";
+            const dialCode = countryCode.split('-').pop() || "";
+            const fullPhone = formData.phone ? `${dialCode}${formData.phone}` : "";
             await api.profiles.updateMe({
                 ...formData,
                 phone: fullPhone
@@ -173,7 +177,7 @@ export default function EditUserProfile() {
                                         </SelectTrigger>
                                         <SelectContent className="rounded-xl border-none shadow-2xl bg-white max-h-[300px]">
                                             {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
-                                                <SelectItem key={`${c.country}-${c.code}`} value={c.code} className="font-medium py-2 rounded-lg cursor-pointer">
+                                                <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-medium py-2 rounded-lg cursor-pointer">
                                                     <span className="flex items-center gap-2">
                                                         <span>{c.flag}</span>
                                                         <span>{c.code}</span>

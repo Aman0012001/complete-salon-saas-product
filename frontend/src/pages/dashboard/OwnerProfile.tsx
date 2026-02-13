@@ -35,7 +35,7 @@ export default function OwnerProfile() {
         address: "",
         city: "",
     });
-    const [countryCode, setCountryCode] = useState("+60");
+    const [countryCode, setCountryCode] = useState("Malaysia-+60");
 
     useEffect(() => {
         if (!authLoading && !user) navigate("/login");
@@ -61,7 +61,10 @@ export default function OwnerProfile() {
                 address: currentSalon.address || "",
                 city: currentSalon.city || "",
             });
-            setCountryCode(detectedCode);
+
+            // Set the country code as unique string
+            const countryObj = countryCodes.find(c => c.code === detectedCode);
+            setCountryCode(countryObj ? `${countryObj.country}-${countryObj.code}` : "Malaysia-+60");
         }
     }, [user, currentSalon, authLoading, navigate]);
 
@@ -87,7 +90,8 @@ export default function OwnerProfile() {
 
         setSaving(true);
         try {
-            const fullPhone = formData.phone ? `${countryCode}${formData.phone}` : "";
+            const dialCode = countryCode.split('-').pop() || "";
+            const fullPhone = formData.phone ? `${dialCode}${formData.phone}` : "";
             await api.salons.update(currentSalon.id, {
                 ...formData,
                 phone: fullPhone
@@ -181,7 +185,7 @@ export default function OwnerProfile() {
                                                 </SelectTrigger>
                                                 <SelectContent className="rounded-2xl border-none shadow-2xl bg-white max-h-[300px]">
                                                     {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
-                                                        <SelectItem key={`${c.country}-${c.code}`} value={c.code} className="font-bold py-3 rounded-xl focus:bg-accent/10 cursor-pointer">
+                                                        <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-bold py-3 rounded-xl focus:bg-accent/10 cursor-pointer">
                                                             <span className="flex items-center gap-2">
                                                                 <span>{c.flag}</span>
                                                                 <span>{c.code}</span>

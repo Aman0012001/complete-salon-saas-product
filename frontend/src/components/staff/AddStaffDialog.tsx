@@ -45,7 +45,7 @@ export function AddStaffDialog({ salonId, staffCount, onSuccess, trigger }: AddS
         name: "",
         email: "",
         phone: "",
-        countryCode: "+60",
+        countryCode: "Malaysia-+60",
         role: "staff" as "staff",
         commission: "0",
         specializations: "",
@@ -60,7 +60,7 @@ export function AddStaffDialog({ salonId, staffCount, onSuccess, trigger }: AddS
             name: "",
             email: "",
             phone: "",
-            countryCode: "+60",
+            countryCode: "Malaysia-+60",
             role: "staff",
             commission: "0",
             specializations: "",
@@ -133,7 +133,8 @@ export function AddStaffDialog({ salonId, staffCount, onSuccess, trigger }: AddS
 
         setCreating(true);
         try {
-            const fullPhone = formData.phone ? `${formData.countryCode}${formData.phone}` : null;
+            const dialCode = formData.countryCode.split('-').pop() || "";
+            const fullPhone = formData.phone ? `${dialCode}${formData.phone}` : null;
             const newStaff = await api.staff.create({
                 salon_id: salonId,
                 display_name: formData.name,
@@ -258,7 +259,7 @@ export function AddStaffDialog({ salonId, staffCount, onSuccess, trigger }: AddS
                                         </SelectTrigger>
                                         <SelectContent className="rounded-xl border-none shadow-2xl bg-white max-h-[300px]">
                                             {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
-                                                <SelectItem key={`${c.country}-${c.code}`} value={c.code} className="font-semibold py-2.5 rounded-lg focus:bg-[#F2A93B]/10 cursor-pointer">
+                                                <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-semibold py-2.5 rounded-lg focus:bg-[#F2A93B]/10 cursor-pointer">
                                                     <span className="flex items-center gap-2">
                                                         <span>{c.flag}</span>
                                                         <span>{c.code}</span>

@@ -50,7 +50,11 @@ class CoinService
 
     public function adjustBalance($userId, $amount, $type, $description, $referenceId = null)
     {
-        $this->db->beginTransaction();
+        $inTransaction = $this->db->inTransaction();
+        if (!$inTransaction) {
+            $this->db->beginTransaction();
+        }
+
         try {
             // Update balance
             $stmt = $this->db->prepare("UPDATE users SET coin_balance = coin_balance + ? WHERE id = ?");
@@ -64,10 +68,14 @@ class CoinService
             ");
             $stmt->execute([$txnId, $userId, $amount, $type, $description, $referenceId]);
 
-            $this->db->commit();
+            if (!$inTransaction) {
+                $this->db->commit();
+            }
             return true;
         } catch (Exception $e) {
-            $this->db->rollBack();
+            if (!$inTransaction && $this->db->inTransaction()) {
+                $this->db->rollBack();
+            }
             error_log("Coin Adjustment Error: " . $e->getMessage());
             return false;
         }

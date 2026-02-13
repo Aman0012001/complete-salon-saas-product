@@ -1,10 +1,32 @@
 <?php
+/**
+ * 🛠️ SIMPLE .ENV LOADER
+ * Loads variables from .env file into environment
+ */
+if (file_exists(dirname(__DIR__) . '/.env')) {
+    $lines = file(dirname(__DIR__) . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos(trim($line), '#') === 0)
+            continue;
+        $parts = explode('=', $line, 2);
+        if (count($parts) !== 2)
+            continue;
+        $name = trim($parts[0]);
+        $value = trim($parts[1]);
+        if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
+            putenv(sprintf('%s=%s', $name, $value));
+            $_ENV[$name] = $value;
+            $_SERVER[$name] = $value;
+        }
+    }
+}
+
 // Database configuration
-define('DB_HOST', 'localhost');
-define('DB_PORT', '3306');
-define('DB_NAME', 'salon_booking');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', getenv('DB_HOST') ?: 'localhost');
+define('DB_PORT', getenv('DB_PORT') ?: '3306');
+define('DB_NAME', getenv('DB_NAME') ?: 'salon_booking');
+define('DB_USER', getenv('DB_USER') ?: 'root');
+define('DB_PASS', getenv('DB_PASS') ?: '');
 define('DB_CHARSET', 'utf8mb4');
 
 // JWT Secret Key
@@ -56,23 +78,3 @@ define('SMTP_USER', 'amanajeetthakur644@gmail.com'); // Your Gmail address
 define('SMTP_PASS', 'xxxx xxxx xxxx xxxx'); // Your Gmail App Password (NOT your login password)
 define('SMTP_FROM_EMAIL', 'amanajeetthakur644@gmail.com');
 define('SMTP_FROM_NAME', 'Salon Style Support');
-
-/**
- * 🛠️ SIMPLE .ENV LOADER
- * Loads variables from .env file into environment
- */
-if (file_exists(dirname(__DIR__) . '/.env')) {
-    $lines = file(dirname(__DIR__) . '/.env', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        if (strpos(trim($line), '#') === 0)
-            continue;
-        list($name, $value) = explode('=', $line, 2);
-        $name = trim($name);
-        $value = trim($value);
-        if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
-            putenv(sprintf('%s=%s', $name, $value));
-            $_ENV[$name] = $value;
-            $_SERVER[$name] = $value;
-        }
-    }
-}

@@ -22,9 +22,9 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
     console.log(`[API Fetch] ${options.method || 'GET'} ${API_BASE_URL}${url}`);
 
-    // Create an AbortController for a 15-second timeout
+    // Create an AbortController for a 30-second timeout (accommodate Railway latency)
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 15000);
+    const id = setTimeout(() => controller.abort(), 30000);
 
     try {
         const response = await fetch(`${API_BASE_URL}${url}`, {
@@ -46,8 +46,8 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     } catch (err: any) {
         clearTimeout(id);
         if (err.name === 'AbortError') {
-            console.error(`[API Timeout Error] Request to ${url} timed out after 8s`);
-            throw new Error('Server request timed out. Please check if backend is running.');
+            console.error(`[API Timeout Error] Request to ${url} timed out after 30s`);
+            throw new Error('Server request timed out. This usually happens when the Railway database is waking up. Please try again in a few seconds.');
         }
         console.error(`[API Network Error] ${err.message}`);
         throw err;

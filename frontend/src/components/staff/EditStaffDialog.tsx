@@ -42,15 +42,15 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
     const [isDragging, setIsDragging] = useState(false);
 
     const getPhoneData = (phone: string | null) => {
-        if (!phone) return { code: "+60", number: "" };
+        if (!phone) return { code: "Malaysia-+60", number: "" };
         const matchedCode = countryCodes
             .filter(c => phone.startsWith(c.code))
             .sort((a, b) => b.code.length - a.code.length)[0];
 
         if (matchedCode) {
-            return { code: matchedCode.code, number: phone.slice(matchedCode.code.length) };
+            return { code: `${matchedCode.country}-${matchedCode.code}`, number: phone.slice(matchedCode.code.length) };
         }
-        return { code: "+60", number: phone.replace(/^\+/, "") };
+        return { code: "Malaysia-+60", number: phone.replace(/^\+/, "") };
     };
 
     const initialPhone = getPhoneData(staff.phone);
@@ -154,7 +154,8 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
 
         setSaving(true);
         try {
-            const fullPhone = formData.phone ? `${formData.countryCode}${formData.phone}` : null;
+            const dialCode = formData.countryCode.split('-').pop() || "";
+            const fullPhone = formData.phone ? `${dialCode}${formData.phone}` : null;
             await api.staff.update(staff.id, {
                 display_name: formData.name,
                 email: formData.email || null,
@@ -286,8 +287,8 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                                         <SelectValue />
                                     </SelectTrigger>
                                     <SelectContent className="rounded-xl border-none shadow-2xl bg-white max-h-[300px]">
-                                        {countryCodes.map((c) => (
-                                            <SelectItem key={`${c.country}-${c.code}`} value={c.code} className="font-bold py-3 rounded-lg cursor-pointer">
+                                        {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
+                                            <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-bold py-3 rounded-lg cursor-pointer">
                                                 <span className="flex items-center gap-2">
                                                     <span>{c.flag}</span>
                                                     <span>{c.code}</span>

@@ -8,15 +8,36 @@ class Database
 
     private function __construct()
     {
-        try {
-            $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
-            $this->connection = new PDO($dsn, DB_USER, DB_PASS);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-            $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        } catch (PDOException $e) {
-            die(json_encode(['error' => 'Database connection failed: ' . $e->getMessage()]));
+        $maxRetries = 3;
+        $retryDelay = 1000000; // 1 second in microseconds
+        $lastException = null;
+
+        for ($i = 0; $i < $maxRetries; $i++) {
+            try {
+                $dsn = "mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+                $this->connection = new PDO($dsn, DB_USER, DB_PASS, [
+                    PDO::ATTR_TIMEOUT => 5, // 5 second connection timeout
+                ]);
+                $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                $this->connection->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+                $this->connection->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                return; // Success!
+            }
+            catch (PDOException $e) {
+                $lastException = $e;
+                error_log("Database connection attempt " . ($i + 1) . " failed: " . $e->getMessage());
+                if ($i < $maxRetries - 1) {
+                    usleep($retryDelay);
+                }
+            }
         }
+
+        die(json_encode([
+            'status' => 'error',
+            'error' => 'DATABASE_CONNECTION_ERROR',
+            'message' => 'Unable to establish a stable connection with the remote database after multiple attempts. Please ensure your Railway database is active.',
+            'details' => $lastException ? $lastException->getMessage() : 'Unknown error'
+        ]));
     }
 
     public static function getInstance()

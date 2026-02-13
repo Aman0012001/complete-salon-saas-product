@@ -28,11 +28,17 @@ class NotificationService
 
             // 2. Email Notification (if requested)
             if ($sendEmail) {
-                $this->sendEmailToUser($userId, $title, $message);
+                try {
+                    $this->sendEmailToUser($userId, $title, $message);
+                }
+                catch (Exception $e) {
+                    error_log("Non-blocking Email Error: " . $e->getMessage());
+                }
             }
 
             return $notifId;
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             error_log("Notification Error: " . $e->getMessage());
             return false;
         }
@@ -52,7 +58,8 @@ class NotificationService
                 $this->notifyUser($admin['user_id'], $title, $message, $type, $link, false);
             }
             return true;
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             error_log("Admin Notification Error: " . $e->getMessage());
             return false;
         }
@@ -70,9 +77,6 @@ class NotificationService
 
         if ($user && !empty($user['email'])) {
             $to = $user['email'];
-            $headers = "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= 'From: <no-reply@salonsystem.local>' . "\r\n";
 
             $htmlMessage = "
             <html>
@@ -98,12 +102,21 @@ class NotificationService
             </html>
             ";
 
-            // In local dev, mail() might not be configured, so we log it as well
-            error_log("📧 MOCK EMAIL SENT TO: $to | SUBJECT: $subject");
+            // In local dev, mail() might not be configured, so we use EmailService if available
+            if (class_exists('EmailService')) {
+                error_log("📧 DISPATCHING EMAIL VIA EmailService TO: $to");
+                $result = EmailService::send($to, $subject, $htmlMessage);
+                if ($result['success']) {
+                    return true;
+                }
+                error_log("EmailService failed: " . ($result['error'] ?? 'Unknown'));
+            }
 
-            // Try to send (might fail on local dev without SMTP setup)
-            @mail($to, $subject, $htmlMessage, $headers);
+            // [SECURITY/PERFORMANCE] Removed @mail() fallback to prevent infinite hangs on systems without working local sendmail.
+            // PHPMailer (EmailService) is now the primary and only dispatch method.
+            return false;
         }
+        return false;
     }
 
     /**
@@ -117,13 +130,12 @@ class NotificationService
 
         if ($user && !empty($user['email'])) {
             $to = $user['email'];
-            $headers = "MIME-Version: 1.0" . "\r\n";
-            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-            $headers .= 'From: <billing@salonsystem.local>' . "\r\n";
 
-            error_log("📧 INVOICE EMAIL SENT TO: $to | SUBJECT: $subject");
-            @mail($to, $subject, $htmlContent, $headers);
-            return true;
+            error_log("📧 INVOICE EMAIL DISPATCH REQUESTED FOR: $to | SUBJECT: $subject");
+            if (class_exists('EmailService')) {
+                $result = EmailService::send($to, $subject, $htmlContent);
+                return $result['success'];
+            }
         }
         return false;
     }

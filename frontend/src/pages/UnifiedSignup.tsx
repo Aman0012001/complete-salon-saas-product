@@ -28,7 +28,7 @@ const UnifiedSignup = () => {
     const [signupType, setSignupType] = useState<SignupType>("salon_owner");
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
-    const [countryCode, setCountryCode] = useState("+60");
+    const [countryCode, setCountryCode] = useState("Malaysia-+60");
     const [phone, setPhone] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -82,7 +82,8 @@ const UnifiedSignup = () => {
         setLoading(true);
 
         try {
-            const fullPhone = phone ? `${countryCode}${phone}` : "";
+            const dialCode = countryCode.split('-').pop() || "";
+            const fullPhone = phone ? `${dialCode}${phone}` : "";
             const extraData: any = {
                 phone: fullPhone,
                 user_type: "salon_owner",
@@ -319,7 +320,7 @@ const UnifiedSignup = () => {
                                         </SelectTrigger>
                                         <SelectContent className="rounded-2xl border-none shadow-2xl bg-white">
                                             {countryCodes.map((c) => (
-                                                <SelectItem key={`${c.country}-${c.code}`} value={c.code} className="font-bold py-3 rounded-xl focus:bg-accent/10 cursor-pointer">
+                                                <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-bold py-3 rounded-xl focus:bg-accent/10 cursor-pointer">
                                                     <span className="flex items-center gap-2">
                                                         <span>{c.flag}</span>
                                                         <span>{c.code}</span>

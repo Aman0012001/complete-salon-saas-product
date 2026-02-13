@@ -63,7 +63,7 @@ export default function SettingsPage() {
     upi_id: "",
     bank_details: "",
   });
-  const [countryCode, setCountryCode] = useState("+60");
+  const [countryCode, setCountryCode] = useState("Malaysia-+60");
 
   const handleFileUpload = async (file: File, type: 'logo' | 'cover') => {
     if (type === 'logo') setUploadingLogo(true);
@@ -159,7 +159,10 @@ export default function SettingsPage() {
         upi_id: currentSalon.upi_id || "",
         bank_details: currentSalon.bank_details || "",
       });
-      setCountryCode(detectedCode);
+
+      // Set the country code as unique string
+      const countryObj = countryCodes.find(c => c.code === detectedCode);
+      setCountryCode(countryObj ? `${countryObj.country}-${countryObj.code}` : "Malaysia-+60");
 
       // Initialize business hours
       let hours = currentSalon.business_hours;
@@ -192,7 +195,8 @@ export default function SettingsPage() {
 
     setSaving(true);
     try {
-      const fullPhone = formData.phone ? `${countryCode}${formData.phone}` : "";
+      const dialCode = countryCode.split('-').pop() || "";
+      const fullPhone = formData.phone ? `${dialCode}${formData.phone}` : "";
       await api.salons.update(currentSalon.id, {
         name: formData.name,
         description: formData.description || null,
@@ -339,7 +343,7 @@ export default function SettingsPage() {
                         </SelectTrigger>
                         <SelectContent className="rounded-xl border-none shadow-2xl bg-white max-h-[300px]">
                           {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
-                            <SelectItem key={`${c.country}-${c.code}`} value={c.code} className="font-medium py-2 rounded-lg cursor-pointer">
+                            <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-medium py-2 rounded-lg cursor-pointer">
                               <span className="flex items-center gap-2">
                                 <span>{c.flag}</span>
                                 <span>{c.code}</span>

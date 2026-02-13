@@ -29,27 +29,35 @@ if ($uriParts[1] === 'signup') {
     }
 
     // Create user
+    error_log("[Signup Trace] 1. Starting user signup process for: $email");
     $userId = Auth::generateUuid();
     $passwordHash = Auth::hashPassword($password);
 
+    error_log("[Signup Trace] 2. Beginning database transaction");
     $db->beginTransaction();
     try {
+        error_log("[Signup Trace] 3. Inserting user record");
         $stmt = $db->prepare("INSERT INTO users (id, email, password_hash) VALUES (?, ?, ?)");
         $stmt->execute([$userId, $email, $passwordHash]);
 
         // Create profile
+        error_log("[Signup Trace] 4. Creating user profile");
         $profileId = Auth::generateUuid();
         $stmt = $db->prepare("INSERT INTO profiles (id, user_id, full_name, phone, user_type) VALUES (?, ?, ?, ?, ?)");
         $stmt->execute([$profileId, $userId, $fullName, $phone, $userType]);
 
         // --- Coin System: Signup Bonus ---
+        error_log("[Signup Trace] 5. Loading CoinService");
         require_once __DIR__ . '/../../Services/CoinService.php';
         $coinService = new CoinService($db);
+        
+        error_log("[Signup Trace] 6. Fetching signup bonus setting");
         $stmtBonus = $db->prepare("SELECT setting_value FROM platform_settings WHERE setting_key = 'coin_signup_bonus'");
         $stmtBonus->execute();
         $signupBonus = (float) ($stmtBonus->fetchColumn() ?: 0);
 
         if ($signupBonus > 0) {
+            error_log("[Signup Trace] 7. Awarding signup bonus: $signupBonus coins");
             $coinService->adjustBalance(
                 $userId,
                 $signupBonus,
@@ -60,6 +68,7 @@ if ($uriParts[1] === 'signup') {
 
         // If salon owner, create salon and link
         if ($userType === 'salon_owner' && !empty($salonName)) {
+            error_log("[Signup Trace] 8. Initializing salon: $salonName");
             $salonId = Auth::generateUuid();
             if (empty($salonSlug)) {
                 $salonSlug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $salonName)));
@@ -70,15 +79,18 @@ if ($uriParts[1] === 'signup') {
             $stmt->execute([$salonId, $salonName, $salonSlug, $email, $phone]);
 
             // Link user to salon as owner
+            error_log("[Signup Trace] 9. Linking user to salon as owner");
             $roleId = Auth::generateUuid();
             $stmt = $db->prepare("INSERT INTO user_roles (id, user_id, salon_id, role) VALUES (?, ?, ?, 'owner')");
             $stmt->execute([$roleId, $userId, $salonId]);
         }
 
+        error_log("[Signup Trace] 10. Committing transaction");
         $db->commit();
 
         // 📢 Dispatch Welcome Notification & Email
         if (isset($notifService)) {
+            error_log("[Signup Trace] 11. Dispatching welcome notification");
             $welcomeMsg = "Welcome to the elite grooming network, {$fullName}! Your account has been successfully initialized.";
             if ($userType === 'salon_owner') {
                 $welcomeMsg = "Your partner node '{$salonName}' has been initialized. Please wait for Super Admin approval to activate your dashboard.";
@@ -86,13 +98,19 @@ if ($uriParts[1] === 'signup') {
             $notifService->notifyUser($userId, "Account Activated", $welcomeMsg, 'success', null, true);
         }
 
+        error_log("[Signup Trace] 12. Generating auth token");
         $token = Auth::generateToken($userId, $email, $userType);
+        
+        error_log("[Signup Trace] 13. Signup successful for: $email");
         sendResponse([
             'user' => ['id' => $userId, 'email' => $email, 'full_name' => $fullName, 'user_type' => $userType],
             'token' => $token
         ], 201);
     } catch (Exception $e) {
-        $db->rollBack();
+        error_log("[Signup Trace ERROR] " . $e->getMessage());
+        if ($db->inTransaction()) {
+            $db->rollBack();
+        }
         sendResponse(['error' => 'Failed to create user: ' . $e->getMessage()], 500);
     }
 }
