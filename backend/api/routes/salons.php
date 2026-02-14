@@ -6,24 +6,21 @@ if ($method === 'GET' && count($uriParts) === 1) {
     try {
         $stmt = $db->prepare("
             SELECT s.id, s.name, s.slug, s.description, s.address, s.city, s.state, s.pincode, 
-                   s.phone, s.email, s.logo_url, s.cover_image_url, s.is_active,
-                   p.full_name as owner_name,
-                   COALESCE(AVG(r.rating), 0) as rating,
-                   COUNT(r.id) as review_count
+                   s.phone, s.email, s.logo_url, s.cover_image_url, s.is_active, s.rating, s.total_reviews,
+                   p.full_name as owner_name
             FROM salons s
             LEFT JOIN user_roles ur ON s.id = ur.salon_id AND ur.role = 'owner'
             LEFT JOIN profiles p ON ur.user_id = p.user_id
-            LEFT JOIN booking_reviews r ON s.id = r.salon_id
-            WHERE s.is_active = 1 
-            AND s.subscription_status IN ('active', 'trial')
-            GROUP BY s.id
+            WHERE s.is_active = 1 AND s.approval_status = 'approved'
+            GROUP BY s.id, p.full_name
             ORDER BY s.created_at DESC
         ");
         $stmt->execute();
         $salons = $stmt->fetchAll();
         error_log("[Salons API] Found " . count($salons) . " active salons");
         sendResponse(['salons' => $salons]);
-    } catch (PDOException $e) {
+    }
+    catch (PDOException $e) {
         sendResponse(['error' => 'Query failed: ' . $e->getMessage()], 500);
     }
 }
@@ -52,13 +49,9 @@ if ($method === 'GET' && $uriParts[1] === 'my') {
 if ($method === 'GET' && count($uriParts) === 2) {
     $salonId = $uriParts[1];
     $stmt = $db->prepare("
-        SELECT s.*, 
-               COALESCE(AVG(r.rating), 0) as rating,
-               COUNT(r.id) as review_count
+        SELECT s.* 
         FROM salons s
-        LEFT JOIN booking_reviews r ON s.id = r.salon_id
         WHERE s.id = ? AND s.is_active = 1
-        GROUP BY s.id
     ");
     $stmt->execute([$salonId]);
     $salon = $stmt->fetch();
@@ -126,7 +119,8 @@ if ($method === 'POST' && count($uriParts) === 1) {
         $salon = $stmt->fetch();
 
         sendResponse(['salon' => $salon], 201);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
         $db->rollBack();
         sendResponse(['error' => 'Failed to create salon: ' . $e->getMessage()], 500);
     }
@@ -227,7 +221,7 @@ if ($method === 'GET' && count($uriParts) === 3 && $uriParts[2] === 'analytics')
         FROM bookings b
         JOIN services s ON b.service_id = s.id
         WHERE b.salon_id = ? AND b.status = 'completed'
-        GROUP BY month
+        GROUP BY DATE_FORMAT(booking_date, '%Y-%m')
         ORDER BY month ASC
         LIMIT 12
     ");

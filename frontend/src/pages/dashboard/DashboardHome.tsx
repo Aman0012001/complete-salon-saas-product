@@ -110,7 +110,10 @@ export default function DashboardHome() {
     if (manual) setRefreshing(true);
     try {
       const todayDate = format(new Date(), "yyyy-MM-dd");
-      const allBookings = await api.bookings.getAll({ salon_id: currentSalon.id });
+      const allBookings = await api.bookings.getAll({
+        salon_id: currentSalon.id,
+        limit: 100
+      });
 
       const enrich = (list: any[]) => list.map(b => ({
         ...b,

@@ -39,8 +39,8 @@ if ($method === 'GET' && $uriParts[1] === 'my') {
         sendResponse(['error' => 'salon_id is required'], 400);
     }
 
-    // Check if user has access to salon
-    $stmt = $db->prepare("SELECT id FROM user_roles WHERE user_id = ? AND salon_id = ? AND role = 'owner'");
+    // Check if user has access to salon (owner or manager)
+    $stmt = $db->prepare("SELECT id FROM user_roles WHERE user_id = ? AND salon_id = ? AND role IN ('owner', 'manager')");
     $stmt->execute([$userData['user_id'], $salonId]);
     if (!$stmt->fetch()) {
         sendResponse(['error' => 'Forbidden'], 403);
@@ -73,7 +73,7 @@ if ($method === 'GET' && $uriParts[1] === 'my') {
 
         // Check computed status
         $isActive = $subscription['status'] === 'active';
-        if ($subscription['subscription_end_date'] && strtotime($subscription['subscription_end_date']) < time()) {
+        if ($subscription['end_date'] && strtotime($subscription['end_date']) < time()) {
             $isActive = false;
             $subscription['status'] = 'expired';
         }

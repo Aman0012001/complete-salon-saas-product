@@ -15,18 +15,20 @@ if ($method === 'GET' && count($uriParts) === 1) {
             ORDER BY r.created_at DESC
         ");
         $stmt->execute([$_GET['service_id']]);
-    } else if (isset($_GET['salon_id'])) {
+    }
+    else if (isset($_GET['salon_id'])) {
         $stmt = $db->prepare("
             SELECT r.*, p.full_name as user_name, p.avatar_url as user_avatar, s.name as service_name
             FROM booking_reviews r
             JOIN profiles p ON r.user_id = p.user_id
             JOIN bookings b ON r.booking_id = b.id
             JOIN services s ON b.service_id = s.id
-            WHERE r.salon_id = ?
+            WHERE b.salon_id = ?
             ORDER BY r.created_at DESC
         ");
         $stmt->execute([$_GET['salon_id']]);
-    } else {
+    }
+    else {
         // If no filter provided, return all 5-star reviews for the landing page
         $stmt = $db->prepare("
             SELECT r.*, p.full_name as user_name, p.avatar_url as user_avatar, s.name as service_name
@@ -57,13 +59,12 @@ if ($method === 'POST' && count($uriParts) === 1) {
 
     try {
         $stmt = $db->prepare("
-            INSERT INTO booking_reviews (id, user_id, salon_id, booking_id, rating, comment)
-            VALUES (?, ?, ?, ?, ?, ?)
+            INSERT INTO booking_reviews (id, user_id, booking_id, rating, comment)
+            VALUES (?, ?, ?, ?, ?)
         ");
         $stmt->execute([
             $reviewId,
             $userData['user_id'],
-            $data['salon_id'],
             $data['booking_id'],
             $data['rating'],
             $data['comment'] ?? null
@@ -74,7 +75,8 @@ if ($method === 'POST' && count($uriParts) === 1) {
         $review = $stmt->fetch();
 
         sendResponse(['review' => $review], 201);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
         sendResponse(['error' => 'Failed to add review: ' . $e->getMessage()], 500);
     }
 }

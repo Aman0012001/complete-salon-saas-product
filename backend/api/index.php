@@ -104,8 +104,8 @@ try {
     require_once __DIR__ . '/../Database.php';
     require_once __DIR__ . '/../Auth.php';
 
-    // Get database connection
-    $db = Database::getInstance()->getConnection();
+    // Get database instance (lazy connection)
+    $db = Database::getInstance();
 
     require_once __DIR__ . '/../Services/NotificationService.php';
     require_once __DIR__ . '/../Services/InvoiceService.php';

@@ -42,7 +42,7 @@ const NewsletterPopup = () => {
         try {
             await api.newsletter.subscribe(email);
             setHasSubscribed(true);
-            toast.success("Welcome! Your RM 50 discount code is on its way to your inbox.");
+            toast.success("Welcome! Use code SUB50 for 50 RM off your first booking.");
             // Auto close after 3 seconds on success
             setTimeout(() => {
                 handleDismiss();
@@ -142,14 +142,14 @@ const NewsletterPopup = () => {
                                 </div>
                                 <h3 className="text-3xl font-bold text-gray-900">Thank You!</h3>
                                 <p className="text-gray-600 text-lg">
-                                    Use code <span className="font-bold text-black">WELCOME50</span> at checkout or show this at the salon.
+                                    Use code <span className="font-bold text-black">SUB50</span> at checkout or show this at the salon.
                                 </p>
                             </motion.div>
                         )}
                     </div>
                 </div>
             </DialogContent>
-        </Dialog>
+        </Dialog >
     );
 };
 

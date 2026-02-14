@@ -1,11 +1,17 @@
 <?php
+require_once __DIR__ . '/config.php';
 require_once __DIR__ . '/Database.php';
-try {
-    $db = Database::getInstance()->getConnection();
-    $stmt = $db->query("SHOW TABLES");
-    $tables = $stmt->fetchAll(PDO::FETCH_COLUMN);
-    echo json_encode(['tables' => $tables]);
+
+$db = Database::getInstance()->getConnection();
+
+echo "=== Notifications Table ===\n";
+$stmt = $db->query("DESCRIBE notifications");
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    echo "  {$row['Field']} ({$row['Type']})\n";
 }
-catch (Exception $e) {
-    echo json_encode(['error' => $e->getMessage()]);
+
+echo "\n=== Staff_Profiles Table ===\n";
+$stmt = $db->query("DESCRIBE staff_profiles");
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    echo "  {$row['Field']} ({$row['Type']})\n";
 }

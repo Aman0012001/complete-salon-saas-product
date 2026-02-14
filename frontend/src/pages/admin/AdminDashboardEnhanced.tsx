@@ -255,9 +255,13 @@ export default function AdminDashboardEnhanced() {
           <div className="w-20 h-20 bg-red-50 text-red-500 rounded-[2rem] flex items-center justify-center">
             <AlertCircle className="w-10 h-10" />
           </div>
-          <div className="space-y-2">
+          <div className="space-y-4">
             <h2 className="text-2xl font-black text-white">Registry Sync Failure</h2>
-            <p className="text-slate-400 max-w-md mx-auto">The local MySQL node could not be reached or returned an invalid response.</p>
+            <p className="text-slate-400 max-w-md mx-auto">
+              {errorMessage.includes('DATABASE_CONNECTION_ERROR')
+                ? "The database is currently coming online. This usually takes 10-15 seconds."
+                : "The local MySQL node could not be reached or returned an invalid response."}
+            </p>
             {errorMessage && (
               <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl">
                 <p className="text-red-400 text-xs font-mono break-all">{errorMessage}</p>

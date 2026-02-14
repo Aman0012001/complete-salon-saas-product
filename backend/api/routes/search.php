@@ -31,7 +31,7 @@ if ($method === 'GET' && count($uriParts) === 1) {
             FROM salons s
             LEFT JOIN booking_reviews r ON s.id = r.salon_id
             WHERE (s.name LIKE ? OR s.description LIKE ?) AND s.is_active = 1 
-            GROUP BY s.id
+            GROUP BY s.id, s.name, s.logo_url, s.city
             LIMIT 5
         ");
         $stmt->execute([$searchTerm, $searchTerm]);
@@ -47,7 +47,7 @@ if ($method === 'GET' && count($uriParts) === 1) {
             LEFT JOIN bookings b ON s.id = b.service_id
             LEFT JOIN booking_reviews r ON b.id = r.booking_id
             WHERE (s.name LIKE ? OR s.description LIKE ?) AND s.is_active = 1 AND sln.is_active = 1 
-            GROUP BY s.id
+            GROUP BY s.id, s.name, s.price, s.image_url, sln.name
             LIMIT 10
         ");
         $stmt->execute([$searchTerm, $searchTerm]);
@@ -77,7 +77,8 @@ if ($method === 'GET' && count($uriParts) === 1) {
         $results['suggestions'] = array_values(array_unique(array_slice($suggestions, 0, 8)));
 
         sendResponse($results);
-    } catch (PDOException $e) {
+    }
+    catch (PDOException $e) {
         sendResponse(['error' => 'Search failed: ' . $e->getMessage()], 500);
     }
 }

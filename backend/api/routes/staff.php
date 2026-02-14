@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 // Staff routes (NEW TXT)
 
 // GET /api/staff?salon_id=xxx - Get salon staff members
@@ -72,7 +72,7 @@ if ($method === 'GET' && ($uriParts[1] ?? '') === 'available-specialists') {
     sendResponse(['specialists' => $staff]);
 }
 
-// GET /api/staff/me - Get current user's staff profile
+// GET /api/staff/me - Get current user's staff profile or dashboard data
 if ($method === 'GET' && ($uriParts[1] ?? '') === 'me') {
     $userData = protectRoute(['staff', 'manager', 'owner']);
     $salonId = $_GET['salon_id'] ?? null;
@@ -92,6 +92,81 @@ if ($method === 'GET' && ($uriParts[1] ?? '') === 'me') {
 
     if (!$staff)
         sendResponse(['error' => 'Staff profile not found'], 404);
+
+    // If sub-route is dashboard-data
+    if (($uriParts[2] ?? '') === 'dashboard-data') {
+        $staffId = $staff['id'];
+
+        // 1. Get Active Attendance Session (any start date)
+        $stmt = $db->prepare("
+            SELECT * FROM staff_attendance 
+            WHERE staff_id = ? AND check_out IS NULL 
+            ORDER BY check_in DESC LIMIT 1
+        ");
+        $stmt->execute([$staffId]);
+        $attendance = $stmt->fetch();
+        
+        if ($attendance) {
+            $attendance['check_in_raw'] = $attendance['check_in'];
+            $attendance['check_in'] = date('c', strtotime($attendance['check_in']));
+        }
+
+        // 2. Get Today's Bookings
+        $stmt = $db->prepare("
+            SELECT b.*, s.name as service_name
+            FROM bookings b
+            JOIN services s ON b.service_id = s.id
+            WHERE b.staff_id = ? AND b.booking_date = CURDATE() AND b.status != 'cancelled'
+            ORDER BY b.booking_time ASC
+        ");
+        $stmt->execute([$staffId]);
+        $todayBookings = $stmt->fetchAll() ?: [];
+
+        // 3. Get Basic Stats for Header (Current Month)
+        $stmt = $db->prepare("
+            SELECT 
+                COUNT(id) as total_customers,
+                COALESCE(SUM(COALESCE(price_paid, 0)), 0) as gross_revenue
+            FROM bookings 
+            WHERE staff_id = ? AND status = 'completed' AND MONTH(booking_date) = MONTH(CURDATE()) AND YEAR(booking_date) = YEAR(CURDATE())
+        ");
+        $stmt->execute([$staffId]);
+        $monthStats = $stmt->fetch();
+        
+        // 3b. Calculate Uptime (Total Hours this month)
+        $stmt = $db->prepare("
+            SELECT COALESCE(SUM(TIMESTAMPDIFF(MINUTE, check_in, IFNULL(check_out, CURRENT_TIMESTAMP))), 0) as total_minutes
+            FROM staff_attendance
+            WHERE staff_id = ? AND MONTH(check_in) = MONTH(CURDATE()) AND YEAR(check_in) = YEAR(CURDATE())
+        ");
+        $stmt->execute([$staffId]);
+        $attendanceStats = $stmt->fetch();
+
+        $commissionRate = (float)($staff['commission_percentage'] ?: 30);
+        $earnings = (float)($monthStats['gross_revenue'] ?? 0) * ($commissionRate / 100);
+
+        // 4. Unread Messages Count
+        $stmt = $db->prepare("
+            SELECT COUNT(*) FROM messages 
+            WHERE receiver_id = ? AND is_read = 0 AND salon_id = ?
+        ");
+        $stmt->execute([$userData['user_id'], $salonId]);
+        $unreadMessagesCount = (int)$stmt->fetchColumn();
+
+        sendResponse([
+            'staff' => $staff,
+            'attendance' => $attendance ?: null,
+            'today_bookings' => $todayBookings,
+            'unread_messages' => $unreadMessagesCount,
+            'stats' => [
+                'revenue' => (float)($monthStats['gross_revenue'] ?? 0),
+                'earnings' => $earnings,
+                'commission_rate' => $commissionRate,
+                'total_customers' => (int)($monthStats['total_customers'] ?? 0),
+                'total_hours' => round(($attendanceStats['total_minutes'] ?? 0) / 60, 1)
+            ]
+        ]);
+    }
 
     sendResponse(['staff' => $staff]);
 }

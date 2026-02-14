@@ -68,64 +68,30 @@ export function StaffDashboard() {
 
         try {
             setLoading(true);
-            // 1. Get current staff profile
-            const me = await api.staff.getMe(currentSalon.id);
-            setStaffInfo(me);
+            const data = await api.staff.getDashboardData(currentSalon.id);
 
-            if (me) {
-                // 2. Get stats
-                const month = new Date().getMonth() + 1;
-                const year = new Date().getFullYear();
-                const statData = await api.staff.getProfileStats(me.id, month, year);
-                setStats(statData.stats);
+            if (data) {
+                setStaffInfo(data.staff);
+                setStats(data.stats);
+                setTodayBookings(data.today_bookings || []);
+                setUnreadMessagesCount(data.unread_messages || 0);
 
-                // 3. Get assigned bookings
-                const allBookings = await api.bookings.getAll({
-                    salon_id: currentSalon.id,
-                    staff_id: me.id
-                });
-
-                // Categorize bookings
-                const today: any[] = [];
-                const upcoming: any[] = [];
-
-                allBookings.forEach((b: any) => {
-                    const bDate = parseISO(b.booking_date);
-                    if (isToday(bDate)) {
-                        today.push(b);
-                    } else if (isAfter(bDate, new Date()) && b.status !== 'cancelled' && b.status !== 'completed') {
-                        upcoming.push(b);
-                    }
-                });
-
-                setTodayBookings(today);
-                setUpcomingBookings(upcoming.slice(0, 5)); // Show next 5 upcoming
-
-                // 4. Get attendance history (check if clocked in today)
-                const history = await api.staff.getAttendance(me.id);
-                setAttendance(history);
-                setLastSync(new Date());
-
-                const active = history.find((rec: any) => !rec.check_out);
-                if (active) {
-                    setCurrentSession(active);
+                if (data.attendance) {
                     setIsClockedIn(true);
+                    setCurrentSession(data.attendance);
                 } else {
-                    setCurrentSession(null);
                     setIsClockedIn(false);
+                    setCurrentSession(null);
                 }
 
-                // 5. Get unread messages count
-                const messages = await api.messages.getAll(currentSalon.id);
-                const unread = messages.filter((m: any) => {
-                    if (m.is_read) return false;
-                    if (m.receiver_id === user.id) return true;
-                    if (!m.receiver_id) {
-                        if (m.recipient_type === 'staff') return true; // Everyone in staff dashboard is staff/manager/owner in staff view
-                    }
-                    return false;
-                });
-                setUnreadMessagesCount(unread.length);
+                // Still fetch full attendance history for the list if needed, 
+                // but main dashboard state is now loaded in one go.
+                if (data.staff?.id) {
+                    const history = await api.staff.getAttendance(data.staff.id);
+                    setAttendance(history);
+                }
+
+                setLastSync(new Date());
             }
         } catch (error) {
             console.error("Staff dashboard fetch error:", error);

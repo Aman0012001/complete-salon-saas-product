@@ -6,6 +6,19 @@ $userData = protectRoute(['admin']);
 
 // GET /api/admin/stats - Get platform statistics
 if ($method === 'GET' && $uriParts[1] === 'stats') {
+    $cacheFile = __DIR__ . '/../../cache/admin_stats.json';
+    $cacheTime = 300; // 5 minutes cache
+
+    // Try to serve from cache first to avoid DB hang during wake-up
+    if (file_exists($cacheFile) && (time() - filemtime($cacheFile) < $cacheTime)) {
+        $cachedData = json_decode(file_get_contents($cacheFile), true);
+        if ($cachedData) {
+            error_log("[Admin Cache] Serving stats from cache");
+            sendResponse($cachedData);
+        }
+    }
+
+    // Use $db directly (the proxy will connect only if needed)
     $stats = [];
 
     // Total salons
@@ -40,7 +53,7 @@ if ($method === 'GET' && $uriParts[1] === 'stats') {
 
     // Service Sales (from bookings)
     $stmt = $db->query("
-        SELECT SUM(COALESCE(b.price_paid, s.price, 0)) as total 
+        SELECT SUM(COALESCE(s.price, 0)) as total 
         FROM bookings b 
         LEFT JOIN services s ON b.service_id = s.id 
         WHERE b.status = 'completed'
@@ -49,7 +62,7 @@ if ($method === 'GET' && $uriParts[1] === 'stats') {
     $stats['service_revenue'] = $row ? ($row['total'] ?? 0) : 0;
 
     // Product Sales (from customer_product_purchases)
-    $stmt = $db->query("SELECT SUM(price) as total FROM customer_product_purchases");
+    $stmt = $db->query("SELECT SUM(total_amount) as total FROM customer_product_purchases");
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $stats['product_revenue'] = $row ? ($row['total'] ?? 0) : 0;
 
@@ -102,25 +115,24 @@ if ($method === 'GET' && $uriParts[1] === 'stats') {
         'total' => $totalCust
     ];
 
-    // Revenue History (Last 12 Months) - Unified
-    $stmt = $db->query("
+    $monthlyData = $db->query("
         SELECT name, SUM(value) as value FROM (
             SELECT DATE_FORMAT(created_at, '%b %Y') as name, amount as value, DATE_FORMAT(created_at, '%Y-%m') as sort_key
             FROM platform_payments 
             WHERE status = 'completed' AND created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
             UNION ALL
-            SELECT DATE_FORMAT(created_at, '%b %Y') as name, COALESCE(price_paid, 0) as value, DATE_FORMAT(created_at, '%Y-%m') as sort_key
-            FROM bookings 
-            WHERE status = 'completed' AND created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
+            SELECT DATE_FORMAT(b.created_at, '%b %Y') as name, COALESCE(s.price, 0) as value, DATE_FORMAT(b.created_at, '%Y-%m') as sort_key
+            FROM bookings b
+            LEFT JOIN services s ON b.service_id = s.id
+            WHERE b.status = 'completed' AND b.created_at >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
             UNION ALL
-            SELECT DATE_FORMAT(purchase_date, '%b %Y') as name, price as value, DATE_FORMAT(purchase_date, '%Y-%m') as sort_key
+            SELECT DATE_FORMAT(purchase_date, '%b %Y') as name, total_amount as value, DATE_FORMAT(purchase_date, '%Y-%m') as sort_key
             FROM customer_product_purchases 
             WHERE purchase_date >= DATE_SUB(NOW(), INTERVAL 12 MONTH)
         ) combined_revenue
         GROUP BY name, sort_key
         ORDER BY sort_key ASC
-    ");
-    $monthlyData = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    ")->fetchAll(PDO::FETCH_ASSOC);
 
     // If no data, provide at least the current month
     if (empty($monthlyData)) {
@@ -130,6 +142,12 @@ if ($method === 'GET' && $uriParts[1] === 'stats') {
     }
 
     $stats['revenue_history'] = $monthlyData;
+
+    // Save to cache
+    if (!is_dir(dirname($cacheFile))) {
+        mkdir(dirname($cacheFile), 0777, true);
+    }
+    file_put_contents($cacheFile, json_encode($stats));
 
     sendResponse($stats);
 }
@@ -474,7 +492,7 @@ if ($method === 'GET' && $uriParts[1] === 'reports') {
     $planRevenue = $stmt->fetch()['total'];
 
     $stmt = $db->prepare("
-        SELECT IFNULL(SUM(COALESCE(b.price_paid, s.price, 0)), 0) as total 
+        SELECT IFNULL(SUM(COALESCE(s.price, 0)), 0) as total 
         FROM bookings b 
         LEFT JOIN services s ON b.service_id = s.id 
         WHERE b.status = 'completed' AND b.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
@@ -482,7 +500,7 @@ if ($method === 'GET' && $uriParts[1] === 'reports') {
     $stmt->execute([$range]);
     $serviceRevenue = $stmt->fetch()['total'];
 
-    $stmt = $db->prepare("SELECT IFNULL(SUM(price), 0) as total FROM customer_product_purchases WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)");
+    $stmt = $db->prepare("SELECT IFNULL(SUM(total_amount), 0) as total FROM customer_product_purchases WHERE created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)");
     $stmt->execute([$range]);
     $productRevenue = $stmt->fetch()['total'];
 
@@ -509,11 +527,12 @@ if ($method === 'GET' && $uriParts[1] === 'reports') {
             FROM platform_payments
             WHERE status = 'completed' AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
             UNION ALL
-            SELECT DATE(created_at) as date, COALESCE(price_paid, 0) as value
-            FROM bookings
-            WHERE status = 'completed' AND created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
+            SELECT DATE(b.created_at) as date, COALESCE(s.price, 0) as value
+            FROM bookings b
+            LEFT JOIN services s ON b.service_id = s.id
+            WHERE b.status = 'completed' AND b.created_at >= DATE_SUB(NOW(), INTERVAL ? DAY)
             UNION ALL
-            SELECT DATE(purchase_date) as date, price as value
+            SELECT DATE(purchase_date) as date, total_amount as value
             FROM customer_product_purchases
             WHERE purchase_date >= DATE_SUB(NOW(), INTERVAL ? DAY)
         ) combined_revenue
@@ -776,7 +795,7 @@ if ($method === 'GET' && $uriParts[1] === 'memberships') {
     $query = "
         SELECT s.id as salon_id, s.name as salon_name, s.email as salon_email,
                ss.id as subscription_id, ss.plan_id, ss.status as subscription_status,
-               ss.subscription_end_date, sp.name as plan_name
+               ss.end_date, sp.name as plan_name
         FROM salons s
         LEFT JOIN salon_subscriptions ss ON s.id = ss.salon_id
         LEFT JOIN subscription_plans sp ON ss.plan_id = sp.id
@@ -822,7 +841,7 @@ if ($method === 'POST' && $uriParts[1] === 'memberships' && isset($uriParts[2]) 
                 UPDATE salon_subscriptions SET 
                     plan_id = ?, 
                     status = ?, 
-                    subscription_end_date = DATE_ADD(NOW(), INTERVAL 1 MONTH),
+                    end_date = DATE_ADD(NOW(), INTERVAL 1 MONTH),
                     updated_at = NOW() 
                 WHERE id = ?
             ");
@@ -832,7 +851,7 @@ if ($method === 'POST' && $uriParts[1] === 'memberships' && isset($uriParts[2]) 
             // Create new
             $subscriptionId = Auth::generateUuid();
             $stmt = $db->prepare("
-                INSERT INTO salon_subscriptions (id, salon_id, plan_id, status, subscription_start_date, subscription_end_date)
+                INSERT INTO salon_subscriptions (id, salon_id, plan_id, status, start_date, end_date)
                 VALUES (?, ?, ?, ?, NOW(), DATE_ADD(NOW(), INTERVAL 1 MONTH))
             ");
             $stmt->execute([$subscriptionId, $salonId, $planId, $status]);

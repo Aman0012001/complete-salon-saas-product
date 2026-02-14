@@ -171,11 +171,11 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       });
       setAppointmentCount(bookings.length);
 
-      // 2. Fetch Unread Notifications
-      const notifications = await api.notifications.getAll({
-        salon_id: currentSalon.id,
-        unread_only: '1'
-      });
+      // 2. Fetch Unread Notifications (HANDLED BY SalonNotificationSystem)
+      // const notifications = await api.notifications.getAll({
+      //   salon_id: currentSalon.id,
+      //   unread_only: '1'
+      // });
 
       // 3. Fetch Unread Messages (REMOVED GLOBAL FEATURE)
       // const messages = await api.messages.getAll(currentSalon.id);
@@ -190,7 +190,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       // });
       // setUnreadMessagesCount(unreadMessages.length);
 
-      setUnreadCount((notifications?.length || 0));
+      // setUnreadCount((notifications?.length || 0));
     } catch (error) {
       console.error('Failed to fetch dashboard stats:', error);
     }
@@ -235,7 +235,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     if (currentSalon?.approval_status === 'pending') {
       interval = setInterval(() => {
         refreshSalons();
-      }, 2000);
+      }, 30000); // Poll every 30 seconds, not 2s
     }
     return () => {
       if (interval) clearInterval(interval);
@@ -545,7 +545,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <Separator orientation="vertical" className="h-6 bg-border/50 hidden md:block" />
 
             <div className="flex items-center gap-3">
-              <SalonNotificationSystem />
+              <SalonNotificationSystem onUnreadCountChange={setUnreadCount} />
 
               <div className="relative h-11 w-11 rounded-xl border-2 border-border/30 hover:border-accent/50 transition-colors cursor-pointer lg:hidden" onClick={() => navigate(`${basePath}/notifications`)}>
                 <Avatar className="h-full w-full">

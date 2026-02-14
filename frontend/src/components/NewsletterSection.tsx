@@ -37,7 +37,7 @@ const NewsletterSection = () => {
       if (response.ok) {
         toast({
           title: "Successfully Subscribed",
-          description: data.data?.message || "You've been added to our beauty updates!",
+          description: data.data?.message || "Welcome! Use code SUB50 for 50 RM off your first booking.",
         });
         setEmail("");
       } else {
@@ -70,7 +70,7 @@ const NewsletterSection = () => {
 
           <p className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto font-medium">
             Subscribe to our newsletter and stay ahead in the beauty industry! <br className="hidden md:block" />
-            Get exclusive salon tips and promotions delivered locally.
+            Get RM 50 OFF your first visit and exclusive salon tips delivered locally.
           </p>
 
           <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto bg-white/5 p-2 rounded-[2rem] border border-white/10 backdrop-blur-sm">

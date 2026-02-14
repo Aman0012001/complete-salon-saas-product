@@ -21,7 +21,20 @@ if ($method === 'POST' && (count($uriParts) === 1 || (count($uriParts) === 2 && 
     try {
         $stmt = $db->prepare("INSERT INTO newsletter_subscribers (email) VALUES (?)");
         $stmt->execute([$email]);
-        sendResponse(['message' => 'Successfully subscribed to newsletter!']);
+
+        // Send welcome email with discount code
+        global $newsletterService;
+        if (isset($newsletterService)) {
+            $newsletterService->sendWelcomeEmail($email);
+        }
+        else {
+            // Fallback if not initialized in global scope
+            require_once __DIR__ . '/../../Services/NewsletterService.php';
+            $ns = new NewsletterService($db);
+            $ns->sendWelcomeEmail($email);
+        }
+
+        sendResponse(['message' => 'Successfully subscribed! Use code SUB50 for 50 RM off your first booking.']);
     }
     catch (PDOException $e) {
         if ($e->getCode() == 23000) { // Duplicate entry

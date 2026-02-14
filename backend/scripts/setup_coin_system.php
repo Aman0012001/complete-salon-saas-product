@@ -12,10 +12,12 @@ try {
     try {
         $db->exec("ALTER TABLE users ADD COLUMN coin_balance DECIMAL(15,2) DEFAULT 0.00 AFTER password_hash");
         echo "Added coin_balance column to users table." . PHP_EOL;
-    } catch (PDOException $e) {
+    }
+    catch (PDOException $e) {
         if (strpos($e->getMessage(), 'Duplicate column name') !== false) {
             echo "coin_balance column already exists." . PHP_EOL;
-        } else {
+        }
+        else {
             throw $e;
         }
     }
@@ -38,16 +40,18 @@ try {
     $stmt->execute();
     if (!$stmt->fetch()) {
         $id = bin2hex(random_bytes(16)); // Simple UUID fallback
-        $stmt = $db->prepare("INSERT INTO platform_settings (id, setting_key, setting_value, description) VALUES (?, 'coin_price', '1.00', 'Value of 1 coin in platform currency')");
+        $stmt = $db->prepare("INSERT INTO platform_settings (id, setting_key, setting_value) VALUES (?, 'coin_price', '1.00')");
         $stmt->execute([$id]);
         echo "Added coin_price setting to platform_settings." . PHP_EOL;
-    } else {
+    }
+    else {
         echo "coin_price setting already exists." . PHP_EOL;
     }
 
     echo "Coin System Setup Completed Successfully!" . PHP_EOL;
 
-} catch (PDOException $e) {
+}
+catch (PDOException $e) {
     echo "Error: " . $e->getMessage() . PHP_EOL;
     exit(1);
 }

@@ -239,7 +239,7 @@ export const servicesAPI = {
 
 // Bookings API
 export const bookingsAPI = {
-    async getAll(filters?: { user_id?: string; salon_id?: string; staff_id?: string; status?: string; date?: string; start_date?: string; end_date?: string }) {
+    async getAll(filters?: { user_id?: string; salon_id?: string; staff_id?: string; status?: string; date?: string; start_date?: string; end_date?: string; limit?: number; offset?: number }) {
         const params = new URLSearchParams(filters as any);
         const data = await fetchWithAuth(`/bookings?${params}`);
         return toArray(data, 'bookings');
@@ -575,6 +575,10 @@ export const staffProfilesAPI = {
         if (year) params.append('year', year.toString());
         if (params.toString()) url += `?${params.toString()}`;
         return await fetchWithAuth(url);
+    },
+
+    async getDashboardData(salonId: string) {
+        return await fetchWithAuth(`/staff/me/dashboard-data?salon_id=${salonId}`);
     },
 
     async getLeaves(id: string) {

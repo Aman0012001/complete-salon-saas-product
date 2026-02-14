@@ -24,7 +24,8 @@ if ($method === 'GET' && (!isset($uriParts[1]) || $uriParts[1] === '')) {
     $stmt->execute([$userId]);
     if ($stmt->fetch()) {
         $userRole = 'super_admin';
-    } else if ($salonId) {
+    }
+    else if ($salonId) {
         $stmt = $db->prepare("SELECT role FROM user_roles WHERE user_id = ? AND salon_id = ?");
         $stmt->execute([$userId, $salonId]);
         $roleInfo = $stmt->fetch();
@@ -48,7 +49,8 @@ if ($method === 'GET' && (!isset($uriParts[1]) || $uriParts[1] === '')) {
             WHERE m.salon_id = ?
         ";
         $params = [$salonId];
-    } else {
+    }
+    else {
         $query = "
             SELECT m.id, m.sender_id, m.receiver_id, m.salon_id, m.subject, m.content, m.is_read, m.recipient_type, m.created_at,
                    COALESCE(p_sender.full_name, 'Unknown Sender') as sender_name,
@@ -61,14 +63,15 @@ if ($method === 'GET' && (!isset($uriParts[1]) || $uriParts[1] === '')) {
         $params = [$userId, $userId, $salonId];
     }
 
-    $query .= " ORDER BY m.created_at DESC";
+    $query .= " ORDER BY m.created_at DESC LIMIT 50";
 
     try {
         $stmt = $db->prepare($query);
         $stmt->execute($params);
         $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
         sendResponse($messages);
-    } catch (PDOException $e) {
+    }
+    catch (PDOException $e) {
         error_log("[Messages API Error] " . $e->getMessage());
         sendResponse(['error' => 'Failed to fetch messages'], 500);
     }
@@ -102,7 +105,8 @@ if ($method === 'POST' && (!isset($uriParts[1]) || $uriParts[1] === '')) {
             if ($owner) {
                 $receiverId = $owner['user_id'];
             }
-        } else if ($recipientType === 'super_admin') {
+        }
+        else if ($recipientType === 'super_admin') {
             // Find any active super admin
             $stmt = $db->query("SELECT user_id FROM platform_admins WHERE is_active = 1 LIMIT 1");
             $admin = $stmt->fetch();
@@ -129,7 +133,8 @@ if ($method === 'POST' && (!isset($uriParts[1]) || $uriParts[1] === '')) {
         ]);
 
         sendResponse(['message' => 'Message sent successfully', 'id' => $id], 201);
-    } catch (Exception $e) {
+    }
+    catch (Exception $e) {
         sendResponse(['error' => 'Failed to save message: ' . $e->getMessage()], 500);
     }
 }

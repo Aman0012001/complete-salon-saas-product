@@ -37,7 +37,7 @@ if ($method === 'GET' && count($uriParts) === 1) {
             LEFT JOIN bookings b ON s.id = b.service_id
             LEFT JOIN booking_reviews r ON b.id = r.booking_id
             WHERE s.is_active = 1 AND sln.is_active = 1
-            GROUP BY s.id
+            GROUP BY s.id, sln.name, sln.city, sln.logo_url, sln.cover_image_url, p.full_name
             ORDER BY RAND()
         ");
         $stmt->execute();
@@ -99,7 +99,7 @@ if ($method === 'GET' && count($uriParts) === 2) {
         LEFT JOIN bookings b ON s.id = b.service_id
         LEFT JOIN booking_reviews r ON b.id = r.booking_id
         WHERE s.id = ?
-        GROUP BY s.id
+        GROUP BY s.id, sln.name, sln.address, sln.city, sln.state, sln.pincode, sln.phone, sln.email, sln.logo_url, sln.cover_image_url
     ");
     $stmt->execute([$serviceId]);
     $service = $stmt->fetch();

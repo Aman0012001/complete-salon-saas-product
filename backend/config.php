@@ -13,11 +13,9 @@ if (file_exists(dirname(__DIR__) . '/.env')) {
             continue;
         $name = trim($parts[0]);
         $value = trim($parts[1]);
-        if (!array_key_exists($name, $_SERVER) && !array_key_exists($name, $_ENV)) {
-            putenv(sprintf('%s=%s', $name, $value));
-            $_ENV[$name] = $value;
-            $_SERVER[$name] = $value;
-        }
+        putenv(sprintf('%s=%s', $name, $value));
+        $_ENV[$name] = $value;
+        $_SERVER[$name] = $value;
     }
 }
 
@@ -71,10 +69,10 @@ define('CLOUDINARY_CLOUD_NAME', getenv('CLOUDINARY_CLOUD_NAME') ?: 'de28lezdr');
 define('CLOUDINARY_API_KEY', getenv('CLOUDINARY_API_KEY') ?: '434569833245894');
 define('CLOUDINARY_API_SECRET', getenv('CLOUDINARY_API_SECRET') ?: 'TT-YIiotMjZAb2M4iwJJlkPu3Hw');
 
-// SMTP Configuration (Gmail)
-define('SMTP_HOST', 'smtp.gmail.com');
-define('SMTP_PORT', 587); // Use 465 for SSL, 587 for TLS
-define('SMTP_USER', 'amanajeetthakur644@gmail.com'); // Your Gmail address
-define('SMTP_PASS', 'xxxx xxxx xxxx xxxx'); // Your Gmail App Password (NOT your login password)
-define('SMTP_FROM_EMAIL', 'amanajeetthakur644@gmail.com');
-define('SMTP_FROM_NAME', 'Salon Style Support');
+// SMTP Configuration
+define('SMTP_HOST', getenv('SMTP_HOST') ?: 'smtp.gmail.com');
+define('SMTP_PORT', getenv('SMTP_PORT') ?: 587); // Use 465 for SSL, 587 for TLS
+define('SMTP_USER', getenv('SMTP_USER') ?: 'your-email@gmail.com');
+define('SMTP_PASS', getenv('SMTP_PASS') ?: ''); // Use App Password
+define('SMTP_FROM_EMAIL', getenv('SMTP_FROM') ?: 'noreply@salonsaas.com');
+define('SMTP_FROM_NAME', getenv('SMTP_FROM_NAME') ?: 'Salon Style Support');

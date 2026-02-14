@@ -23,7 +23,11 @@ interface Notification {
     link?: string;
 }
 
-export function SalonNotificationSystem() {
+interface SalonNotificationSystemProps {
+    onUnreadCountChange?: (count: number) => void;
+}
+
+export function SalonNotificationSystem({ onUnreadCountChange }: SalonNotificationSystemProps) {
     const [notifications, setNotifications] = useState<Notification[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -36,7 +40,14 @@ export function SalonNotificationSystem() {
             const data = await api.notifications.getAll({
                 salon_id: currentSalon.id
             });
-            setNotifications(data || []);
+            const notificationList = data || [];
+            setNotifications(notificationList);
+
+            // Notify parent of unread count
+            if (onUnreadCountChange) {
+                const unread = notificationList.filter((n: any) => !n.is_read).length;
+                onUnreadCountChange(unread);
+            }
         } catch (error) {
             console.error('Failed to fetch salon notifications:', error);
         } finally {
@@ -53,7 +64,13 @@ export function SalonNotificationSystem() {
     const markAsRead = async (id: string) => {
         try {
             await api.notifications.markAsRead(id);
-            setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
+            setNotifications(prev => {
+                const updated = prev.map(n => n.id === id ? { ...n, is_read: true } : n);
+                if (onUnreadCountChange) {
+                    onUnreadCountChange(updated.filter(n => !n.is_read).length);
+                }
+                return updated;
+            });
         } catch (error) {
             console.error('Failed to mark notification as read:', error);
         }
@@ -63,7 +80,13 @@ export function SalonNotificationSystem() {
         if (!currentSalon) return;
         try {
             await api.notifications.markAllAsRead(currentSalon.id);
-            setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
+            setNotifications(prev => {
+                const updated = prev.map(n => ({ ...n, is_read: true }));
+                if (onUnreadCountChange) {
+                    onUnreadCountChange(0);
+                }
+                return updated;
+            });
         } catch (error) {
             console.error('Failed to mark all as read:', error);
         }
