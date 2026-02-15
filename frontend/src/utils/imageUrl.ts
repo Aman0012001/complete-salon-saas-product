@@ -19,7 +19,13 @@ export const getImageUrl = (
 ): string => {
     // Deterministic fallback based on ID - Simplified to high-quality salon placeholders
     const getFallback = () => {
-        const hash = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        let hash = 0;
+        try {
+            const idStr = String(id || 'default');
+            hash = idStr.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+        } catch (e) {
+            console.warn("[getImageUrl] Hash calculation failed:", e);
+        }
 
         const coverFallbacks = [
             "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1200&auto=format&fit=crop&q=80",

@@ -153,6 +153,9 @@ export default function ClinicalProfile() {
                 title: "Health Profile Updated",
                 description: "Your clinical details have been securely saved.",
             });
+
+            // Refetch the profile to show updated data
+            await fetchClinicalProfile(selectedSalonId);
         } catch (error: any) {
             toast({
                 title: "Update Failed",

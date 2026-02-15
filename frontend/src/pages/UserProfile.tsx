@@ -96,13 +96,15 @@ export default function UserProfile() {
                 setUpcomingBookings(upcoming.slice(0, 2));
             }
 
-            // Fetch health profile (if exists)
-            // Note: Since health profiles are salon-linked, we might just show a "Manage Health Profiles" or 
-            // a message that it's available. For hub, maybe just a placeholder or general check.
+            // Fetch health profile
             try {
-                // This is a bit tricky as health profiles are salon-specific. 
-                // Maybe just show a link to view health history.
-            } catch (e) { }
+                const hp = await api.customerRecords.getGlobalProfile(user.id);
+                if (hp && hp.profile) {
+                    setHealthProfile(hp.profile);
+                }
+            } catch (e) {
+                console.error("Error fetching health profile:", e);
+            }
 
         } catch (error) {
             console.error("Error fetching hub data:", error);
@@ -273,11 +275,18 @@ export default function UserProfile() {
                                     <div className="space-y-4 mb-4">
                                         <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10">
                                             <span className="text-xs font-bold text-slate-300">Skin Type</span>
-                                            <Badge variant="outline" className="text-white border-white/20 px-3 py-1 rounded-lg bg-white/5 text-[10px] uppercase font-black tracking-tighter">Normal</Badge>
+                                            <Badge variant="outline" className="text-white border-white/20 px-3 py-1 rounded-lg bg-white/5 text-[10px] uppercase font-black tracking-tighter">
+                                                {healthProfile?.skin_type || 'Not Specified'}
+                                            </Badge>
                                         </div>
                                         <div className="flex items-center justify-between p-4 rounded-2xl bg-white/5 border border-white/10">
                                             <span className="text-xs font-bold text-slate-300">Allergies</span>
-                                            <Badge variant="outline" className="text-rose-400 border-rose-400/20 px-3 py-1 rounded-lg bg-rose-400/5 text-[10px] uppercase font-black tracking-tighter">None Reported</Badge>
+                                            <Badge
+                                                variant="outline"
+                                                className={`${(healthProfile?.allergies && healthProfile.allergies !== 'None Reported') ? 'text-rose-400 border-rose-400/20' : 'text-slate-400 border-white/20'} px-3 py-1 rounded-lg bg-white/5 text-[10px] uppercase font-black tracking-tighter`}
+                                            >
+                                                {healthProfile?.allergies || 'None Reported'}
+                                            </Badge>
                                         </div>
                                     </div>
 

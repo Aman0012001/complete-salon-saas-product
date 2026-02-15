@@ -1,0 +1,31 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Handle CORS OPTIONS preflight at the server level (faster response)
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ - [R=200,L]
+
+    # Rewrite /backend/api/xyz -> api/xyz
+    RewriteRule ^backend/api/(.*)$ api/$1 [L,QSA]
+    
+    # Route all other API requests to api/index.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^api/(.*)$ api/index.php [L,QSA]
+</IfModule>
+
+<IfModule mod_headers.c>
+    # 🚨 CORS FIX: You cannot use '*' with Credentials: true.
+    # We must mirror the request's 'Origin' header to satisfy the browser.
+    
+    # Capture the Origin header
+    SetEnvIf Origin "^(.*)$" ACCESS_CONTROL_ORIGIN=$1
+    
+    # Set the CORS headers dynamically
+    Header always set Access-Control-Allow-Origin "%{ACCESS_CONTROL_ORIGIN}e" env=ACCESS_CONTROL_ORIGIN
+    Header always set Access-Control-Allow-Credentials "true"
+    
+    # Standard permitted methods and headers
+    Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept, Origin, Cache-Control, Pragma"
+</IfModule>

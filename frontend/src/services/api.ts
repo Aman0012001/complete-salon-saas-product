@@ -741,7 +741,8 @@ export const api = {
             const url = `/customer_records/${userId}/treatments${salonId ? `?salon_id=${salonId}` : ''}`;
             return fetchWithAuth(url);
         },
-        getTransformations: () => fetchWithAuth('/customer_records/transformations')
+        getTransformations: () => fetchWithAuth('/customer_records/transformations'),
+        getGlobalProfile: (userId: string) => fetchWithAuth(`/customer_records/${userId}/profile`)
     },
     reminders: {
         create: (data: any) => fetchWithAuth('/reminders', {
