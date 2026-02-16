@@ -36,10 +36,25 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         clearTimeout(id);
 
         if (!response.ok) {
-            const resJson = await response.json().catch(() => ({ error: 'Request failed' }));
-            const errorData = resJson.data || resJson;
+            let errorData;
+            try {
+                const resJson = await response.json();
+                errorData = resJson.data || resJson;
+            } catch (e) {
+                errorData = { error: `HTTP ${response.status} - Request failed` };
+            }
+
             console.error(`[API Error] Status: ${response.status}`, errorData);
-            throw new Error(errorData.error || `HTTP ${response.status}`);
+
+            // Map common status codes to user-friendly messages
+            if (response.status === 503 || response.status === 504) {
+                throw new Error('Database service is currently busy or unavailable. Please try again in a few moments.');
+            }
+            if (response.status === 401 || response.status === 403) {
+                throw new Error('Access denied. Please ensure you are logged in with the correct permissions.');
+            }
+
+            throw new Error(errorData.message || errorData.error || `Server returned ${response.status}`);
         }
 
         const json = await response.json();
@@ -48,11 +63,17 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         clearTimeout(id);
         if (err.name === 'AbortError') {
             console.error(`[API Timeout Error] Request to ${url} timed out after 30s`);
-            throw new Error('Server request timed out. This usually happens when the Railway database is waking up. Please try again in a few seconds.');
+            throw new Error('Server request timed out. This often happens due to network latency with the database. Please try again.');
         }
+
+        if (err.message === 'Failed to fetch') {
+            throw new Error('Failed to connect to the local API server. Please ensure your backend (XAMPP or PHP server) is running on port 8000.');
+        }
+
         console.error(`[API Network Error] ${err.message}`);
         throw err;
     }
+
 };
 
 const fetchWithFileUpload = async (url: string, formData: FormData) => {

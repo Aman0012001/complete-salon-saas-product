@@ -94,6 +94,7 @@ const AllServicesSimple = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const [currentPage, setCurrentPage] = useState(1);
@@ -120,6 +121,7 @@ const AllServicesSimple = () => {
 
   const fetchSimpleServices = async () => {
     setLoading(true);
+    setError(null);
     try {
       console.log("🔍 Fetching services from local API...");
       const data = await api.services.getAll();
@@ -131,20 +133,13 @@ const AllServicesSimple = () => {
         review_count: s.review_count || 0
       }));
       setServices(formatted);
-
-      /*
-      if (data && data.length > 0) {
-        toast({
-          title: "Services Synchronized",
-          description: `Retrieved ${data.length} services from local MySQL database.`,
-        });
-      }
-      */
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching services:", error);
+      const message = error.message || "Failed to reach local PHP API. Ensure XAMPP is running.";
+      setError(message);
       toast({
         title: "Connection Error",
-        description: "Failed to reach local PHP API. Ensure XAMPP is running.",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -301,6 +296,38 @@ const AllServicesSimple = () => {
             <div className="flex flex-col items-center justify-center py-32 space-y-4">
               <Loader2 className="w-12 h-12 text-accent animate-spin" />
               <p className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Syncing Local Service Registry...</p>
+            </div>
+          ) : error ? (
+            <div className="text-center py-32 space-y-8 max-w-2xl mx-auto">
+              <div className="w-24 h-24 bg-red-50 rounded-full flex items-center justify-center mx-auto shadow-sm">
+                <Clock className="w-12 h-12 text-red-500 animate-pulse" />
+              </div>
+              <div className="space-y-4">
+                <h3 className="text-3xl font-black text-slate-900 border-b-4 border-red-500 inline-block pb-2">Service Offline</h3>
+                <p className="text-slate-500 text-lg font-medium leading-relaxed">
+                  {error}
+                </p>
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 mt-6 overflow-hidden">
+                  <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-2">Technical Detail</p>
+                  <code className="text-xs text-slate-600 break-all">{error}</code>
+                </div>
+              </div>
+              <div className="flex items-center justify-center gap-4">
+                <Button
+                  onClick={() => fetchSimpleServices()}
+                  className="bg-red-600 text-white rounded-2xl px-12 h-14 font-black shadow-xl shadow-red-600/20 hover:bg-red-700 transition-all hover:scale-105 active:scale-95"
+                >
+                  <Clock className="w-4 h-4 mr-2" />
+                  RETRY CONNECTION
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => window.location.reload()}
+                  className="rounded-2xl px-8 h-14 font-black border-2 border-slate-200"
+                >
+                  REFRESH PAGE
+                </Button>
+              </div>
             </div>
           ) : filteredServices.length === 0 ? (
             <div className="text-center py-32 space-y-6">
