@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useParams } from "react-router-dom";
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -89,8 +89,9 @@ const mainCategories = [
 ];
 
 const BookAppointment = () => {
+  const { id: routeSalonId } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
-  const salonId = searchParams.get("salonId");
+  const salonId = searchParams.get("salonId") || routeSalonId;
 
   const [salon, setSalon] = useState<Salon | null>(null);
   const [services, setServices] = useState<Service[]>([]);
@@ -352,11 +353,12 @@ const BookAppointment = () => {
         });
       } else {
         setCouponError("Invalid or expired coupon code");
-        toast({ title: "Invalid Coupon", description: "This coupon code is not valid.", variant: "destructive" });
+        toast({ title: "Invalid Coupon", description: "This coupon code is not valid or has expired.", variant: "destructive" });
       }
-    } catch (error) {
-      setCouponError("Invalid coupon code");
-      toast({ title: "Invalid Coupon", description: "This coupon code is not valid.", variant: "destructive" });
+    } catch (error: any) {
+      console.error("Coupon validation error:", error);
+      setCouponError(error.message || "Invalid coupon code");
+      toast({ title: "Invalid Coupon", description: error.message || "This coupon code is not valid.", variant: "destructive" });
     }
   };
 
