@@ -925,7 +925,10 @@ export const api = {
         }),
     },
     coupons: {
-        validate: (code: string) => fetchWithAuth(`/coupons/validate/${code}`),
+        validate: (code: string, salonId?: string) => {
+            const url = `/coupons/validate/${code}${salonId ? `?salon_id=${salonId}` : ''}`;
+            return fetchWithAuth(url);
+        },
     }
 };
 

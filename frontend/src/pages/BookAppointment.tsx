@@ -332,7 +332,7 @@ const BookAppointment = () => {
 
     try {
       // Call API to validate coupon using the newly added service
-      const coupon = await api.coupons.validate(couponCode);
+      const coupon = await api.coupons.validate(couponCode, salonId || undefined);
 
       if (coupon && coupon.is_active) {
         const subtotal = calculateSubtotal();
