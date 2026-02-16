@@ -3,7 +3,8 @@
  * Normalizes image paths from the database to work with the PHP backend
  */
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/backend/api';
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/backend/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://complete-salon-saas-product-production.up.railway.app/backend/api';
 
 // Extract the base URL without the /api suffix (e.g., http://localhost:8000/backend)
 const BACKEND_URL = API_BASE_URL.replace(/\/api\/?$/, '');

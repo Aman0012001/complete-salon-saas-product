@@ -23,7 +23,8 @@ const TestEmail = () => {
         setLoading(true);
 
         try {
-            const response = await fetch("http://localhost:8000/backend/api/mail", {
+            // const response = await fetch("http://localhost:8000/backend/api/mail", {
+            const response = await fetch("https://complete-salon-saas-product-production.up.railway.app/backend/api/mail", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

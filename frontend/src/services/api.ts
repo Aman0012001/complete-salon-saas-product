@@ -1,7 +1,8 @@
 // API Service for PHP/MySQL Backend
 // This replaces Supabase client calls
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || `http://localhost:8000/backend/api`;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || `http://localhost:8000/backend/api`;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || `https://complete-salon-saas-product-production.up.railway.app/backend/api`;
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {

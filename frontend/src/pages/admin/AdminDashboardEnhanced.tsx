@@ -186,7 +186,8 @@ export default function AdminDashboardEnhanced() {
   const handleFixPermissions = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`http://localhost:8000/backend/api/debug/promote-me`, {
+      // const res = await fetch(`http://localhost:8000/backend/api/debug/promote-me`, {
+      const res = await fetch(`https://complete-salon-saas-product-production.up.railway.app/backend/api/debug/promote-me`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('auth_token')}`
         }
