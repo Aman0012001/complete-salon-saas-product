@@ -3,7 +3,6 @@ import { api } from '@/services/api';
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Loader2, Package, Truck, CheckCircle, XCircle, MapPin, Phone, User, Globe } from 'lucide-react';
