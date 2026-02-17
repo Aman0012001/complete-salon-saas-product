@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { api } from "@/services/api";
 import { getImageUrl } from "@/utils/imageUrl";
 
 const BestSellersSection = () => {
+    const navigate = useNavigate();
     const [products, setProducts] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -118,12 +120,13 @@ const BestSellersSection = () => {
                             {/* Action Buttons - Pill style from reference */}
                             <div className="grid grid-cols-2 gap-3 mt-8">
                                 <button
-                                    onClick={() => window.location.href = `/product/${product.id}`}
+                                    onClick={() => navigate(`/product/${product.id}`)}
                                     className="py-3 px-4 border border-[#B07D62]/40 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] text-[#B07D62] hover:bg-[#B07D62] hover:text-white transition-all text-center"
                                 >
                                     VIEW
                                 </button>
                                 <button
+                                    onClick={() => navigate('/shop')}
                                     className="py-3 px-4 bg-[#B07D62] rounded-full text-[11px] font-bold uppercase tracking-[0.15em] text-white hover:bg-[#96644d] transition-all text-center shadow-md shadow-[#B07D62]/20"
                                 >
                                     SHOP NOW
