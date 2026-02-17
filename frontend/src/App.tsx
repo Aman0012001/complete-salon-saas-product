@@ -7,7 +7,6 @@ import { RoleProtectedRoute } from "@/components/auth/RoleProtectedRoute";
 import { AuthProvider } from "@/hooks/useAuth";
 import { SalonProvider } from "@/hooks/useSalon";
 import { SuperAdminProvider } from "@/hooks/useSuperAdmin";
-import { PWAInstallPrompt } from "@/components/PWAInstallPrompt";
 import "@/utils/adminBypass"; // Auto-enable admin bypass
 import ScrollToTop from "./components/ScrollToTop";
 import Index from "./pages/Index";
@@ -128,7 +127,6 @@ const App = () => {
                 <TooltipProvider>
                   <Toaster />
                   <Sonner />
-                  <PWAInstallPrompt />
                   <ScrollToTop />
                   <Routes>
                     <Route path="/" element={<AllServicesSimple />} />
