@@ -79,8 +79,10 @@ interface SubscriptionDetails {
 }
 
 const SalonContext = createContext<SalonContextType | undefined>(undefined);
+console.log("[useSalon.tsx] SalonContext object created:", SalonContext);
 
 export const SalonProvider = ({ children }: { children: ReactNode }) => {
+  console.log("[useSalon.tsx] SalonProvider mounting...");
   const { user, loading: authLoading } = useAuth();
   const { toast } = useToast();
   const [salons, setSalons] = useState<Salon[]>([]);
@@ -229,6 +231,7 @@ export const SalonProvider = ({ children }: { children: ReactNode }) => {
 
 export const useSalon = () => {
   const context = useContext(SalonContext);
+  console.log("[useSalon.tsx] useSalon hook called. Context value:", context ? "Defined" : "Undefined", "Context Object:", SalonContext);
   if (context === undefined) {
     throw new Error("useSalon must be used within a SalonProvider");
   }

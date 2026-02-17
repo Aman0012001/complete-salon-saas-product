@@ -248,21 +248,33 @@ const BookAppointment = () => {
   };
 
   useEffect(() => {
-    const fetchCoins = async () => {
-      if (!user) return;
+    const fetchPoints = async () => {
+      if (!user || !salonId) return;
       try {
-        const data = await api.coins.getBalance();
-        setUserCoins(Number(data.balance || 0));
-        setCoinPrice(Number(data.price || 1));
-        if (data.settings) {
-          setCoinSettings(data.settings);
+        // 1. Fetch Platform Coins
+        const coinData = await api.coins.getBalance();
+        const coins = Number(coinData.balance || 0);
+
+        // 2. Fetch Salon-specific Loyalty Points
+        let loyaltyPoints = 0;
+        try {
+          loyaltyPoints = await api.loyalty.getMyPoints(salonId);
+        } catch (e) {
+          console.error("Error fetching loyalty points:", e);
+        }
+
+        setUserCoins(coins + loyaltyPoints);
+        setCoinPrice(Number(coinData.price || 1));
+
+        if (coinData.settings) {
+          setCoinSettings(coinData.settings);
         }
       } catch (err) {
         console.error("Error fetching coins:", err);
       }
     };
-    fetchCoins();
-  }, [user]);
+    fetchPoints();
+  }, [user, salonId]);
 
   const handleBooking = async () => {
     if (!selectedDate || !selectedTime || !salonId || !policyAccepted) {

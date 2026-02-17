@@ -28,7 +28,7 @@ const ComparisonSlider = ({ before, after }: { before: string, after: string }) 
     const [sliderPos, setSliderPos] = useState(50);
     const containerRef = useRef<HTMLDivElement>(null);
 
-    const handleMove = (clientX: number) => {
+    const handleMove = (clientX: number, e?: React.MouseEvent | React.TouchEvent) => {
         if (!containerRef.current) return;
         const rect = containerRef.current.getBoundingClientRect();
         const x = Math.max(0, Math.min(clientX - rect.left, rect.width));
@@ -40,8 +40,10 @@ const ComparisonSlider = ({ before, after }: { before: string, after: string }) 
         <div
             ref={containerRef}
             className="relative w-full aspect-[4/5] overflow-hidden cursor-ew-resize select-none touch-none"
-            onMouseMove={(e) => e.buttons === 1 && handleMove(e.clientX)}
-            onTouchMove={(e) => handleMove(e.touches[0].clientX)}
+            onMouseMove={(e) => {
+                if (e.buttons === 1) handleMove(e.clientX, e);
+            }}
+            onTouchMove={(e) => handleMove(e.touches[0].clientX, e)}
         >
             {/* Labels - Clean labels like Image 1 */}
             <div className="absolute top-4 left-6 z-20">
@@ -176,6 +178,7 @@ const BeforeAfterSection = () => {
                         opts={{
                             align: "start",
                             loop: true,
+                            watchDrag: false,
                         }}
                         plugins={[
                             Autoplay({
@@ -191,11 +194,11 @@ const BeforeAfterSection = () => {
                                         initial={{ opacity: 0, y: 30 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
-                                        className="flex flex-col bg-white rounded-[3rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] border border-slate-50 h-full"
+                                        className="flex flex-col bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] border border-slate-50 h-full"
                                     >
                                         <ComparisonSlider before={item.before_image} after={item.after_image} />
 
-                                        <div className="p-10 flex flex-col space-y-6 flex-grow">
+                                        <div className="p-6 md:p-10 flex flex-col space-y-6 flex-grow">
                                             {/* Name and Rating Block - Horizontal Alignment */}
                                             <div className="text-center items-center justify-between gap-4">
                                                 <h3 className="text-3xl font-black text-[#1A2338] uppercase tracking-tight">{item.customer_name}</h3>

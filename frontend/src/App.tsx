@@ -104,12 +104,15 @@ const App = () => {
   const [isInitialLoading, setIsInitialLoading] = useState(true);
 
   useEffect(() => {
+    console.log("[App.tsx] App component mounted");
     // Simulate initial load or wait for resources
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
     }, 2500);
     return () => clearTimeout(timer);
   }, []);
+
+  console.log("[App.tsx] App rendering. Initial loading state:", isInitialLoading);
 
   return (
     <QueryClientProvider client={queryClient}>

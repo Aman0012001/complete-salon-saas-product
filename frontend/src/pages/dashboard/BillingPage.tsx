@@ -65,6 +65,10 @@ interface Invoice {
   customerPhone?: string;
   discount: number;
   subtotal: number;
+  coinsUsed: number;
+  loyaltyPointsUsed: number;
+  coinValue: number;
+  type: 'appointment' | 'product';
 }
 
 interface PaymentStats {
@@ -196,6 +200,10 @@ const BillingPage = () => {
           customerPhone: booking.phone || '',
           discount: Number(booking.discount_amount || 0),
           subtotal: Number(booking.service_price || booking.price || 0),
+          coinsUsed: Number(booking.coins_used || 0),
+          loyaltyPointsUsed: Number(booking.loyalty_points_used || 0),
+          coinValue: Number(booking.coin_currency_value || 0) * (Number(booking.coins_used || 0) + Number(booking.loyalty_points_used || 0)),
+          type: 'appointment',
         };
       });
 
@@ -464,12 +472,14 @@ const BillingPage = () => {
                         <p className="font-medium text-slate-500">{selectedInvoice.customerPhone}</p>
                       </div>
                     </div>
-                    <div className="space-y-3 border-l-4 border-slate-50 pl-4">
-                      <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Ship to</p>
-                      <div>
-                        <p className="font-medium text-slate-500 italic">Deliverables same as billing address.</p>
+                    {selectedInvoice.type === 'product' && (
+                      <div className="space-y-3 border-l-4 border-slate-50 pl-4">
+                        <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Ship to</p>
+                        <div>
+                          <p className="font-medium text-slate-500 italic">Deliverables same as billing address.</p>
+                        </div>
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Table */}
@@ -516,22 +526,33 @@ const BillingPage = () => {
                     <div className="w-full md:w-72 space-y-3 mt-8 md:mt-0">
                       <div className="flex justify-between font-medium">
                         <span className="text-slate-500">Subtotal</span>
-                        <span>RM {selectedInvoice.subtotal}</span>
+                        <span>RM {selectedInvoice.subtotal.toFixed(2)}</span>
                       </div>
                       {selectedInvoice.discount > 0 && (
-                        <div className="flex justify-between font-medium text-green-600">
-                          <span>Discount</span>
-                          <span>- RM {selectedInvoice.discount}</span>
+                        <div className="flex justify-between font-medium text-amber-600">
+                          <span>Coupons/Discount</span>
+                          <span>- RM {selectedInvoice.discount.toFixed(2)}</span>
+                        </div>
+                      )}
+                      {(selectedInvoice.coinsUsed > 0 || selectedInvoice.loyaltyPointsUsed > 0) && (
+                        <div className="flex justify-between font-medium text-blue-600">
+                          <span className="flex flex-col">
+                            <span>Points Redeemed</span>
+                            <span className="text-[9px] uppercase tracking-tighter opacity-70">
+                              ({selectedInvoice.coinsUsed + selectedInvoice.loyaltyPointsUsed} pts)
+                            </span>
+                          </span>
+                          <span>- RM {selectedInvoice.coinValue.toFixed(2)}</span>
                         </div>
                       )}
                       <div className="h-px bg-slate-100 my-2" />
                       <div className="flex justify-between text-lg font-black text-slate-900">
                         <span>Total Paid</span>
-                        <span>RM {selectedInvoice.amount}</span>
+                        <span>RM {selectedInvoice.amount.toFixed(2)}</span>
                       </div>
                       <div className="flex justify-between font-medium text-emerald-600">
                         <span>Amount Settled</span>
-                        <span>- RM {selectedInvoice.status === 'paid' ? selectedInvoice.amount : '0.00'}</span>
+                        <span>- RM {selectedInvoice.status === 'paid' ? selectedInvoice.amount.toFixed(2) : '0.00'}</span>
                       </div>
                     </div>
                   </div>
@@ -598,119 +619,129 @@ const BillingPage = () => {
       </div>
 
       {/* Hidden Print Container for Direct Download (No Preview Modal) */}
-      {selectedInvoice && (
-        <div className="hidden print:block fixed inset-0 bg-white z-[9999] pointer-events-none print-invoice-container">
-          <div className="p-12 space-y-12 text-sm text-[#444]">
-            {/* Logo and Title */}
-            <div className="flex justify-between items-start">
-              <div className="flex items-center gap-2">
-                {currentSalon?.logo_url ? (
-                  <img src={currentSalon.logo_url} className="w-24 h-auto object-contain" alt="Logo" />
-                ) : (
-                  <div className="relative flex items-center justify-center w-16 h-16">
-                    <span className="text-5xl font-black text-[#0066FF] leading-none">S</span>
-                    <span className="text-5xl font-black text-[#0066FF] leading-none -ml-3 transform skew-x-[15deg] border-l-4 border-white pl-1">A</span>
+      {
+        selectedInvoice && (
+          <div className="hidden print:block fixed inset-0 bg-white z-[9999] pointer-events-none print-invoice-container">
+            <div className="p-12 space-y-12 text-sm text-[#444]">
+              {/* Logo and Title */}
+              <div className="flex justify-between items-start">
+                <div className="flex items-center gap-2">
+                  {currentSalon?.logo_url ? (
+                    <img src={currentSalon.logo_url} className="w-24 h-auto object-contain" alt="Logo" />
+                  ) : (
+                    <div className="relative flex items-center justify-center w-16 h-16">
+                      <span className="text-5xl font-black text-[#0066FF] leading-none">S</span>
+                      <span className="text-5xl font-black text-[#0066FF] leading-none -ml-3 transform skew-x-[15deg] border-l-4 border-white pl-1">A</span>
+                    </div>
+                  )}
+                </div>
+                <div className="text-right">
+                  <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tighter">Tax Invoice</h2>
+                  <div className="space-y-1 text-slate-500 font-medium text-sm">
+                    <p>Invoice no: <span className="text-slate-900">{selectedInvoice.id.replace('L-INV-', '')}</span></p>
+                    <p>Invoice date: <span className="text-slate-900">{format(new Date(selectedInvoice.date), "MMM d, yyyy")}</span></p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Addresses */}
+              <div className="grid grid-cols-3 gap-8">
+                <div className="space-y-3 border-l-4 border-slate-50 pl-4">
+                  <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">From</p>
+                  <div>
+                    <p className="text-lg font-black text-slate-900 mb-1">{currentSalon?.name || "Salon Name"}</p>
+                    <p className="font-medium">{currentSalon?.email}</p>
+                    <p className="font-medium text-slate-500">{currentSalon?.address || "No Address Provided"}</p>
+                    <p className="font-medium text-slate-500">{currentSalon?.phone}</p>
+                  </div>
+                </div>
+                <div className="space-y-3 border-l-4 border-slate-50 pl-4">
+                  <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Bill to</p>
+                  <div>
+                    <p className="text-lg font-black text-slate-900 mb-1">{selectedInvoice.customer}</p>
+                    <p className="font-medium text-slate-500">{selectedInvoice.customerPhone}</p>
+                  </div>
+                </div>
+                {selectedInvoice.type === 'product' && (
+                  <div className="space-y-3 border-l-4 border-slate-50 pl-4">
+                    <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Ship to</p>
+                    <div>
+                      <p className="font-medium text-slate-500 italic">Deliverables same as billing address.</p>
+                    </div>
                   </div>
                 )}
               </div>
-              <div className="text-right">
-                <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tighter">Tax Invoice</h2>
-                <div className="space-y-1 text-slate-500 font-medium text-sm">
-                  <p>Invoice no: <span className="text-slate-900">{selectedInvoice.id.replace('L-INV-', '')}</span></p>
-                  <p>Invoice date: <span className="text-slate-900">{format(new Date(selectedInvoice.date), "MMM d, yyyy")}</span></p>
-                </div>
-              </div>
-            </div>
 
-            {/* Addresses */}
-            <div className="grid grid-cols-3 gap-8">
-              <div className="space-y-3 border-l-4 border-slate-50 pl-4">
-                <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">From</p>
-                <div>
-                  <p className="text-lg font-black text-slate-900 mb-1">{currentSalon?.name || "Salon Name"}</p>
-                  <p className="font-medium">{currentSalon?.email}</p>
-                  <p className="font-medium text-slate-500">{currentSalon?.address || "No Address Provided"}</p>
-                  <p className="font-medium text-slate-500">{currentSalon?.phone}</p>
-                </div>
+              {/* Table */}
+              <div className="overflow-hidden rounded-xl border border-slate-100">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-[#0066FF] text-white font-bold uppercase tracking-widest text-[10px]">
+                      <th className="px-6 py-4">Description</th>
+                      <th className="px-6 py-4 text-center">Rate</th>
+                      <th className="px-6 py-4 text-center">Qty</th>
+                      <th className="px-6 py-4 text-center">Tax</th>
+                      <th className="px-6 py-4 text-center">Disc</th>
+                      <th className="px-6 py-4 text-right">Amount</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="font-medium text-slate-700">
+                      <td className="px-6 py-5">
+                        <p className="font-bold text-slate-900">{selectedInvoice.service}</p>
+                        <p className="text-[10px] text-slate-400 mt-1">Professional session inclusive of all taxes.</p>
+                      </td>
+                      <td className="px-6 py-5 text-center">RM {selectedInvoice.subtotal}</td>
+                      <td className="px-6 py-5 text-center">1</td>
+                      <td className="px-6 py-5 text-center">0%</td>
+                      <td className="px-6 py-5 text-center">RM {selectedInvoice.discount}</td>
+                      <td className="px-6 py-5 text-right font-bold text-slate-900">RM {selectedInvoice.amount}</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div className="space-y-3 border-l-4 border-slate-50 pl-4">
-                <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Bill to</p>
-                <div>
-                  <p className="text-lg font-black text-slate-900 mb-1">{selectedInvoice.customer}</p>
-                  <p className="font-medium text-slate-500">{selectedInvoice.customerPhone}</p>
-                </div>
-              </div>
-              <div className="space-y-3 border-l-4 border-slate-50 pl-4">
-                <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Ship to</p>
-                <div>
-                  <p className="font-medium text-slate-500 italic">Deliverables same as billing address.</p>
-                </div>
-              </div>
-            </div>
 
-            {/* Table */}
-            <div className="overflow-hidden rounded-xl border border-slate-100">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-[#0066FF] text-white font-bold uppercase tracking-widest text-[10px]">
-                    <th className="px-6 py-4">Description</th>
-                    <th className="px-6 py-4 text-center">Rate</th>
-                    <th className="px-6 py-4 text-center">Qty</th>
-                    <th className="px-6 py-4 text-center">Tax</th>
-                    <th className="px-6 py-4 text-center">Disc</th>
-                    <th className="px-6 py-4 text-right">Amount</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="font-medium text-slate-700">
-                    <td className="px-6 py-5">
-                      <p className="font-bold text-slate-900">{selectedInvoice.service}</p>
-                      <p className="text-[10px] text-slate-400 mt-1">Professional session inclusive of all taxes.</p>
-                    </td>
-                    <td className="px-6 py-5 text-center">RM {selectedInvoice.subtotal}</td>
-                    <td className="px-6 py-5 text-center">1</td>
-                    <td className="px-6 py-5 text-center">0%</td>
-                    <td className="px-6 py-5 text-center">RM {selectedInvoice.discount}</td>
-                    <td className="px-6 py-5 text-right font-bold text-slate-900">RM {selectedInvoice.amount}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            {/* Footer Summary */}
-            <div className="flex justify-between items-start pt-6 border-t border-slate-100">
-              <div className="space-y-4">
-                <p className="font-bold text-slate-900">Payment instruction</p>
-                <div className="text-slate-500 space-y-1">
-                  <p>UPI/Paypal: <span className="font-bold text-slate-700">{currentSalon?.upi_id || "pay@example.com"}</span></p>
-                  <p>Bank: <span className="font-bold text-slate-700">{currentSalon?.bank_details || "No Bank Info"}</span></p>
-                </div>
-              </div>
-              <div className="w-72 space-y-3">
-                <div className="flex justify-between font-medium">
-                  <span className="text-slate-500">Subtotal</span>
-                  <span>RM {selectedInvoice.subtotal}</span>
-                </div>
-                {selectedInvoice.discount > 0 && (
-                  <div className="flex justify-between font-medium text-green-600">
-                    <span>Discount</span>
-                    <span>- RM {selectedInvoice.discount}</span>
+              {/* Footer Summary */}
+              <div className="flex justify-between items-start pt-6 border-t border-slate-100">
+                <div className="space-y-4">
+                  <p className="font-bold text-slate-900">Payment instruction</p>
+                  <div className="text-slate-500 space-y-1">
+                    <p>UPI/Paypal: <span className="font-bold text-slate-700">{currentSalon?.upi_id || "pay@example.com"}</span></p>
+                    <p>Bank: <span className="font-bold text-slate-700">{currentSalon?.bank_details || "No Bank Info"}</span></p>
                   </div>
-                )}
-                <div className="h-px bg-slate-100 my-2" />
-                <div className="flex justify-between text-lg font-black text-slate-900">
-                  <span>Total Paid</span>
-                  <span>RM {selectedInvoice.amount}</span>
                 </div>
-                <div className="flex justify-between font-medium text-emerald-600">
-                  <span>Amount Settled</span>
-                  <span>- RM {selectedInvoice.status === 'paid' ? selectedInvoice.amount : '0.00'}</span>
+                <div className="w-72 space-y-3">
+                  <div className="flex justify-between font-medium">
+                    <span className="text-slate-500">Subtotal</span>
+                    <span>RM {selectedInvoice.subtotal.toFixed(2)}</span>
+                  </div>
+                  {selectedInvoice.discount > 0 && (
+                    <div className="flex justify-between font-medium text-amber-600">
+                      <span>Discount</span>
+                      <span>- RM {selectedInvoice.discount.toFixed(2)}</span>
+                    </div>
+                  )}
+                  {(selectedInvoice.coinsUsed > 0 || selectedInvoice.loyaltyPointsUsed > 0) && (
+                    <div className="flex justify-between font-medium text-blue-600">
+                      <span>Points ({selectedInvoice.coinsUsed + selectedInvoice.loyaltyPointsUsed})</span>
+                      <span>- RM {selectedInvoice.coinValue.toFixed(2)}</span>
+                    </div>
+                  )}
+                  <div className="h-px bg-slate-100 my-2" />
+                  <div className="flex justify-between text-lg font-black text-slate-900">
+                    <span>Total Paid</span>
+                    <span>RM {selectedInvoice.amount.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between font-medium text-emerald-600">
+                    <span>Amount Settled</span>
+                    <span>- RM {selectedInvoice.status === 'paid' ? selectedInvoice.amount.toFixed(2) : '0.00'}</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       <style>{`
         @media print {

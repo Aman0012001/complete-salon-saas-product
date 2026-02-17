@@ -20,7 +20,9 @@ import {
     Bell,
     LogOut,
     Sparkles,
-    ShieldCheck
+    ShieldCheck,
+    Coins,
+    RefreshCw
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import api from "@/services/api";
@@ -40,6 +42,7 @@ export default function UserProfile() {
     });
     const [upcomingBookings, setUpcomingBookings] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [fixingPoints, setFixingPoints] = useState(false);
     const [healthProfile, setHealthProfile] = useState<any>(null);
 
     useEffect(() => {
@@ -62,19 +65,29 @@ export default function UserProfile() {
             const completed = bookings.filter((b: any) => b.status === "completed");
 
             // Fetch real coin balance
-            let points = 0;
+            let coins = 0;
             try {
                 const coinData = await api.coins.getBalance();
-                points = Number(coinData.balance || 0);
+                coins = Number(coinData.balance || 0);
             } catch (error) {
                 console.error("Error fetching coin balance:", error);
+            }
+
+            // Fetch all salon loyalty points
+            let totalLoyalty = 0;
+            try {
+                const loyaltyData = await api.loyalty.getAllPoints();
+                const salonPoints = loyaltyData.points || [];
+                totalLoyalty = salonPoints.reduce((acc: number, curr: any) => acc + Number(curr.loyalty_points || 0), 0);
+            } catch (error) {
+                console.error("Error fetching loyalty points:", error);
             }
 
             setStats({
                 totalBookings: bookings.length,
                 upcomingBookings: upcoming.length,
                 completedBookings: completed.length,
-                points: points
+                points: coins + totalLoyalty
             });
 
             if (upcoming.length === 0 && completed.length > 0) {
@@ -113,6 +126,26 @@ export default function UserProfile() {
         }
     };
 
+    const handleFixPoints = async () => {
+        setFixingPoints(true);
+        try {
+            const result = await api.loyalty.fixMyPoints();
+            toast({
+                title: "Points Synced",
+                description: `Scan complete: ${result.details.loyalty_awards_fixed} awards fixed.`,
+            });
+            await fetchHubData(); // Refresh stats
+        } catch (error: any) {
+            toast({
+                title: "Error",
+                description: error.message || "Failed to fix points",
+                variant: "destructive",
+            });
+        } finally {
+            setFixingPoints(false);
+        }
+    };
+
     if (authLoading || !user) return null;
 
     return (
@@ -144,7 +177,7 @@ export default function UserProfile() {
                     {[
                         { label: "Total Visits", value: stats.totalBookings, icon: History, color: "bg-blue-50 text-blue-600" },
                         { label: "Upcoming", value: stats.upcomingBookings, icon: Calendar, color: "bg-orange-50 text-orange-600" },
-                        { label: "Points", value: stats.points, icon: Star, color: "bg-yellow-50 text-yellow-600" }
+                        { label: "Points", value: stats.points, icon: Sparkles, color: "bg-amber-50 text-amber-600" }
                     ].map((stat, i) => (
                         <motion.div
                             key={stat.label}
@@ -156,7 +189,22 @@ export default function UserProfile() {
                                 <CardContent className="p-8 flex items-center justify-between">
                                     <div>
                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">{stat.label}</p>
-                                        <p className="text-3xl font-black text-slate-900 tracking-tighter">{stat.value}</p>
+                                        <div className="flex items-center gap-2">
+                                            <p className="text-3xl font-black text-slate-900 tracking-tighter">
+                                                {stat.label === "Points" ? Number(stat.value).toFixed(2) : stat.value}
+                                            </p>
+                                            {stat.label === "Points" && (
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    onClick={handleFixPoints}
+                                                    disabled={fixingPoints}
+                                                    className="w-8 h-8 rounded-full hover:bg-amber-100/50 text-amber-600 transition-all"
+                                                >
+                                                    <RefreshCw className={`w-4 h-4 ${fixingPoints ? 'animate-spin' : ''}`} />
+                                                </Button>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className={`w-14 h-14 ${stat.color} rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform`}>
                                         <stat.icon className="w-6 h-6" />

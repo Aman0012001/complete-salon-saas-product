@@ -818,6 +818,10 @@ export const api = {
         delete: (id: string) => fetchWithAuth(`/offers/${id}`, {
             method: 'DELETE',
         }),
+        getRedemptions: async (offerId: string) => {
+            const data = await fetchWithAuth(`/offers/${offerId}/redemptions`);
+            return toArray(data, 'redemptions');
+        },
     },
     inventory: {
         getBySalon: (salonId: string, category?: string) => {
@@ -940,10 +944,12 @@ export const api = {
             const data = await fetchWithAuth(`/loyalty/my-points?salon_id=${salonId}`);
             return data?.points || 0;
         },
+        getAllPoints: () => fetchWithAuth('/loyalty/all-points'),
         redeem: (salonId: string, rewardId: string) => fetchWithAuth('/loyalty/redeem', {
             method: 'POST',
             body: JSON.stringify({ salon_id: salonId, reward_id: rewardId }),
         }),
+        fixMyPoints: () => fetchWithAuth('/loyalty/fix-my-points'),
     },
     coupons: {
         validate: (code: string, salonId?: string) => {

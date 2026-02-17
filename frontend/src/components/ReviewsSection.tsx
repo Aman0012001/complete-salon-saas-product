@@ -86,19 +86,20 @@ const ReviewsSection = () => {
                     opts={{
                         align: "start",
                         loop: true,
+                        watchDrag: false,
                     }}
                     plugins={[
                         Autoplay({
                             delay: 4000,
                         }),
                     ]}
-                    className="w-full"
+                    className="w-full relative group"
                 >
                     <CarouselContent className="-ml-12">
                         {reviews.map((review) => (
                             <CarouselItem key={review.id} className="pl-12 md:basis-1/2 lg:basis-1/3">
                                 <motion.div
-                                    className="flex flex-col group cursor-grab active:cursor-grabbing"
+                                    className="flex flex-col group"
                                 >
                                     {/* Vertical Layout - Image Top */}
                                     <div className="relative aspect-square w-full rounded-[4rem] overflow-hidden  mb-8">
@@ -139,6 +140,12 @@ const ReviewsSection = () => {
                             </CarouselItem>
                         ))}
                     </CarouselContent>
+
+                    {/* Navigation Buttons */}
+                    <div className="flex justify-center gap-4 mt-12">
+                        <CarouselPrevious className="static translate-y-0 w-14 h-14 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-600 transition-all shadow-sm" />
+                        <CarouselNext className="static translate-y-0 w-14 h-14 rounded-full border border-slate-200 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-600 transition-all shadow-sm" />
+                    </div>
                 </Carousel>
             </div>
         </section>

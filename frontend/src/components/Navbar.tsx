@@ -71,8 +71,6 @@ const Navbar = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Top Black Bar */}
-      <div className="h-[2px] bg-[#1A1A1A] w-full" />
 
       <nav className="bg-[#F3EEEA] border-b border-[#E5E0D8]">
         <div className="container mx-auto px-4 h-20 md:h-24 flex items-center justify-between">
@@ -97,10 +95,10 @@ const Navbar = () => {
           </div>
 
           {/* Action Icons Section - Right */}
-          <div className="flex items-center gap-4 md:gap-6">
+          <div className="flex items-center gap-1 md:gap-2">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="text-[#1A1A1A] hover:opacity-60 transition-opacity"
+              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:bg-black/5 rounded-full transition-all"
             >
               <Search className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
             </button>
@@ -108,7 +106,7 @@ const Navbar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="text-[#1A1A1A] hover:opacity-60 transition-opacity outline-none">
+                  <button className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:bg-black/5 rounded-full transition-all outline-none">
                     <User className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
                   </button>
                 </DropdownMenuTrigger>
@@ -157,7 +155,7 @@ const Navbar = () => {
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="text-[#1A1A1A] hover:opacity-60 transition-opacity outline-none">
+                  <button className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:bg-black/5 rounded-full transition-all outline-none">
                     <User className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
                   </button>
                 </DropdownMenuTrigger>
@@ -205,10 +203,10 @@ const Navbar = () => {
               </DropdownMenu>
             )}
 
-            <Link to="/cart" className="text-[#1A1A1A] hover:opacity-60 transition-opacity relative group">
+            <Link to="/cart" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:opacity-100 hover:bg-black/5 rounded-full transition-all relative group">
               <ShoppingBag className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
               {cartCount > 0 && (
-                <div className="absolute -top-2 -right-2 w-4 h-4 bg-accent text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-in zoom-in h-fit px-1">
+                <div className="absolute top-1 right-1 md:top-2 md:right-2 min-w-[18px] h-[18px] bg-accent text-white text-[10px] font-black rounded-full flex items-center justify-center animate-in zoom-in border-2 border-[#F3EEEA] shadow-sm">
                   {cartCount}
                 </div>
               )}
@@ -219,7 +217,7 @@ const Navbar = () => {
             <div className="lg:hidden">
               <Sheet open={isOpen} onOpenChange={setIsOpen}>
                 <SheetTrigger asChild>
-                  <Button variant="ghost" size="icon" className="text-[#1A1A1A]">
+                  <Button variant="ghost" size="icon" className="h-10 w-10 md:h-12 md:w-12 text-[#1A1A1A] hover:bg-black/5 rounded-full transition-all">
                     <Menu className="w-6 h-6" />
                   </Button>
                 </SheetTrigger>

@@ -126,25 +126,29 @@ export default function AppointmentsPage() {
   const [showStaffAssignment, setShowStaffAssignment] = useState(false);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [assigningStaff, setAssigningStaff] = useState(false);
+  const [statusToSet, setStatusToSet] = useState<string | null>(null);
 
   const assignStaffToBooking = async (staffId: string) => {
     if (!selectedBooking) return;
 
     setAssigningStaff(true);
+    const targetStatus = statusToSet || 'confirmed';
     try {
-      // Auto-confirm the booking when staff is assigned
-      const response = await api.bookings.updateStatus(selectedBooking.id, 'confirmed', staffId);
+      // Auto-confirm/complete the booking when staff is assigned based on intent
+      const response = await api.bookings.updateStatus(selectedBooking.id, targetStatus, staffId);
       const updatedBooking = response.booking || response;
 
       toast({
-        title: "Staff Assigned",
-        description: "The specialist has been successfully assigned and the booking is now confirmed.",
+        title: targetStatus === 'completed' ? "Booking Completed" : "Staff Assigned",
+        description: targetStatus === 'completed'
+          ? "Specialist assigned and ritual marked as completed."
+          : "The specialist has been successfully assigned and the booking is now confirmed.",
       });
 
       // Update local state with the returned booking data 
       setBookings(prev => prev.map(b =>
         b.id === selectedBooking.id
-          ? { ...b, staff_id: staffId, staff_name: updatedBooking.staff_name, status: 'confirmed' }
+          ? { ...b, staff_id: staffId, staff_name: updatedBooking.staff_name, status: targetStatus }
           : b
       ));
 
@@ -152,6 +156,7 @@ export default function AppointmentsPage() {
       fetchBookings();
 
       setShowStaffAssignment(false);
+      setStatusToSet(null);
     } catch (error) {
       console.error("Error assigning staff:", error);
       toast({
@@ -372,16 +377,17 @@ export default function AppointmentsPage() {
     }
   };
 
-  const updateBookingStatus = async (bookingId: string, status: string) => {
-    // Safety check: Cannot complete without staff assignment
+  const updateBookingStatus = async (bookingId: string, status: string, force = false) => {
+    // Safety check: Cannot complete without staff assignment, unless forced
     const booking = bookings.find(b => b.id === bookingId);
-    if (status === 'completed' && !booking?.staff_id && !booking?.staff_name) {
+    if (status === 'completed' && !booking?.staff_id && !booking?.staff_name && !force) {
       setSelectedBooking(booking || null);
+      setStatusToSet('completed');
       setShowStaffAssignment(true);
       toast({
         title: "Staff Assignment Required",
         description: "Please assign a specialist before marking this appointment as completed.",
-        variant: "destructive"
+        variant: "default"
       });
       return;
     }
@@ -911,6 +917,7 @@ export default function AppointmentsPage() {
                                   <DropdownMenuItem
                                     onClick={() => {
                                       setSelectedBooking(booking);
+                                      setStatusToSet('confirmed');
                                       setShowStaffAssignment(true);
                                     }}
                                     className="rounded-xl py-3 font-bold text-amber-600 focus:bg-amber-50 focus:text-amber-700"
@@ -1021,11 +1028,27 @@ export default function AppointmentsPage() {
                 )}
               </div>
             </div>
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col sm:flex-row justify-between gap-3 mt-4">
               <Button variant="outline" onClick={() => {
                 setShowStaffAssignment(false);
                 setSelectedBooking(null);
+                setStatusToSet(null);
               }}>Cancel</Button>
+
+              <Button
+                variant="ghost"
+                className="text-slate-400 hover:text-slate-600 h-9 px-3 text-[10px] font-bold uppercase tracking-widest"
+                disabled={assigningStaff}
+                onClick={() => {
+                  if (selectedBooking) {
+                    updateBookingStatus(selectedBooking.id, statusToSet || 'confirmed', true);
+                    setShowStaffAssignment(false);
+                    setStatusToSet(null);
+                  }
+                }}
+              >
+                {statusToSet === 'completed' ? 'Complete' : 'Confirm'} without Specialist
+              </Button>
             </div>
           </DialogContent>
         </Dialog>

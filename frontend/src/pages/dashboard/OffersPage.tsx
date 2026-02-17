@@ -71,6 +71,10 @@ const OffersPage = () => {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [editingOffer, setEditingOffer] = useState<Offer | null>(null);
+  const [isRedemptionsDialogOpen, setIsRedemptionsDialogOpen] = useState(false);
+  const [viewingOffer, setViewingOffer] = useState<Offer | null>(null);
+  const [redemptions, setRedemptions] = useState<any[]>([]);
+  const [loadingRedemptions, setLoadingRedemptions] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -128,6 +132,25 @@ const OffersPage = () => {
       status: "active"
     });
     setEditingOffer(null);
+  };
+
+  const handleViewRedemptions = async (offer: Offer) => {
+    setViewingOffer(offer);
+    setIsRedemptionsDialogOpen(true);
+    setLoadingRedemptions(true);
+    try {
+      const data = await api.offers.getRedemptions(offer.id);
+      setRedemptions(data || []);
+    } catch (error) {
+      console.error("Error fetching redemptions:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load redemptions",
+        variant: "destructive",
+      });
+    } finally {
+      setLoadingRedemptions(false);
+    }
   };
 
   const handleSaveOffer = async () => {
@@ -233,7 +256,7 @@ const OffersPage = () => {
     },
     {
       title: "Total Redemptions",
-      value: offers.reduce((acc, o) => acc + o.usage_count, 0).toString(),
+      value: offers.reduce((acc, o) => acc + (o.usage_count || 0), 0).toString(),
       icon: Tag
     },
     {
@@ -358,11 +381,29 @@ const OffersPage = () => {
                           </div>
                           {getStatusBadge(offer.status)}
                           {(isOwner || isManager) && (
-                            <div className="flex items-center gap-2">
-                              <Button variant="ghost" size="sm" onClick={() => openEditDialog(offer)}>
+                            <div className="flex items-center gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleViewRedemptions(offer)}
+                                className="h-9 w-9 rounded-xl hover:bg-accent hover:text-white transition-all duration-300 active:scale-95"
+                              >
+                                <Users className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => openEditDialog(offer)}
+                                className="h-9 w-9 rounded-xl hover:bg-slate-900 hover:text-white transition-all duration-300 active:scale-95"
+                              >
                                 <Edit className="w-4 h-4" />
                               </Button>
-                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleDeleteOffer(offer.id)}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-9 w-9 rounded-xl text-destructive hover:bg-destructive hover:text-white transition-all duration-300 active:scale-95"
+                                onClick={() => handleDeleteOffer(offer.id)}
+                              >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
@@ -425,11 +466,29 @@ const OffersPage = () => {
                           </div>
                           {getStatusBadge(offer.status)}
                           {(isOwner || isManager) && (
-                            <div className="flex items-center gap-2">
-                              <Button variant="ghost" size="sm" onClick={() => openEditDialog(offer)}>
+                            <div className="flex items-center gap-1">
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleViewRedemptions(offer)}
+                                className="h-9 w-9 rounded-xl hover:bg-accent hover:text-white transition-all duration-300 active:scale-95"
+                              >
+                                <Users className="w-4 h-4" />
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => openEditDialog(offer)}
+                                className="h-9 w-9 rounded-xl hover:bg-slate-900 hover:text-white transition-all duration-300 active:scale-95"
+                              >
                                 <Edit className="w-4 h-4" />
                               </Button>
-                              <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive" onClick={() => handleDeleteOffer(offer.id)}>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-9 w-9 rounded-xl text-destructive hover:bg-destructive hover:text-white transition-all duration-300 active:scale-95"
+                                onClick={() => handleDeleteOffer(offer.id)}
+                              >
                                 <Trash2 className="w-4 h-4" />
                               </Button>
                             </div>
@@ -612,6 +671,56 @@ const OffersPage = () => {
                 {saving ? <Loader2 className="animate-spin mr-2" /> : null}
                 {editingOffer ? "Update Offer" : "Create Offer"}
               </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {/* Redemptions Dialog */}
+        <Dialog open={isRedemptionsDialogOpen} onOpenChange={setIsRedemptionsDialogOpen}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Redemption History: {viewingOffer?.title}</DialogTitle>
+              <DialogDescription>
+                Specific customers who have used the code: <span className="font-mono font-bold text-accent">{viewingOffer?.code}</span>
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="py-4">
+              {loadingRedemptions ? (
+                <div className="flex justify-center py-8"><Loader2 className="animate-spin text-accent" /></div>
+              ) : redemptions.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground bg-accent/5 rounded-xl border border-dashed border-accent/20">
+                  No redemptions tracked specifically for this code yet.
+                </div>
+              ) : (
+                <div className="max-h-[400px] overflow-y-auto space-y-3 pr-2 custom-scrollbar">
+                  {redemptions.map((r, idx) => (
+                    <div key={idx} className="flex items-center justify-between p-4 rounded-xl bg-secondary/40 border border-border/50">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold">
+                          {r.customer_name?.charAt(0) || "U"}
+                        </div>
+                        <div>
+                          <p className="font-bold text-sm tracking-tight">{r.customer_name || "Unknown User"}</p>
+                          <p className="text-[11px] text-muted-foreground">{r.customer_email}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-xs font-black text-accent tracking-widest uppercase">RM {parseFloat(r.discount_amount).toFixed(2)} OFF</p>
+                        <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
+                          Used on {new Date(r.booking_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <DialogFooter className="sm:justify-start">
+              <div className="w-full flex justify-between items-center text-[10px] text-muted-foreground font-bold uppercase tracking-[0.2em]">
+                <span>Total: {redemptions.length} Used</span>
+                <Button variant="outline" size="sm" onClick={() => setIsRedemptionsDialogOpen(false)} className="rounded-full px-6">Close</Button>
+              </div>
             </DialogFooter>
           </DialogContent>
         </Dialog>

@@ -289,34 +289,6 @@ export function StaffDashboard() {
                 </div>
             </div>
 
-            {/* Main Stats Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-                {[
-                    { label: 'Total Revenue', value: `RM ${stats?.revenue?.toLocaleString() || 0}`, icon: TrendingUp, color: 'text-[#F2A93B]', bg: 'bg-orange-50' },
-                    { label: 'Monthly Earnings', value: `RM ${stats?.earnings?.toLocaleString() || 0}`, icon: DollarSign, color: 'text-emerald-500', bg: 'bg-emerald-50' },
-                    { label: 'Commission Rate', value: `${stats?.commission_rate || 30}%`, icon: User, color: 'text-blue-500', bg: 'bg-blue-50' },
-                    { label: 'Uptime (Hrs)', value: `${stats?.total_hours || 0}h`, icon: Clock, color: 'text-purple-500', bg: 'bg-purple-50' },
-                ].map((stat, i) => (
-                    <motion.div
-                        key={i}
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: i * 0.1 }}
-                    >
-                        <Card className="rounded-[2rem] border-none shadow-sm bg-white overflow-hidden hover:shadow-xl transition-all h-full">
-                            <CardContent className="p-8 space-y-4">
-                                <div className={cn("w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner", stat.bg)}>
-                                    <stat.icon className={cn("w-6 h-6", stat.color)} />
-                                </div>
-                                <div>
-                                    <h3 className="text-2xl font-black text-slate-900">{stat.value}</h3>
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">{stat.label}</p>
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </motion.div>
-                ))}
-            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Today's Mission (Appointments) */}

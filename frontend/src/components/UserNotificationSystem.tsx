@@ -70,7 +70,7 @@ export function UserNotificationSystem() {
 
     const unreadCount = notifications.filter(n => !n.is_read).length;
 
-    if (!user) return null;
+    if (!user || notifications.length === 0) return null;
 
     return (
         <Popover open={isOpen} onOpenChange={setIsOpen}>
@@ -78,13 +78,13 @@ export function UserNotificationSystem() {
                 <Button
                     variant="ghost"
                     size="icon"
-                    className="relative h-10 w-10 md:h-11 md:w-11 rounded-full bg-slate-50 hover:bg-slate-100 transition-all group"
+                    className="relative h-10 w-10 md:h-12 md:w-12 rounded-full hover:bg-black/5 transition-all group"
                 >
-                    <Bell className="w-5 h-5 text-slate-600 group-hover:text-accent transition-colors" />
+                    <Bell className="w-5 h-5 md:w-6 md:h-6 text-[#1A1A1A] group-hover:text-accent transition-colors stroke-[1.2px]" />
                     {unreadCount > 0 && (
-                        <Badge className="absolute -top-0 -right-0 w-5 h-5 p-0 text-[10px] flex items-center justify-center font-bold bg-accent text-white border-2 border-white shadow-sm animate-pulse">
+                        <div className="absolute top-1 right-1 md:top-2 md:right-2 min-w-[18px] h-[18px] bg-accent text-white text-[10px] font-black rounded-full flex items-center justify-center animate-in zoom-in border-2 border-[#F3EEEA] shadow-sm">
                             {unreadCount}
-                        </Badge>
+                        </div>
                     )}
                 </Button>
             </PopoverTrigger>

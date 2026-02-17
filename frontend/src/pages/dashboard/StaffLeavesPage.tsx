@@ -165,7 +165,7 @@ export default function StaffLeavesPage() {
                         </div>
                         <div>
                             <p className="text-2xl font-black text-slate-900">{leaves.filter(l => l.status === 'rejected').length}</p>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Denied Apps</p>
+                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Denied Leaves</p>
                         </div>
                     </Card>
                 </div>
@@ -289,7 +289,7 @@ export default function StaffLeavesPage() {
 
                         <DialogFooter className="gap-3">
                             <Button variant="ghost" onClick={() => setIsRequestOpen(false)} className="h-14 flex-1 font-black text-[10px] uppercase tracking-widest text-slate-400">Abort</Button>
-                            <Button onClick={handleCreateLeave} className="h-14 flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-xl">Submit App</Button>
+                            <Button onClick={handleCreateLeave} className="h-14 flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-xl">Submit Leave</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

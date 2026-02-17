@@ -57,10 +57,10 @@ const NewsletterPopup = () => {
 
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent className="max-w-4xl p-0 overflow-hidden border-none bg-white rounded-3xl shadow-2xl">
-                <div className="flex flex-col md:flex-row h-full min-h-[450px]">
+            <DialogContent className="w-[92vw] sm:max-w-4xl p-0 overflow-hidden border-none bg-white rounded-3xl shadow-2xl">
+                <div className="flex flex-col md:flex-row h-full md:min-h-[450px]">
                     {/* Left Side - Image */}
-                    <div className="relative w-full md:w-1/2 h-48 md:h-auto overflow-hidden">
+                    <div className="relative w-full md:w-1/2 h-40 sm:h-48 md:h-auto overflow-hidden">
                         <img
                             src="/images/salon_banner_1.png"
                             alt="Salon Experience"
@@ -71,7 +71,7 @@ const NewsletterPopup = () => {
                     </div>
 
                     {/* Right Side - Content */}
-                    <div className="flex flex-col justify-center w-full md:w-1/2 p-8 md:p-12 bg-[#F8F5F2] relative">
+                    <div className="flex flex-col justify-center w-full md:w-1/2 p-6 md:p-12 bg-[#F8F5F2] relative">
                         {!hasSubscribed ? (
 
                             <motion.div
@@ -80,11 +80,11 @@ const NewsletterPopup = () => {
                                 transition={{ duration: 0.5 }}
                                 className="space-y-6"
                             >
-                                <div className="space-y-4">
-                                    <h2 className="text-4xl md:text-5xl font-['Playfair_Display'] font-bold text-gray-900 leading-tight">
+                                <div className="space-y-2 md:space-y-4">
+                                    <h2 className="text-2xl sm:text-3xl md:text-5xl font-['Playfair_Display'] font-bold text-gray-900 leading-tight">
                                         Get RM 50 OFF Your First Visit
                                     </h2>
-                                    <p className="text-gray-600 text-lg leading-relaxed">
+                                    <p className="text-gray-600 text-sm md:text-lg leading-relaxed">
                                         Subscribe to our newsletter for exclusive offers, wellness tips, and a premium salon experience.
                                     </p>
                                 </div>

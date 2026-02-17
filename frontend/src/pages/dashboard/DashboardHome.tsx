@@ -38,6 +38,13 @@ import { useToast } from "@/hooks/use-toast";
 import { format, isToday, parseISO } from "date-fns";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { StaffDashboard } from "@/components/dashboard/StaffDashboard";
 
 interface DashboardStats {
@@ -71,6 +78,7 @@ interface Booking {
     price: number;
     duration_minutes: number;
   } | null;
+  staff_id?: string | null;
   customer: {
     user_id: string;
     full_name: string | null;
@@ -83,6 +91,7 @@ interface Booking {
 export default function DashboardHome() {
   const navigate = useNavigate();
   const { user, loading: authLoading } = useAuth();
+  console.log("[DashboardHome.tsx] Calling useSalon hook...");
   const { currentSalon, loading: salonLoading, isOwner: salonOwnerRole, isStaff: salonStaffRole, subscription } = useSalon();
 
   const isOwner = user?.user_type === 'salon_owner' || salonOwnerRole || (user?.salon_role && ['owner', 'manager'].includes(user.salon_role));
@@ -103,6 +112,13 @@ export default function DashboardHome() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [lastRefresh, setLastRefresh] = useState<Date>(new Date());
+
+  // Staff Assignment State
+  const [showStaffAssignment, setShowStaffAssignment] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
+  const [assigningStaff, setAssigningStaff] = useState(false);
+  const [statusToSet, setStatusToSet] = useState<string | null>(null);
+  const [staffMembers, setStaffMembers] = useState<any[]>([]);
 
   const refreshBookings = useCallback(async (manual = false) => {
     if (!currentSalon) return;
@@ -170,6 +186,12 @@ export default function DashboardHome() {
 
       setLastRefresh(new Date());
 
+      // Fetch staff members if we are an owner/manager
+      if (manual || !staffMembers.length) {
+        const staffData = await api.staff.getBySalon(currentSalon.id);
+        setStaffMembers(staffData.filter((s: any) => s.is_active));
+      }
+
       if (manual) {
         toast({
           title: "Data Refreshed",
@@ -183,16 +205,50 @@ export default function DashboardHome() {
     }
   }, [currentSalon, toast]);
 
-  const updateBookingStatus = async (bookingId: string, newStatus: string) => {
+  const updateBookingStatus = async (bookingId: string, newStatus: string, staffId?: string, force = false) => {
+    const booking = [...recentBookings, ...pendingBookings].find(b => b.id === bookingId);
+
+    // If confirming/completing and no staff assigned, show assignment dialog
+    if ((newStatus === 'confirmed' || newStatus === 'completed') && isOwner && !booking?.staff_id && !staffId && !force) {
+      // We only enforce this for salon owners/managers as they are the ones assigning.
+      // Check if booking already has staff
+      setSelectedBooking(booking || null);
+      setStatusToSet(newStatus);
+      setShowStaffAssignment(true);
+      return;
+    }
+
     try {
-      await api.bookings.updateStatus(bookingId, newStatus);
+      await api.bookings.updateStatus(bookingId, newStatus, staffId);
       await refreshBookings();
       toast({
-        title: newStatus === 'confirmed' ? "Booking Confirmed" : "Booking Cancelled",
+        title: newStatus === 'confirmed' ? "Booking Confirmed" : (newStatus === 'completed' ? "Booking Completed" : "Booking Cancelled"),
         description: `Status updated successfully.`,
       });
     } catch (error) {
       console.error("Status update error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update status",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const assignStaffToBooking = async (staffId: string) => {
+    if (!selectedBooking) return;
+
+    setAssigningStaff(true);
+    const targetStatus = statusToSet || 'confirmed';
+    try {
+      await updateBookingStatus(selectedBooking.id, targetStatus, staffId, true);
+      setShowStaffAssignment(false);
+      setSelectedBooking(null);
+      setStatusToSet(null);
+    } catch (error) {
+      console.error("Error assigning staff:", error);
+    } finally {
+      setAssigningStaff(false);
     }
   };
 
@@ -540,6 +596,80 @@ export default function DashboardHome() {
           </div>
         </div>
       </div>
+
+      {/* Staff Assignment Dialog */}
+      <Dialog open={showStaffAssignment} onOpenChange={setShowStaffAssignment}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">Assign Specialist</DialogTitle>
+            <DialogDescription>
+              Select a team member to handle this service.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="grid grid-cols-1 gap-3">
+              {staffMembers.length === 0 ? (
+                <p className="text-center py-4 text-muted-foreground">No active staff members found.</p>
+              ) : (
+                staffMembers.map((staff) => (
+                  <button
+                    key={staff.id}
+                    disabled={assigningStaff}
+                    onClick={() => assignStaffToBooking(staff.id)}
+                    className={cn(
+                      "flex items-center justify-between p-4 rounded-2xl border-2 transition-all group hover:border-accent hover:bg-accent/5",
+                      "border-slate-100"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
+                      <Avatar className="w-10 h-10 border-2 border-white shadow-sm ring-2 ring-accent/5">
+                        <AvatarImage src={staff.avatar_url} />
+                        <AvatarFallback className="bg-accent/10 text-accent font-bold">
+                          {staff.display_name.charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="text-left">
+                        <p className="font-bold text-slate-900">{staff.display_name}</p>
+                        <p className="text-xs text-slate-500">{staff.role || 'Specialist'}</p>
+                      </div>
+                    </div>
+                    <Plus className="w-5 h-5 text-slate-300 group-hover:text-accent transition-colors" />
+                  </button>
+                ))
+              )}
+            </div>
+          </div>
+          <div className="flex flex-col sm:flex-row justify-between gap-3 mt-4">
+            <Button
+              variant="ghost"
+              className="text-slate-400 hover:text-slate-600 order-2 sm:order-1"
+              onClick={() => {
+                setShowStaffAssignment(false);
+                setSelectedBooking(null);
+              }}
+            >
+              Cancel
+            </Button>
+
+            <div className="flex flex-col sm:flex-row gap-3 order-1 sm:order-2">
+              <Button
+                variant="outline"
+                className="border-slate-200 text-slate-600 font-semibold"
+                disabled={assigningStaff}
+                onClick={() => {
+                  if (selectedBooking) {
+                    // If confirming without specialist, we pass undefined for staffId and true for force
+                    updateBookingStatus(selectedBooking.id, statusToSet || 'confirmed', undefined, true);
+                    setShowStaffAssignment(false);
+                  }
+                }}
+              >
+                Confirm without Specialist
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </ResponsiveDashboardLayout>
   );
 
