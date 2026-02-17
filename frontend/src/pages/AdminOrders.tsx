@@ -3,13 +3,16 @@ import { api } from '@/services/api';
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Package, Truck, CheckCircle, XCircle } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Loader2, Package, Truck, CheckCircle, XCircle, MapPin, Phone, User, Globe } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
 
 const AdminOrdersPage = () => {
     const [orders, setOrders] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selectedOrder, setSelectedOrder] = useState<any>(null);
     const { toast } = useToast();
 
     const fetchOrders = async () => {
@@ -105,7 +108,13 @@ const AdminOrdersPage = () => {
                                         <tr key={order.id} className="hover:bg-slate-50/50 transition-colors">
                                             <td className="p-6 font-mono text-xs text-slate-500">#{order.id.substring(0, 8)}...</td>
                                             <td className="p-6">
-                                                <div className="font-bold text-[#1A1A1A]">{order.customer_name}</div>
+                                                <div
+                                                    className="font-bold text-[#1A1A1A] cursor-pointer hover:text-accent transition-colors flex items-center gap-2 group"
+                                                    onClick={() => setSelectedOrder(order)}
+                                                >
+                                                    {order.customer_name}
+                                                    <MapPin className="w-3.5 h-3.5 text-slate-400 group-hover:text-accent opacity-0 group-hover:opacity-100 transition-all" />
+                                                </div>
                                                 <div className="text-xs text-slate-400">{order.customer_email}</div>
                                             </td>
                                             <td className="p-6">
@@ -178,6 +187,93 @@ const AdminOrdersPage = () => {
                     </div>
                 )}
             </div>
+
+            <Dialog open={!!selectedOrder} onOpenChange={(open) => !open && setSelectedOrder(null)}>
+                <DialogContent className="sm:max-w-[500px] rounded-2xl p-0 overflow-hidden bg-white border-none shadow-2xl">
+                    <div className="bg-slate-50 p-6 border-b border-slate-100">
+                        <DialogHeader>
+                            <DialogTitle className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                <Truck className="w-5 h-5 text-accent" />
+                                Shipping Details
+                            </DialogTitle>
+                            <DialogDescription className="text-slate-500">
+                                Delivery information for Order #{selectedOrder?.id?.substring(0, 8)}
+                            </DialogDescription>
+                        </DialogHeader>
+                    </div>
+
+                    {selectedOrder && selectedOrder.shipping_address ? (
+                        <div className="p-6 space-y-6">
+                            <div className="grid gap-4">
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                                        <User className="w-5 h-5 text-blue-600" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Recipient</p>
+                                        <p className="font-semibold text-slate-900 text-lg">
+                                            {selectedOrder.shipping_address.firstName} {selectedOrder.shipping_address.lastName}
+                                        </p>
+                                        <p className="text-slate-500 text-sm">{selectedOrder.customer_email}</p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center shrink-0">
+                                        <Phone className="w-5 h-5 text-emerald-600" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Contact</p>
+                                        <p className="font-medium text-slate-900">
+                                            {selectedOrder.shipping_address.phone || 'N/A'}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <div className="flex items-start gap-4">
+                                    <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center shrink-0">
+                                        <MapPin className="w-5 h-5 text-amber-600" />
+                                    </div>
+                                    <div className="space-y-1">
+                                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Delivery Address</p>
+                                        <p className="font-medium text-slate-900 leading-relaxed">
+                                            {selectedOrder.shipping_address.address}
+                                            {selectedOrder.shipping_address.apartment && <>, {selectedOrder.shipping_address.apartment}</>}
+                                        </p>
+                                        <p className="text-slate-600">
+                                            {selectedOrder.shipping_address.city}, {selectedOrder.shipping_address.state} {selectedOrder.shipping_address.zip}
+                                        </p>
+                                        {selectedOrder.shipping_address.country && (
+                                            <div className="flex items-center gap-1.5 mt-1 text-slate-500 text-sm">
+                                                <Globe className="w-3.5 h-3.5" />
+                                                {selectedOrder.shipping_address.country}
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 mt-2">
+                                <div className="flex justify-between items-center mb-2">
+                                    <span className="text-slate-500 text-sm">Order Status</span>
+                                    <Badge className={`${getStatusColor(selectedOrder.status)} border-none capitalize`}>
+                                        {selectedOrder.status}
+                                    </Badge>
+                                </div>
+                                <div className="flex justify-between items-center">
+                                    <span className="text-slate-500 text-sm">Total Amount</span>
+                                    <span className="font-bold text-slate-900">RM {parseFloat(selectedOrder.total_amount).toFixed(2)}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ) : (
+                        <div className="p-10 text-center">
+                            <MapPin className="w-12 h-12 text-slate-200 mx-auto mb-3" />
+                            <p className="text-slate-500 font-medium">No shipping address provided for this order.</p>
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
         </AdminLayout>
     );
 };
