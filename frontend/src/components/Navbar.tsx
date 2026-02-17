@@ -276,11 +276,11 @@ const Navbar = () => {
                       </div>
                     </div>
 
-                    <div className="p-8 bg-[#1A1A1A]/5 text-center">
+                    {/* <div className="p-8 bg-[#1A1A1A]/5 text-center">
                       <p className="text-[10px] font-black uppercase tracking-widest text-[#1A1A1A]/40">
                         daily habits wellness club © 2026
                       </p>
-                    </div>
+                    </div> */}
                   </div>
                 </SheetContent>
               </Sheet>

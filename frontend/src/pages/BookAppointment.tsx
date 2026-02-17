@@ -495,16 +495,16 @@ const BookAppointment = () => {
                   <div className="w-20 h-20 bg-accent/10 rounded-[2rem] flex items-center justify-center mx-auto">
                     <Sparkles className="w-10 h-10 text-accent" />
                   </div>
-                  <h2 className="text-5xl font-black text-slate-900 tracking-tight leading-tight uppercase">
+                  <h2 className="text-3xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight uppercase">
                     Ready to start<br />your ritual?
                   </h2>
-                  <p className="text-lg text-slate-500 font-medium max-w-lg mx-auto italic">
+                  <p className="text-sm md:text-lg text-slate-500 font-medium max-w-lg mx-auto italic">
                     Step into a space of calm. Select your services, find your stylist, and reserve your moment.
                   </p>
                 </div>
                 <Button
                   onClick={() => setStep(2)}
-                  className="h-20 px-16 bg-slate-900 hover:bg-black text-white rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-sm shadow-2xl transition-all hover:scale-105"
+                  className="h-14 md:h-20 px-8 md:px-16 bg-slate-900 hover:bg-black text-white rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-xs md:text-sm shadow-2xl transition-all hover:scale-105"
                 >
                   Start Booking
                 </Button>
@@ -601,11 +601,11 @@ const BookAppointment = () => {
                       </div>
                     </div>
                     <div className="flex gap-4 w-full md:w-auto">
-                      <Button onClick={() => setStep(1)} variant="outline" className="hidden md:flex h-14 rounded-2xl px-8 font-black uppercase">Back</Button>
+                      <Button onClick={() => setStep(1)} variant="outline" className="flex-1 md:flex-none h-14 rounded-2xl px-8 font-black uppercase">Back</Button>
                       <Button
                         onClick={() => setStep(3)}
                         disabled={selectedServices.length === 0}
-                        className="flex-1 md:flex-none h-14 rounded-2xl px-10 bg-slate-900 text-white font-black uppercase shadow-xl hover:bg-accent hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex-[2] md:flex-none h-14 rounded-2xl px-10 bg-slate-900 text-white font-black uppercase shadow-xl hover:bg-accent hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                       >
                         Confirm & Continue
                       </Button>
@@ -627,16 +627,16 @@ const BookAppointment = () => {
                   <button
                     onClick={() => setSelectedStaffId(null)}
                     className={cn(
-                      "p-8 rounded-[2rem] border-2 transition-all flex items-center gap-6",
+                      "p-6 md:p-8 rounded-[2rem] border-2 transition-all flex items-center gap-4 md:gap-6",
                       !selectedStaffId ? "border-accent bg-accent/5 shadow-lg shadow-accent/5" : "border-slate-100 bg-white hover:border-slate-200"
                     )}
                   >
-                    <div className="w-16 h-16 rounded-2xl bg-slate-50 flex items-center justify-center">
-                      <User className={cn("w-8 h-8", !selectedStaffId ? "text-accent" : "text-slate-300")} />
+                    <div className="w-12 h-12 md:w-16 md:h-16 rounded-2xl bg-slate-50 flex items-center justify-center shrink-0">
+                      <User className={cn("w-6 h-6 md:w-8 md:h-8", !selectedStaffId ? "text-accent" : "text-slate-300")} />
                     </div>
                     <div className="text-left">
-                      <h4 className="text-xl font-black text-slate-900 uppercase">Any Beautician</h4>
-                      <p className="text-xs text-slate-400 font-bold uppercase tracking-tight">Best for immediate registry</p>
+                      <h4 className="text-lg md:text-xl font-black text-slate-900 uppercase">Any Beautician</h4>
+                      <p className="text-[10px] md:text-xs text-slate-400 font-bold uppercase tracking-tight">Best for immediate registry</p>
                     </div>
                   </button>
 
@@ -645,25 +645,25 @@ const BookAppointment = () => {
                       key={staff.id}
                       onClick={() => setSelectedStaffId(staff.id)}
                       className={cn(
-                        "p-8 rounded-[2rem] border-2 transition-all flex items-center gap-6 text-left",
+                        "p-6 md:p-8 rounded-[2rem] border-2 transition-all flex items-center gap-4 md:gap-6 text-left",
                         selectedStaffId === staff.id ? "border-accent bg-accent/5 shadow-lg shadow-accent/5" : "border-slate-100 bg-white hover:border-slate-200"
                       )}
                     >
-                      <Avatar className="w-16 h-16 rounded-2xl border-4 border-white shadow-sm">
+                      <Avatar className="w-12 h-12 md:w-16 md:h-16 rounded-2xl border-4 border-white shadow-sm shrink-0">
                         <AvatarImage src={staff.avatar_url} />
                         <AvatarFallback className="bg-slate-100 font-black text-slate-400">{staff.display_name.substring(0, 2).toUpperCase()}</AvatarFallback>
                       </Avatar>
                       <div>
-                        <h4 className="text-xl font-black text-slate-900 uppercase">{staff.display_name}</h4>
-                        <p className="text-xs text-accent font-bold uppercase tracking-widest">Master Specialist</p>
+                        <h4 className="text-lg md:text-xl font-black text-slate-900 uppercase">{staff.display_name}</h4>
+                        <p className="text-[10px] md:text-xs text-accent font-bold uppercase tracking-widest">Master Specialist</p>
                       </div>
                     </button>
                   ))}
                 </div>
 
                 <div className="flex gap-4">
-                  <Button onClick={() => setStep(2)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
-                  <Button onClick={() => setStep(4)} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Select Time & Date</Button>
+                  <Button onClick={() => setStep(2)} variant="outline" className="h-14 md:h-20 rounded-[2.5rem] px-6 md:px-12 font-black uppercase tracking-widest text-xs md:text-sm">Back</Button>
+                  <Button onClick={() => setStep(4)} className="flex-1 h-14 md:h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-sm md:text-lg shadow-xl uppercase">Select Time & Date</Button>
                 </div>
               </motion.div>
             )}
@@ -673,20 +673,22 @@ const BookAppointment = () => {
             {step === 4 && (
               <motion.div key="step4" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                  <Card className="border-none shadow-sm bg-white rounded-[3rem] p-10">
-                    <Calendar
-                      mode="single"
-                      selected={selectedDate}
-                      onSelect={setSelectedDate}
-                      disabled={(date) => {
-                        const today = new Date();
-                        today.setHours(0, 0, 0, 0);
-                        const compareDate = new Date(date);
-                        compareDate.setHours(0, 0, 0, 0);
-                        return compareDate < today || date.getDay() === 0;
-                      }}
-                      className="mx-auto"
-                    />
+                  <Card className="border-none shadow-sm bg-white rounded-[3rem]  md:p-10 flex justify-center items-center overflow-hidden">
+                    <div className="w-full max-w-[350px] md:max-w-none transform scale-90 md:scale-100 origin-top">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        disabled={(date) => {
+                          const today = new Date();
+                          today.setHours(0, 0, 0, 0);
+                          const compareDate = new Date(date);
+                          compareDate.setHours(0, 0, 0, 0);
+                          return compareDate < today || date.getDay() === 0;
+                        }}
+                        className="mx-auto border border-slate-100 rounded-xl md:border-none p-2 md:p-0"
+                      />
+                    </div>
                   </Card>
 
                   <div className="space-y-8">
@@ -703,7 +705,7 @@ const BookAppointment = () => {
                             disabled={isBooked}
                             onClick={() => setSelectedTime(time)}
                             className={cn(
-                              "h-16 rounded-2xl font-black transition-all text-sm uppercase",
+                              "h-12 md:h-16 rounded-2xl font-black transition-all text-xs md:text-sm uppercase",
                               isBooked ? "bg-slate-50 text-slate-200 cursor-not-allowed border border-slate-100" :
                                 selectedTime === time ? "bg-accent text-white shadow-xl shadow-accent/20 scale-105" :
                                   "bg-white text-slate-900 hover:bg-slate-50 border border-slate-100 shadow-sm"
@@ -715,17 +717,17 @@ const BookAppointment = () => {
                       })}
                     </div>
                     {selectedTime && (
-                      <div className="p-6 rounded-3xl bg-slate-900 text-white flex justify-between items-center animate-in slide-in-from-bottom-2">
-                        <span className="text-xs font-black uppercase tracking-widest opacity-60">Selection</span>
-                        <span className="text-lg font-black">{selectedDate ? format(selectedDate, "MMM dd") : ''} at {selectedTime}</span>
+                      <div className="p-4 md:p-6 rounded-3xl bg-slate-900 text-white flex justify-between items-center animate-in slide-in-from-bottom-2">
+                        <span className="text-[10px] md:text-xs font-black uppercase tracking-widest opacity-60">Selection</span>
+                        <span className="text-sm md:text-lg font-black">{selectedDate ? format(selectedDate, "MMM dd") : ''} at {selectedTime}</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 <div className="flex gap-4">
-                  <Button onClick={() => setStep(3)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
-                  <Button onClick={() => setStep(5)} disabled={!selectedDate || !selectedTime} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Complete Details</Button>
+                  <Button onClick={() => setStep(3)} variant="outline" className="h-14 md:h-20 rounded-[2.5rem] px-6 md:px-12 font-black uppercase tracking-widest text-xs md:text-sm">Back</Button>
+                  <Button onClick={() => setStep(5)} disabled={!selectedDate || !selectedTime} className="flex-1 h-14 md:h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-sm md:text-lg shadow-xl uppercase">Complete Details</Button>
                 </div>
               </motion.div>
             )}
@@ -733,42 +735,42 @@ const BookAppointment = () => {
             {/* STEP 5: PERSONAL DETAILS (was Step 4) */}
             {step === 5 && (
               <motion.div key="step5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
-                <Card className="border-none shadow-sm bg-white rounded-[3rem] p-12 overflow-hidden relative">
+                <Card className="border-none shadow-sm bg-white rounded-[3rem] p-6 md:p-12 overflow-hidden relative">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-[5rem]" />
                   <div className="relative space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                       <div className="space-y-3">
-                        <Label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Full Name</Label>
+                        <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Full Name</Label>
                         <Input
                           value={memberDetails.fullName}
                           onChange={(e) => setMemberDetails({ ...memberDetails, fullName: e.target.value })}
-                          className="h-16 rounded-2xl bg-white border-2 border-slate-100 focus:border-accent px-6 font-bold"
+                          className="h-14 md:h-16 rounded-2xl bg-white border-2 border-slate-100 focus:border-accent px-4 md:px-6 font-bold text-sm md:text-base"
                           placeholder="Your identity..."
                         />
                       </div>
                       <div className="space-y-3">
-                        <Label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</Label>
+                        <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Email Address</Label>
                         <Input
                           value={memberDetails.email}
                           onChange={(e) => setMemberDetails({ ...memberDetails, email: e.target.value })}
-                          className="h-16 rounded-2xl bg-white border-2 border-slate-100 focus:border-accent px-6 font-bold"
+                          className="h-14 md:h-16 rounded-2xl bg-white border-2 border-slate-100 focus:border-accent px-4 md:px-6 font-bold text-sm md:text-base"
                           placeholder="ritual@noam.com"
                         />
                       </div>
                     </div>
                     <div className="space-y-3">
-                      <Label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</Label>
+                      <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Phone Number</Label>
                       <Input
                         value={memberDetails.phone}
                         onChange={(e) => setMemberDetails({ ...memberDetails, phone: e.target.value })}
-                        className="h-16 rounded-2xl bg-white border-2 border-slate-100 focus:border-accent px-6 font-bold"
+                        className="h-14 md:h-16 rounded-2xl bg-white border-2 border-slate-100 focus:border-accent px-4 md:px-6 font-bold text-sm md:text-base"
                         placeholder="01X-XXX XXXX"
                       />
                     </div>
                     <div className="space-y-3">
-                      <Label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Additional Notes</Label>
+                      <Label className="text-[10px] md:text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Additional Notes</Label>
                       <Textarea
-                        className="h-32 rounded-3xl bg-white border-2 border-slate-100 focus:border-accent p-6 font-medium italic"
+                        className="h-24 md:h-32 rounded-3xl bg-white border-2 border-slate-100 focus:border-accent p-4 md:p-6 font-medium italic text-sm md:text-base"
                         placeholder="Any allergies or specific requirements we should prepare for?"
                         value={notes}
                         onChange={(e) => setNotes(e.target.value)}
@@ -778,8 +780,8 @@ const BookAppointment = () => {
                 </Card>
 
                 <div className="flex gap-4">
-                  <Button onClick={() => setStep(4)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
-                  <Button onClick={() => setStep(6)} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Review & Policy</Button>
+                  <Button onClick={() => setStep(4)} variant="outline" className="h-14 md:h-20 rounded-[2.5rem] px-6 md:px-12 font-black uppercase tracking-widest text-xs md:text-sm">Back</Button>
+                  <Button onClick={() => setStep(6)} className="flex-1 h-14 md:h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-sm md:text-lg shadow-xl uppercase">Review & Policy</Button>
                 </div>
               </motion.div>
             )}
@@ -789,8 +791,8 @@ const BookAppointment = () => {
               <motion.div key="step6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
                 <Card className="border-none shadow-sm bg-slate-900 text-white rounded-[3rem] p-12 space-y-12">
                   <div className="space-y-6">
-                    <h3 className="text-2xl font-black uppercase tracking-tighter border-b border-white/10 pb-6">Cancellation & House Policy</h3>
-                    <div className="space-y-8 text-slate-400 font-medium italic leading-relaxed text-sm">
+                    <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter border-b border-white/10 pb-6">Cancellation & House Policy</h3>
+                    <div className="space-y-8 text-slate-400 font-medium italic leading-relaxed text-xs md:text-sm">
                       <p>We value everyone’s time and kindly request that any changes or cancellations be made at least 24 hours in advance.</p>
                       <div className="space-y-4">
                         <p className="text-white font-black uppercase tracking-widest text-[10px] opacity-60">To maintain a comfortable environment:</p>
@@ -824,7 +826,7 @@ const BookAppointment = () => {
                       onCheckedChange={(val) => setPolicyAccepted(val as boolean)}
                       className="mt-1 border-white/20 data-[state=checked]:bg-accent data-[state=checked]:text-white"
                     />
-                    <Label htmlFor="policy" className="text-sm font-bold text-slate-300 cursor-pointer select-none">
+                    <Label htmlFor="policy" className="text-xs md:text-sm font-bold text-slate-300 cursor-pointer select-none leading-relaxed">
                       I have read and agree to the Cancellation & House Policy.
                     </Label>
                   </div>
@@ -838,12 +840,12 @@ const BookAppointment = () => {
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                           placeholder="PROMO CODE"
-                          className="h-16 rounded-2xl bg-white/5 border-2 border-white/10 focus:border-accent px-6 font-bold text-white placeholder:text-slate-500"
+                          className="h-14 md:h-16 rounded-2xl bg-white/5 border-2 border-white/10 focus:border-accent px-4 md:px-6 font-bold text-white placeholder:text-slate-500 text-sm"
                         />
                         <Button
                           onClick={applyCoupon}
                           disabled={!couponCode || !!appliedCoupon}
-                          className="h-16 px-8 rounded-2xl bg-accent hover:bg-accent/80 text-black font-black uppercase tracking-widest"
+                          className="h-14 md:h-16 px-6 md:px-8 rounded-2xl bg-accent hover:bg-accent/80 text-black font-black uppercase tracking-widest text-xs md:text-sm"
                         >
                           {appliedCoupon ? "OK" : "Apply"}
                         </Button>
@@ -868,7 +870,7 @@ const BookAppointment = () => {
                         onClick={() => setUseCoins(!useCoins)}
                         disabled={userCoins < coinSettings.min_redemption}
                         className={cn(
-                          "w-full h-16 rounded-2xl border-2 transition-all flex items-center justify-between px-6",
+                          "w-full h-14 md:h-16 rounded-2xl border-2 transition-all flex items-center justify-between px-4 md:px-6",
                           useCoins
                             ? "bg-accent/10 border-accent text-accent"
                             : "bg-white/5 border-white/10 text-white hover:border-white/20",
@@ -903,34 +905,33 @@ const BookAppointment = () => {
 
                   {/* Price Breakdown */}
                   <div className="space-y-4 pt-8 border-t border-white/10">
-                    <div className="flex justify-between items-center text-sm font-medium text-slate-400">
+                    <div className="flex justify-between items-center text-xs md:text-sm font-medium text-slate-400">
                       <span>Subtotal</span>
                       <span>RM {calculateSubtotal().toFixed(2)}</span>
                     </div>
                     {appliedCoupon && appliedCoupon.discount > 0 && (
-                      <div className="flex justify-between items-center text-sm font-bold text-accent">
+                      <div className="flex justify-between items-center text-xs md:text-sm font-bold text-accent">
                         <span>Discount ({appliedCoupon.code})</span>
                         <span>- RM {appliedCoupon.discount.toFixed(2)}</span>
                       </div>
                     )}
                     {useCoins && calculateCoinDiscount() > 0 && (
-                      <div className="flex justify-between items-center text-sm font-bold text-accent">
+                      <div className="flex justify-between items-center text-xs md:text-sm font-bold text-accent">
                         <span>Loyalty Points Redemption</span>
                         <span>- RM {calculateCoinDiscount().toFixed(2)}</span>
                       </div>
                     )}
                   </div>
 
-                  {/* Summary Review */}
                   <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
-                    <div className="text-center md:text-left">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2">Total Reservation Value</p>
-                      <p className="text-5xl font-black text-accent tracking-tighter">RM {calculateTotal().toFixed(2)}</p>
+                    <div className="text-center md:text-left w-full md:w-auto flex justify-between md:block items-center">
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-0 md:mb-2">Total Reservation Value</p>
+                      <p className="text-3xl md:text-5xl font-black text-accent tracking-tighter">RM {calculateTotal().toFixed(2)}</p>
                     </div>
                     <Button
                       onClick={handleBooking}
                       disabled={!policyAccepted || booking}
-                      className="h-20 px-16 bg-accent hover:bg-white hover:text-black text-black rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-sm shadow-2xl transition-all"
+                      className="w-full md:w-auto h-16 md:h-20 px-8 md:px-16 bg-accent hover:bg-white hover:text-black text-black rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-xs md:text-sm shadow-2xl transition-all"
                     >
                       {booking ? "Finalizing Registry..." : "Confirm & Book Now"}
                     </Button>
@@ -943,28 +944,28 @@ const BookAppointment = () => {
             {step === 7 && (
               <motion.div key="step7" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-12 py-12">
                 <div className="space-y-8">
-                  <div className="w-32 h-32 bg-accent/10 rounded-[3rem] flex items-center justify-center mx-auto">
-                    <CheckCircle className="w-16 h-16 text-accent" />
+                  <div className="w-24 h-24 md:w-32 md:h-32 bg-accent/10 rounded-[3rem] flex items-center justify-center mx-auto">
+                    <CheckCircle className="w-12 h-12 md:w-16 md:h-16 text-accent" />
                   </div>
-                  <div className="space-y-4">
-                    <h1 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tight uppercase">Session Reserved.</h1>
-                    <p className="text-xl text-slate-500 font-medium max-w-sm mx-auto italic">Your ritual has been successfully logged. We are preparing for your arrival.</p>
+                  <div className="space-y-2 md:space-y-4">
+                    <h1 className="text-3xl md:text-6xl font-black text-slate-900 tracking-tight uppercase">Session Reserved.</h1>
+                    <p className="text-base md:text-xl text-slate-500 font-medium max-w-sm mx-auto italic">Your ritual has been successfully logged. We are preparing for your arrival.</p>
                   </div>
                 </div>
 
-                <div className="p-10 bg-white rounded-[3rem] border border-slate-100 shadow-sm max-w-md mx-auto space-y-6">
+                <div className="p-6 md:p-10 bg-white rounded-[3rem] border border-slate-100 shadow-sm max-w-md mx-auto space-y-4 md:space-y-6">
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Date & Time</span>
-                    <span className="text-sm font-black text-slate-900">{selectedDate ? format(selectedDate, "PPP") : ''} at {selectedTime}</span>
+                    <span className="text-xs md:text-sm font-black text-slate-900">{selectedDate ? format(selectedDate, "PPP") : ''} at {selectedTime}</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Therapist</span>
-                    <span className="text-sm font-black text-slate-900">{selectedStaffId ? 'Master Specialist' : 'Direct Registry'}</span>
+                    <span className="text-xs md:text-sm font-black text-slate-900">{selectedStaffId ? 'Master Specialist' : 'Direct Registry'}</span>
                   </div>
                 </div>
 
                 <div className="pt-8 flex flex-col gap-4 max-w-xs mx-auto">
-                  <Button onClick={() => navigate("/my-bookings")} className="h-20 bg-slate-900 text-white font-black rounded-3xl w-full text-sm uppercase tracking-widest shadow-xl">View Appointments</Button>
+                  <Button onClick={() => navigate("/my-bookings")} className="h-14 md:h-20 bg-slate-900 text-white font-black rounded-3xl w-full text-xs md:text-sm uppercase tracking-widest shadow-xl">View Appointments</Button>
                   <Button variant="ghost" onClick={() => navigate("/")} className="text-slate-400 font-bold hover:bg-slate-50 rounded-2xl uppercase tracking-widest text-[10px]">Return Home</Button>
                 </div>
               </motion.div>

@@ -24,12 +24,16 @@ interface Product {
     price: number;
     image_url: string;
     category: string;
+    image_url_2?: string;
+    image_url_3?: string;
+    image_url_4?: string;
 }
 
 export default function ProductDetails() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [product, setProduct] = useState<Product | null>(null);
+    const [selectedImage, setSelectedImage] = useState<string>('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [quantity, setQuantity] = useState(1);
@@ -43,6 +47,7 @@ export default function ProductDetails() {
                 const data = await api.platformProducts.getById(id);
                 const productData = data?.product || data;
                 setProduct(productData);
+                setSelectedImage(productData.image_url);
             } catch (err: any) {
                 console.error("Error fetching product details:", err);
                 setError("Could not load product details.");
@@ -93,30 +98,46 @@ export default function ProductDetails() {
                 <div className="container mx-auto px-4 max-w-7xl">
 
                     {/* Breadcrumbs */}
-                    <nav className="flex items-center gap-2 text-sm font-['Outfit'] text-[#1A1A1A] mb-12">
-                        <Link to="/" className="hover:opacity-60">Home</Link>
-                        <ChevronRight className="w-3 h-3 opacity-40" />
-                        <Link to="/shop" className="hover:opacity-60">All Products</Link>
-                        <ChevronRight className="w-3 h-3 opacity-40" />
-                        <span className="opacity-60 truncate max-w-[200px] md:max-w-none">{product.name}</span>
+                    <nav className="flex flex-row flex-nowrap items-center gap-2 text-xs md:text-sm font-['Outfit'] text-[#1A1A1A] mb-8 overflow-x-auto scrollbar-hide py-2 whitespace-nowrap">
+                        <Link to="/" className="hover:opacity-60 flex-shrink-0 flex items-center">Home</Link>
+                        <ChevronRight className="w-3 h-3 opacity-40 flex-shrink-0" />
+                        <Link to="/shop" className="hover:opacity-60 flex-shrink-0 flex items-center">All Products</Link>
+                        <ChevronRight className="w-3 h-3 opacity-40 flex-shrink-0" />
+                        <span className="opacity-60 flex-shrink-0 truncate">{product.name}</span>
                     </nav>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 xl:gap-24 items-start">
 
                         {/* Left: Product Image */}
                         <div className="relative group">
-                            <div className="bg-white/40 rounded-[2.5rem] overflow-hidden aspect-square flex items-center justify-center p-8 md:p-12">
+                            <div className="bg-white/40 rounded-[2.5rem] overflow-hidden aspect-square flex items-center justify-center p-8 md:p-12 mb-6">
                                 <motion.img
+                                    key={selectedImage}
                                     initial={{ opacity: 0, scale: 0.9 }}
                                     animate={{ opacity: 1, scale: 1 }}
-                                    src={getImageUrl(product.image_url, 'service', product.id)}
+                                    src={getImageUrl(selectedImage, 'service', product.id)}
                                     alt={product.name}
                                     className="w-full h-full object-contain"
                                 />
+                            </div>
 
-                                {/* <button className="absolute top-8 right-8 w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm hover:shadow-md transition-shadow text-[#1A1A1A]">
-                                    <Search className="w-5 h-5" />
-                                </button> */}
+                            {/* Image Grid */}
+                            <div className="grid grid-cols-4 gap-4">
+                                {[product.image_url, product.image_url_2, product.image_url_3, product.image_url_4]
+                                    .filter(Boolean)
+                                    .map((img, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setSelectedImage(img!)}
+                                            className={`aspect-square rounded-2xl overflow-hidden p-2 bg-white/40 border-2 transition-all ${selectedImage === img ? 'border-[#1A1A1A] opacity-100' : 'border-transparent opacity-60 hover:opacity-100'}`}
+                                        >
+                                            <img
+                                                src={getImageUrl(img!, 'service', product.id)}
+                                                alt={`${product.name} view ${index + 1}`}
+                                                className="w-full h-full object-contain"
+                                            />
+                                        </button>
+                                    ))}
                             </div>
                         </div>
 
