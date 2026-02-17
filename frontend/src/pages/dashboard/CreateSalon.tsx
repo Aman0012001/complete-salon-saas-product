@@ -173,7 +173,7 @@ export default function CreateSalon() {
               <Store className="w-10 h-10 text-accent" />
             </div>
             <CardTitle className="text-4xl font-black text-slate-900 tracking-tight">Register Saloon</CardTitle>
-            <CardDescription className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-2">XAMPP MySQL Instance active</CardDescription>
+            <CardDescription className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mt-2">Database Connection Active</CardDescription>
           </CardHeader>
 
           <CardContent className="px-10 pb-16">

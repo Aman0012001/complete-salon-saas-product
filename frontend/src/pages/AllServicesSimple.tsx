@@ -135,7 +135,7 @@ const AllServicesSimple = () => {
       setServices(formatted);
     } catch (error: any) {
       console.error("Error fetching services:", error);
-      const message = error.message || "Failed to reach local PHP API. Ensure XAMPP is running.";
+      const message = error.message || "Failed to reach the server. Please try again later.";
       setError(message);
       toast({
         title: "Connection Error",

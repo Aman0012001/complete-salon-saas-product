@@ -227,7 +227,6 @@ const BookAppointment = () => {
         });
       }
 
-      // Auto-select service if ID provided in URL
       const serviceId = searchParams.get("serviceId");
       if (serviceId && servicesData) {
         const preselected = servicesData.find((s: any) => s.id === serviceId);
@@ -235,12 +234,15 @@ const BookAppointment = () => {
           setSelectedServices([preselected]);
           setActiveCategory(preselected.category);
           setBookingType('service');
-          setStep(2); // Jump to Add-ons
+          // Don't auto-jump, let them see what they selected or add more
+          setStep(2);
         }
+      } else if (searchParams.get("start") === "true") {
+        setStep(2);
       }
     } catch (error) {
-      console.error("Error fetching local salon data:", error);
-      toast({ title: "Local Database Error", description: "Could not sync with XAMPP backend.", variant: "destructive" });
+      console.error("Error fetching salon data:", error);
+      toast({ title: "Error", description: error.message || "Could not connect to the server. Please check your internet connection.", variant: "destructive" });
       navigate("/salons");
     } finally {
       setLoading(false);
@@ -329,7 +331,7 @@ const BookAppointment = () => {
         title: "Booking Ritual Initiated!",
         description: "Your session is being prepared by our stylists."
       });
-      setStep(6);
+      setStep(7);
     } catch (error: any) {
       toast({ title: "Ritual Interrupted", description: error.message, variant: "destructive" });
     } finally {
@@ -349,14 +351,17 @@ const BookAppointment = () => {
 
       if (coupon && coupon.is_active) {
         const subtotal = calculateSubtotal();
-        const discountAmount = coupon.discount_type === 'percentage'
-          ? (subtotal * coupon.discount_value / 100)
-          : coupon.discount_value;
+        const discountVal = Number(coupon.value || coupon.discount_value);
+        const type = (coupon.type || coupon.discount_type || '').toLowerCase();
+
+        const discountAmount = type === 'percentage' || type === 'percent'
+          ? (subtotal * discountVal / 100)
+          : discountVal;
 
         setAppliedCoupon({
           code: coupon.code,
           discount: discountAmount,
-          type: coupon.discount_type
+          type: type
         });
         setCouponError("");
         toast({
@@ -425,11 +430,12 @@ const BookAppointment = () => {
   const getStepTitle = (s: number) => {
     switch (s) {
       case 1: return "Welcome to Noam Skin";
-      case 2: return "Select Your Stylist";
-      case 3: return "Registry Calendar";
-      case 4: return "Member Details";
-      case 5: return "Policy Review";
-      case 6: return "Session Reserved";
+      case 2: return "Select Your Treatments";
+      case 3: return "Select Your Stylist";
+      case 4: return "Registry Calendar";
+      case 5: return "Member Details";
+      case 6: return "Policy Review";
+      case 7: return "Session Reserved";
       default: return "";
     }
   };
@@ -450,7 +456,7 @@ const BookAppointment = () => {
         <div className="max-w-4xl mx-auto space-y-12">
 
           {/* Progress Header */}
-          {step < 6 && (
+          {step < 7 && (
             <div className="space-y-8">
               <div className="flex items-center gap-6">
                 <Button
@@ -462,13 +468,13 @@ const BookAppointment = () => {
                   <ArrowLeft className="h-5 w-5" />
                 </Button>
                 <div>
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] block mb-1">Step 0{step} of 05</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.3em] block mb-1">Step 0{step} of 06</span>
                   <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight uppercase">{getStepTitle(step)}</h1>
                 </div>
               </div>
 
               <div className="flex gap-2 h-1.5 px-1">
-                {[1, 2, 3, 4, 5].map((s) => (
+                {[1, 2, 3, 4, 5, 6].map((s) => (
                   <div key={s} className={`flex-1 rounded-full transition-all duration-500 ${step >= s ? (step === s ? 'bg-accent w-2/3' : 'bg-slate-900') : 'bg-slate-100'}`} />
                 ))}
               </div>
@@ -505,10 +511,114 @@ const BookAppointment = () => {
               </motion.div>
             )}
 
-            {/* STEP 2: SELECT THERAPIST (was Step 3) */}
+            {/* STEP 2: SELECT SERVICES (NEW) */}
             {step === 2 && (
               <motion.div
                 key="step2"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="space-y-8"
+              >
+                {/* Categories Tabs */}
+                <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
+                  {["All", ...Array.from(new Set(services.map(s => s.category)))].map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => setActiveCategory(cat === "All" ? null : cat)}
+                      className={cn(
+                        "px-6 py-3 rounded-full text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all",
+                        (activeCategory === cat || (cat === "All" && !activeCategory))
+                          ? "bg-slate-900 text-white shadow-lg"
+                          : "bg-white text-slate-400 hover:bg-slate-50 border border-slate-100"
+                      )}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Services Grid */}
+                <div className="grid grid-cols-1 gap-4">
+                  {services
+                    .filter(s => !activeCategory || s.category === activeCategory)
+                    .map(service => {
+                      const isSelected = selectedServices.some(s => s.id === service.id);
+                      return (
+                        <div
+                          key={service.id}
+                          onClick={() => {
+                            if (isSelected) {
+                              setSelectedServices(prev => prev.filter(s => s.id !== service.id));
+                            } else {
+                              setSelectedServices(prev => [...prev, service]);
+                            }
+                          }}
+                          className={cn(
+                            "group cursor-pointer relative p-6 rounded-[2rem] border-2 transition-all duration-300",
+                            isSelected
+                              ? "border-accent bg-accent/5 shadow-xl shadow-accent/10"
+                              : "border-slate-100 bg-white hover:border-slate-200 hover:shadow-md"
+                          )}
+                        >
+                          <div className="flex justify-between items-start gap-4">
+                            <div className="space-y-2 flex-1">
+                              <div className="flex items-center gap-3">
+                                <h3 className={cn("text-lg font-black uppercase tracking-tight", isSelected ? "text-slate-900" : "text-slate-700")}>
+                                  {service.name}
+                                </h3>
+                                {isSelected && <CheckCircle2 className="w-5 h-5 text-accent animate-in zoom-in spin-in-90" />}
+                              </div>
+                              <p className="text-sm font-medium text-slate-500 line-clamp-2">{service.description}</p>
+                              <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase pt-2">
+                                <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {service.duration_minutes} min</span>
+                                <span className={cn("px-2 py-1 rounded bg-slate-100", isSelected && "bg-accent/10 text-accent")}>
+                                  {service.category}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="text-right">
+                              <div className={cn("text-xl font-black", isSelected ? "text-accent" : "text-slate-900")}>
+                                RM {service.price}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+
+                {/* Summary Footer */}
+                <div className="mt-8 pt-8 border-t border-slate-100">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Total Selection</p>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-2xl font-black text-slate-900">RM {calculateSubtotal().toFixed(2)}</span>
+                        <span className="text-sm font-bold text-slate-500">
+                          ({selectedServices.length} items)
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex gap-4 w-full md:w-auto">
+                      <Button onClick={() => setStep(1)} variant="outline" className="hidden md:flex h-14 rounded-2xl px-8 font-black uppercase">Back</Button>
+                      <Button
+                        onClick={() => setStep(3)}
+                        disabled={selectedServices.length === 0}
+                        className="flex-1 md:flex-none h-14 rounded-2xl px-10 bg-slate-900 text-white font-black uppercase shadow-xl hover:bg-accent hover:text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Confirm & Continue
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP 3: SELECT THERAPIST (was Step 2) */}
+            {step === 3 && (
+              <motion.div
+                key="step3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 className="space-y-12"
@@ -552,16 +662,16 @@ const BookAppointment = () => {
                 </div>
 
                 <div className="flex gap-4">
-                  <Button onClick={() => setStep(1)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
-                  <Button onClick={() => setStep(3)} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Select Time & Date</Button>
+                  <Button onClick={() => setStep(2)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
+                  <Button onClick={() => setStep(4)} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Select Time & Date</Button>
                 </div>
               </motion.div>
             )}
 
 
-            {/* STEP 3: REGISTRY CALENDAR - DATE & TIME */}
-            {step === 3 && (
-              <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
+            {/* STEP 4: REGISTRY CALENDAR - DATE & TIME */}
+            {step === 4 && (
+              <motion.div key="step4" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
                   <Card className="border-none shadow-sm bg-white rounded-[3rem] p-10">
                     <Calendar
@@ -614,15 +724,15 @@ const BookAppointment = () => {
                 </div>
 
                 <div className="flex gap-4">
-                  <Button onClick={() => setStep(2)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
-                  <Button onClick={() => setStep(4)} disabled={!selectedDate || !selectedTime} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Complete Details</Button>
+                  <Button onClick={() => setStep(3)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
+                  <Button onClick={() => setStep(5)} disabled={!selectedDate || !selectedTime} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Complete Details</Button>
                 </div>
               </motion.div>
             )}
 
-            {/* STEP 4: PERSONAL DETAILS (was Step 5) */}
-            {step === 4 && (
-              <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
+            {/* STEP 5: PERSONAL DETAILS (was Step 4) */}
+            {step === 5 && (
+              <motion.div key="step5" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="space-y-12">
                 <Card className="border-none shadow-sm bg-white rounded-[3rem] p-12 overflow-hidden relative">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-accent/5 rounded-bl-[5rem]" />
                   <div className="relative space-y-6">
@@ -668,15 +778,15 @@ const BookAppointment = () => {
                 </Card>
 
                 <div className="flex gap-4">
-                  <Button onClick={() => setStep(3)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
-                  <Button onClick={() => setStep(5)} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Review & Policy</Button>
+                  <Button onClick={() => setStep(4)} variant="outline" className="h-20 rounded-[2.5rem] px-12 font-black uppercase tracking-widest">Back</Button>
+                  <Button onClick={() => setStep(6)} className="flex-1 h-20 rounded-[2.5rem] bg-slate-900 text-white font-black text-lg shadow-xl">Review & Policy</Button>
                 </div>
               </motion.div>
             )}
 
-            {/* STEP 5: POLICY REVIEW (was Step 6) */}
-            {step === 5 && (
-              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
+            {/* STEP 6: POLICY REVIEW (was Step 5) */}
+            {step === 6 && (
+              <motion.div key="step6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
                 <Card className="border-none shadow-sm bg-slate-900 text-white rounded-[3rem] p-12 space-y-12">
                   <div className="space-y-6">
                     <h3 className="text-2xl font-black uppercase tracking-tighter border-b border-white/10 pb-6">Cancellation & House Policy</h3>
@@ -791,6 +901,26 @@ const BookAppointment = () => {
                     </div>
                   </div>
 
+                  {/* Price Breakdown */}
+                  <div className="space-y-4 pt-8 border-t border-white/10">
+                    <div className="flex justify-between items-center text-sm font-medium text-slate-400">
+                      <span>Subtotal</span>
+                      <span>RM {calculateSubtotal().toFixed(2)}</span>
+                    </div>
+                    {appliedCoupon && appliedCoupon.discount > 0 && (
+                      <div className="flex justify-between items-center text-sm font-bold text-accent">
+                        <span>Discount ({appliedCoupon.code})</span>
+                        <span>- RM {appliedCoupon.discount.toFixed(2)}</span>
+                      </div>
+                    )}
+                    {useCoins && calculateCoinDiscount() > 0 && (
+                      <div className="flex justify-between items-center text-sm font-bold text-accent">
+                        <span>Loyalty Points Redemption</span>
+                        <span>- RM {calculateCoinDiscount().toFixed(2)}</span>
+                      </div>
+                    )}
+                  </div>
+
                   {/* Summary Review */}
                   <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="text-center md:text-left">
@@ -809,9 +939,9 @@ const BookAppointment = () => {
               </motion.div>
             )}
 
-            {/* STEP 6: SUCCESS (was Step 7) */}
-            {step === 6 && (
-              <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-12 py-12">
+            {/* STEP 7: SUCCESS (was Step 6) */}
+            {step === 7 && (
+              <motion.div key="step7" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-12 py-12">
                 <div className="space-y-8">
                   <div className="w-32 h-32 bg-accent/10 rounded-[3rem] flex items-center justify-center mx-auto">
                     <CheckCircle className="w-16 h-16 text-accent" />

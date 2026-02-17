@@ -176,7 +176,7 @@ export default function SalonServices() {
                     </div>
 
                     <Button
-                        onClick={() => navigate(`/book?salonId=${salon.id}`)}
+                        onClick={() => navigate(`/book?salonId=${salon.id}&start=true`)}
                         className="bg-[#214E78] hover:bg-[#1a3d5e] text-white font-bold h-12 px-8 rounded-full shadow-md text-sm"
                     >
                         Book An Appointment

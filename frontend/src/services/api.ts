@@ -67,7 +67,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         }
 
         if (err.message === 'Failed to fetch') {
-            throw new Error('Failed to connect to the local API server. Please ensure your backend (XAMPP or PHP server) is running on port 8000.');
+            throw new Error('Failed to connect to the API server. Please check your internet connection or try again later.');
         }
 
         console.error(`[API Network Error] ${err.message}`);
