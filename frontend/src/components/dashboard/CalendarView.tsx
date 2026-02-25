@@ -89,7 +89,7 @@ export const CalendarView = ({ bookings, onDateSelect, selectedDate }: CalendarV
                                 setCurrentMonth(new Date());
                                 onDateSelect(new Date());
                             }}
-                            className="px-4 font-black text-[10px] uppercase tracking-widest text-[#F2A93B] hover:bg-[#F2A93B]/5"
+                            className="px-4 font-black text-[10px] uppercase tracking-widest text-[#55402f] hover:bg-[#55402f]/5"
                         >
                             Today
                         </Button>
@@ -125,20 +125,20 @@ export const CalendarView = ({ bookings, onDateSelect, selectedDate }: CalendarV
                                 className={cn(
                                     "min-h-[140px] p-3 border-r border-b border-slate-50 cursor-pointer transition-all hover:bg-slate-50",
                                     !isCurrentMonth && "bg-slate-50/30 opacity-40",
-                                    isSelected && "bg-[#F2A93B]/5 ring-2 ring-[#F2A93B]/10 z-10",
+                                    isSelected && "bg-[#55402f]/5 ring-2 ring-[#55402f]/10 z-10",
                                     idx % 7 === 6 && "border-r-0"
                                 )}
                             >
                                 <div className="flex items-center justify-between mb-3">
                                     <span className={cn(
                                         "text-lg font-black tracking-tight",
-                                        isToday(day) ? "text-[#F2A93B]" : "text-slate-900",
+                                        isToday(day) ? "text-[#55402f]" : "text-slate-900",
                                         !isCurrentMonth && "text-slate-300"
                                     )}>
                                         {format(day, 'd')}
                                     </span>
                                     {dayBookings.length > 0 && (
-                                        <Badge className="bg-[#F2A93B] text-white border-0 font-black text-[9px] px-2 h-5">
+                                        <Badge className="bg-[#55402f] text-white border-0 font-black text-[9px] px-2 h-5">
                                             {dayBookings.length}
                                         </Badge>
                                     )}
@@ -159,7 +159,7 @@ export const CalendarView = ({ bookings, onDateSelect, selectedDate }: CalendarV
                                                         </span>
                                                     </div>
                                                 </TooltipTrigger>
-                                                <TooltipContent side="right" className="bg-[#F2A93B] text-white border-none p-4 rounded-2xl shadow-2xl w-64">
+                                                <TooltipContent side="right" className="bg-[#55402f] text-white border-none p-4 rounded-2xl shadow-2xl w-64">
                                                     <div className="space-y-3">
                                                         <div className="flex items-center justify-between">
                                                             <Badge className={cn("text-[8px] font-black uppercase tracking-widest", getStatusColor(booking.status))}>

@@ -77,7 +77,7 @@ const MembershipDetailsPage = () => {
             <Navbar />
 
             {/* Reference-Aligned Hero Section */}
-            <section className="relative h-[65vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+            <section className="relative h-[92vh] min-h-[500px] flex items-center justify-center overflow-hidden">
                 <div className="absolute inset-0 bg-slate-900">
                     <img
                         src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?q=80&w=2070&auto=format&fit=crop"
@@ -147,29 +147,29 @@ const MembershipDetailsPage = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center max-w-6xl mx-auto">
                         <div className="space-y-6">
                             <div className="space-y-4">
-                                <span className="text-[10px] font-black text-[#b07d62] uppercase tracking-[0.5em] block">Automatic Enrolment</span>
+                                <span className="text-[10px] font-black text-[#55402f] uppercase tracking-[0.5em] block">Automatic Enrolment</span>
                                 <h2 className="text-5xl font-black text-[#1A1A1A] uppercase tracking-tighter leading-[1.1]">
                                     Spend RM600<br />Get Invited.
                                 </h2>
-                                <div className="h-1.5 w-16 bg-[#b07d62] rounded-full" />
+                                <div className="h-1.5 w-16 bg-[#55402f] rounded-full" />
                             </div>
                             <p className="text-slate-500 font-medium leading-relaxed italic text-lg max-w-lg">
                                 Any single visit with a total spend of RM600 or more will automatically grant you prestige membership for a full year.
                             </p>
                             <div className="pt-4 space-y-4">
                                 <div className="flex items-center gap-4">
-                                    <ShieldCheck className="w-5 h-5 text-[#b07d62]" />
+                                    <ShieldCheck className="w-5 h-5 text-[#55402f]" />
                                     <span className="text-sm font-bold text-slate-700">Digital Status Activation</span>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <Clock className="w-5 h-5 text-[#b07d62]" />
+                                    <Clock className="w-5 h-5 text-[#55402f]" />
                                     <span className="text-sm font-bold text-slate-700">One-Year Locked Benefits</span>
                                 </div>
                             </div>
                         </div>
 
                         <motion.div
-                            initial={{ opacity: 0, scale: 0.9 }}
+                            initial={{ opacity: 0, scale: 0.95 }}
                             whileInView={{ opacity: 1, scale: 1 }}
                             className="perspective-1000"
                         >
@@ -177,20 +177,25 @@ const MembershipDetailsPage = () => {
                                 onMouseMove={handleMouseMove}
                                 onMouseLeave={handleMouseLeave}
                                 style={{ rotateX, rotateY }}
-                                className="relative w-full aspect-[1.6/1] rounded-[2.5rem] bg-gradient-to-br from-[#2a2a2a] via-[#1a1a1a] to-[#2a2a2a] overflow-hidden border border-white/10 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.4)] group"
+                                className="relative text-white w-full aspect-[1.6/1] rounded-[2.5rem] bg-[#0A0A0A] overflow-hidden border border-white/20 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] group"
                             >
-                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity" />
-                                <div className="absolute inset-0 p-10 flex flex-col justify-between">
+                                {/* Subtle Dynamic Highlight */}
+                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.05] to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                                <div className="absolute inset-0 p-10 md:p-14 flex flex-col justify-between">
                                     <div className="flex justify-between items-start">
-                                        <img src={logo} alt="Logo" className="h-10 w-auto brightness-0 invert opacity-40 shrink-0" />
-                                        <Crown className="w-8 h-8 text-[#b07d62]" />
-                                    </div>
-                                    <div className="space-y-4">
-                                        <h3 className="text-3xl font-black text-white tracking-widest uppercase">Member</h3>
-                                        <div className="flex justify-between items-center opacity-40">
-                                            <p className="text-[10px] uppercase font-mono tracking-widest">Prestige Signature</p>
-                                            <Sparkles className="w-4 h-4 text-[#b07d62]" />
+                                        <div className="flex flex-col text-white leading-none">
+                                            <span className="text-2xl text-white md:text-3xl font-serif italic tracking-tight">Noam</span>
+                                            <span className="text-2xl text-white md:text-3xl font-serif italic tracking-tight">Skin.</span>
                                         </div>
+                                        <Crown className="w-8 h-8" color="white" />
+                                    </div>
+
+                                    <div className="flex justify-between items-end">
+                                        <h3 className="text-5xl md:text-7xl font-black text-white tracking-tight uppercase leading-none">
+                                            MEMBER
+                                        </h3>
+                                        <Sparkles className="w-5 h-5" color="white" />
                                     </div>
                                 </div>
                             </motion.div>

@@ -293,57 +293,57 @@ export default function SettingsPage() {
     >
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-black text-foreground tracking-tight">Salon Settings</h1>
-          <p className="text-muted-foreground font-medium">
+          <h1 className="text-3xl font-black text-white tracking-tight">Salon Settings</h1>
+          <p className="text-white/60 font-medium">
             Manage your salon's configuration in the local database
           </p>
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList className="bg-secondary/50 p-1 rounded-2xl">
-            <TabsTrigger value="profile" className="gap-2 rounded-xl h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+          <TabsList className="bg-muted/10 p-1 rounded-2xl border border-white/5">
+            <TabsTrigger value="profile" className="gap-2 rounded-xl h-10 data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg">
               <Store className="w-4 h-4" />
               Profile
             </TabsTrigger>
-            <TabsTrigger value="hours" className="gap-2 rounded-xl h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+            <TabsTrigger value="hours" className="gap-2 rounded-xl h-10 data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg">
               <Clock className="w-4 h-4" />
               Hours
             </TabsTrigger>
-            <TabsTrigger value="notifications" className="gap-2 rounded-xl h-10 data-[state=active]:bg-white data-[state=active]:shadow-sm">
+            <TabsTrigger value="notifications" className="gap-2 rounded-xl h-10 data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg">
               <Bell className="w-4 h-4" />
               Notifications
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="profile">
-            <Card className="border-none shadow-sm bg-white rounded-[2rem]">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold">Business Information</CardTitle>
-                <CardDescription className="font-medium">
+            <Card className="border-0 shadow-sm bg-card rounded-[2rem] overflow-hidden">
+              <CardHeader className="border-b border-white/5 bg-white/5">
+                <CardTitle className="text-xl font-bold text-white">Business Information</CardTitle>
+                <CardDescription className="text-white/60 font-medium">
                   Public details visible to customers on the listing page
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Salon Name</Label>
+                    <Label htmlFor="name" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">Salon Name</Label>
                     <Input
                       id="name"
                       value={formData.name}
                       onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      className="h-12 bg-secondary/30 border-none rounded-xl"
+                      className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="phone" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Phone</Label>
+                    <Label htmlFor="phone" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">Phone</Label>
                     <div className="flex gap-2">
                       <Select value={countryCode} onValueChange={setCountryCode}>
-                        <SelectTrigger className="w-[110px] h-12 bg-secondary/30 border-none rounded-xl">
+                        <SelectTrigger className="w-[110px] h-12 bg-muted/10 border-white/10 text-white rounded-xl">
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent className="rounded-xl border-none shadow-2xl bg-white max-h-[300px]">
+                        <SelectContent className="rounded-xl border border-white/10 shadow-2xl bg-card text-white max-h-[300px]">
                           {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
-                            <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-medium py-2 rounded-lg cursor-pointer">
+                            <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-medium py-2 rounded-lg cursor-pointer focus:bg-[#55402f]/20">
                               <span className="flex items-center gap-2">
                                 <span>{c.flag}</span>
                                 <span>{c.code}</span>
@@ -357,77 +357,77 @@ export default function SettingsPage() {
                         type="tel"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value.replace(/[^0-9]/g, '') })}
-                        className="h-12 bg-secondary/30 border-none rounded-xl flex-1"
+                        className="h-12 bg-muted/10 border-white/10 text-white rounded-xl flex-1 focus:ring-[#55402f]/20"
                         placeholder="000 000 0000"
                       />
                     </div>
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Description</Label>
+                  <Label htmlFor="description" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">Description</Label>
                   <Textarea
                     id="description"
                     value={formData.description}
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     rows={3}
-                    className="bg-secondary/30 border-none rounded-xl p-4 min-h-[100px]"
+                    className="bg-muted/10 border-white/10 text-white rounded-xl p-4 min-h-[100px] focus:ring-[#55402f]/20"
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Public Email</Label>
+                    <Label htmlFor="email" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">Public Email</Label>
                     <Input
                       id="email"
                       type="email"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="h-12 bg-secondary/30 border-none rounded-xl"
+                      className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="gst" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">GST Number</Label>
+                    <Label htmlFor="gst" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">GST Number</Label>
                     <Input
                       id="gst"
                       value={formData.gst_number}
                       onChange={(e) => setFormData({ ...formData, gst_number: e.target.value })}
-                      className="h-12 bg-secondary/30 border-none rounded-xl font-bold"
+                      className="h-12 bg-muted/10 border-white/10 text-white rounded-xl font-bold focus:ring-[#55402f]/20"
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="address" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Detailed Address</Label>
+                  <Label htmlFor="address" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">Detailed Address</Label>
                   <Input
                     id="address"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                    className="h-12 bg-secondary/30 border-none rounded-xl"
+                    className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                   />
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="upi" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">UPI ID (for payments)</Label>
+                    <Label htmlFor="upi" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">UPI ID (for payments)</Label>
                     <Input
                       id="upi"
                       placeholder="e.g. salon@upi"
                       value={formData.upi_id}
                       onChange={(e) => setFormData({ ...formData, upi_id: e.target.value })}
-                      className="h-12 bg-secondary/30 border-none rounded-xl"
+                      className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="bank" className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Bank Details (for invoices)</Label>
+                    <Label htmlFor="bank" className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">Bank Details (for invoices)</Label>
                     <Input
                       id="bank"
                       placeholder="e.g. Maybank 5642XXX"
                       value={formData.bank_details}
                       onChange={(e) => setFormData({ ...formData, bank_details: e.target.value })}
-                      className="h-12 bg-secondary/30 border-none rounded-xl"
+                      className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                     />
                   </div>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
-                    <Label className="text-xs font-black uppercase tracking-widest text-muted-foreground ml-1">Salon Logo</Label>
+                    <Label className="text-xs font-black uppercase tracking-widest text-white/50 ml-1">Salon Logo</Label>
 
                     <div className="relative group w-32 h-32">
                       <div
@@ -479,8 +479,8 @@ export default function SettingsPage() {
 
                     <div
                       className={cn(
-                        "relative group aspect-video rounded-3xl overflow-hidden border-2 border-dashed border-slate-200 hover:border-accent/40 bg-slate-50 transition-all",
-                        isDraggingCover && "scale-[1.02] border-accent bg-accent/5 ring-4 ring-accent/10"
+                        "relative group aspect-video rounded-3xl overflow-hidden border-2 border-dashed border-white/10 hover:border-[#55402f]/40 bg-white/5 transition-all text-white",
+                        isDraggingCover && "scale-[1.02] border-[#55402f] bg-[#55402f]/5 ring-4 ring-[#55402f]/10"
                       )}
                       onDragOver={(e) => handleDrag(e, 'cover', true)}
                       onDragLeave={(e) => handleDrag(e, 'cover', false)}
@@ -497,11 +497,11 @@ export default function SettingsPage() {
                         </>
                       ) : (
                         <Label htmlFor="cover-upload" className="absolute inset-0 cursor-pointer flex flex-col items-center justify-center gap-3">
-                          <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-slate-400 group-hover:scale-110 transition-all">
+                          <div className="w-12 h-12 rounded-2xl bg-white/5 shadow-sm flex items-center justify-center text-white/40 group-hover:scale-110 transition-all">
                             <ImageIcon className="w-6 h-6" />
                           </div>
-                          <p className="text-sm font-bold text-slate-600">Select Booth Banner</p>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1">or drag and drop</p>
+                          <p className="text-sm font-bold text-white/80">Select Booth Banner</p>
+                          <p className="text-[10px] font-black uppercase tracking-widest text-white/40 mt-1">or drag and drop</p>
                         </Label>
                       )}
 
@@ -513,9 +513,9 @@ export default function SettingsPage() {
                       )}
 
                       {uploadingCover && (
-                        <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
-                          <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
-                          <p className="text-[10px] font-black uppercase tracking-widest text-accent">Uploading...</p>
+                        <div className="absolute inset-0 bg-card/80 backdrop-blur-sm flex flex-col items-center justify-center gap-2">
+                          <div className="w-8 h-8 border-2 border-[#55402f] border-t-transparent rounded-full animate-spin" />
+                          <p className="text-[10px] font-black uppercase tracking-widest text-[#55402f]">Uploading...</p>
                         </div>
                       )}
 
@@ -536,25 +536,25 @@ export default function SettingsPage() {
                     placeholder="City"
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="h-12 bg-secondary/30 border-none rounded-xl"
+                    className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                   />
                   <Input
                     placeholder="State"
                     value={formData.state}
                     onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                    className="h-12 bg-secondary/30 border-none rounded-xl"
+                    className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                   />
                   <Input
                     placeholder="PIN Code"
                     value={formData.pincode}
                     onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
-                    className="h-12 bg-secondary/30 border-none rounded-xl"
+                    className="h-12 bg-muted/10 border-white/10 text-white rounded-xl focus:ring-[#55402f]/20"
                   />
                 </div>
                 <Button
                   onClick={handleSaveProfile}
                   disabled={saving}
-                  className="bg-accent hover:bg-accent/90 text-white font-black px-8 h-12 rounded-xl shadow-lg shadow-accent/20"
+                  className="bg-[#55402f] hover:bg-[#55402f]/90 text-white font-black px-8 h-12 rounded-xl shadow-lg shadow-[#55402f]/20"
                 >
                   {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Save className="w-4 h-4 mr-2" />}
                   Save All Changes
@@ -564,15 +564,15 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="hours">
-            <Card className="border-none shadow-sm bg-white rounded-[2rem]">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold">Opening Hours</CardTitle>
-                <CardDescription className="font-medium">Define your weekly operational schedule</CardDescription>
+            <Card className="border-0 shadow-sm bg-card rounded-[2rem] overflow-hidden">
+              <CardHeader className="border-b border-white/5 bg-white/5">
+                <CardTitle className="text-xl font-bold text-white">Opening Hours</CardTitle>
+                <CardDescription className="text-white/60 font-medium">Define your weekly operational schedule</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-3">
+              <CardContent className="space-y-3 pt-6">
                 {DAYS.map((day) => (
-                  <div key={day} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-secondary/20 transition-all hover:bg-secondary/30">
-                    <div className="w-32 font-black text-slate-700">{day}</div>
+                  <div key={day} className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-5 rounded-2xl bg-white/5 border border-white/5 transition-all hover:bg-white/10">
+                    <div className="w-32 font-black text-white/90">{day}</div>
                     <div className="flex items-center gap-6 flex-1 justify-end">
                       <div className="flex items-center gap-3">
                         <span className="text-xs font-bold text-muted-foreground">{businessHours[day]?.closed ? "CLOSED" : "OPEN"}</span>
@@ -593,9 +593,9 @@ export default function SettingsPage() {
                               ...businessHours,
                               [day]: { ...businessHours[day], open: e.target.value }
                             })}
-                            className="w-32 bg-white border-none h-10 rounded-lg font-bold"
+                            className="w-32 bg-card border-white/10 h-10 rounded-lg font-bold text-white"
                           />
-                          <span className="text-xs font-black text-muted-foreground">TO</span>
+                          <span className="text-xs font-black text-white/40">TO</span>
                           <Input
                             type="time"
                             value={businessHours[day]?.close || "20:00"}
@@ -603,7 +603,7 @@ export default function SettingsPage() {
                               ...businessHours,
                               [day]: { ...businessHours[day], close: e.target.value }
                             })}
-                            className="w-32 bg-white border-none h-10 rounded-lg font-bold"
+                            className="w-32 bg-card border-white/10 h-10 rounded-lg font-bold text-white"
                           />
                         </div>
                       )}
@@ -611,7 +611,7 @@ export default function SettingsPage() {
                   </div>
                 ))}
                 <div className="pt-6">
-                  <Button onClick={handleSaveBusinessHours} disabled={saving} className="bg-accent text-white font-black px-8 h-12 rounded-xl shadow-lg shadow-accent/20">
+                  <Button onClick={handleSaveBusinessHours} disabled={saving} className="bg-[#55402f] text-white font-black px-8 h-12 rounded-xl shadow-lg shadow-[#55402f]/20">
                     {saving ? "Saving..." : "Update Business Hours"}
                   </Button>
                 </div>
@@ -620,21 +620,21 @@ export default function SettingsPage() {
           </TabsContent>
 
           <TabsContent value="notifications">
-            <Card className="border-none shadow-sm bg-white rounded-[2rem]">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold">Communication Settings</CardTitle>
-                <CardDescription className="font-medium">How we alert you and your clients</CardDescription>
+            <Card className="border-0 shadow-sm bg-card rounded-[2rem] overflow-hidden">
+              <CardHeader className="border-b border-white/5 bg-white/5">
+                <CardTitle className="text-xl font-bold text-white">Communication Settings</CardTitle>
+                <CardDescription className="text-white/60 font-medium">How we alert you and your clients</CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 pt-6">
                 {[
                   { id: 'email_bookings', label: 'Email for New Bookings', desc: 'Get an alert for every new appointment', checked: notifications.email_bookings },
                   { id: 'email_reminders', label: 'Client Email Reminders', desc: 'Automated reminders 24h before visits', checked: notifications.email_reminders },
                   { id: 'sms_confirmations', label: 'SMS Confirmations', desc: 'Direct text alerts (Local SMS charges apply)', checked: notifications.sms_confirmations },
                 ].map(item => (
-                  <div key={item.id} className="flex items-center justify-between p-6 rounded-2xl bg-secondary/10 border border-slate-50">
+                  <div key={item.id} className="flex items-center justify-between p-6 rounded-2xl bg-white/5 border border-white/5">
                     <div className="space-y-1">
-                      <p className="font-bold text-slate-900">{item.label}</p>
-                      <p className="text-xs text-muted-foreground font-medium">{item.desc}</p>
+                      <p className="font-bold text-white">{item.label}</p>
+                      <p className="text-xs text-white/50 font-medium">{item.desc}</p>
                     </div>
                     <Switch
                       checked={item.checked}
@@ -642,7 +642,7 @@ export default function SettingsPage() {
                     />
                   </div>
                 ))}
-                <Button onClick={handleSaveNotifications} disabled={saving} className="bg-accent text-white font-black px-8 h-12 rounded-xl mt-4 shadow-lg shadow-accent/20">
+                <Button onClick={handleSaveNotifications} disabled={saving} className="bg-[#55402f] text-white font-black px-8 h-12 rounded-xl mt-4 shadow-lg shadow-[#55402f]/20">
                   {saving ? "Saving..." : "Update Preferences"}
                 </Button>
               </CardContent>

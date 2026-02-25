@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Search, MapPin, Star, Filter, ArrowRight,
-  Scissors, Sparkles, Clock, Heart, Loader2,
+  Scissors, Sparkles, Clock, Loader2,
   Navigation, Zap, Award, CheckCircle2, User, Banknote
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -72,7 +72,7 @@ export default function SalonListing() {
         distance: (Math.random() * 5).toFixed(1) + " km",
         categories: salon.categories ? salon.categories.split(',') : ["Beauty", "Spa"],
         status: "Open locally",
-        priceRange: "RM",
+        priceRange: "MYR",
         isFeatured: Math.random() > 0.5
       }));
 
@@ -214,11 +214,6 @@ export default function SalonListing() {
                           </div>
                         </div>
 
-                        <div className="absolute top-4 right-4">
-                          <div className="bg-white/80 backdrop-blur-md w-10 h-10 rounded-xl flex items-center justify-center shadow-sm opacity-0 group-hover:opacity-100 transition-opacity">
-                            <Heart className="w-4 h-4 text-slate-400 hover:text-red-500" />
-                          </div>
-                        </div>
 
                         <div className="absolute bottom-4 left-4">
                           <Badge className="bg-slate-900 text-white border-none font-black px-3 py-1 rounded-lg text-[8px] uppercase tracking-widest flex items-center gap-1">

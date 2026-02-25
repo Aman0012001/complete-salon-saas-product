@@ -66,7 +66,7 @@ const ServicesSection = () => {
   }, []);
 
   return (
-    <section id="services" className="py-24 px-4 bg-white overflow-hidden">
+    <section className="py-24 px-4 bg-muted/30 overflow-hidden">
       <div className="container mx-auto">
         {/* Header Block */}
         <div className="max-w-4xl mx-auto text-center mb-20 space-y-6">
@@ -77,11 +77,12 @@ const ServicesSection = () => {
             transition={{ duration: 0.8 }}
             className="space-y-4"
           >
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#1A2338] tracking-tight uppercase">
-              Inside Our Space Salons
+            <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-[#1A2B3C] tracking-tighter uppercase font-sans">
+              INSIDE OUR SPACE SALONS
             </h2>
-            <p className="text-base md:text-xl text-slate-500 font-normal leading-relaxed max-w-2xl mx-auto">
-              Step into a place designed just for you. Our space is all about personalized care, comfort, and results.            </p>
+            <p className="text-base md:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl mx-auto">
+              Step into a place designed just for you. Our space is all about personalized care, comfort, and results.
+            </p>
           </motion.div>
         </div>
 
@@ -91,7 +92,7 @@ const ServicesSection = () => {
           </div>
         ) : salons.length === 0 ? (
           <div className="text-center py-20 bg-slate-50 rounded-[3rem]">
-            <p className="text-slate-400 font-bold uppercase tracking-widest">No available salons at the moment</p>
+            <p className="text-muted-foreground font-bold uppercase tracking-widest">No available salons at the moment</p>
           </div>
         ) : (
           <div className="relative max-w-[1400px] mx-auto px-4 md:px-12">
@@ -116,10 +117,10 @@ const ServicesSection = () => {
               </CarouselContent>
 
               <div className="hidden lg:flex absolute -left-4 top-1/2 -translate-y-1/1 items-center">
-                <CarouselPrevious className="relative left-0 translate-y-0 h-12 w-12 rounded-full border-none bg-white shadow-xl hover:bg-slate-50 transition-all" />
+                <CarouselPrevious className="relative left-0 translate-y-0 h-12 w-12 rounded-full border-none bg-card shadow-xl hover:bg-muted transition-all" />
               </div>
               <div className="hidden lg:flex absolute -right-4 top-1/2 -translate-y-1/2 items-center">
-                <CarouselNext className="relative right-0 translate-y-0 h-12 w-12 rounded-full border-none bg-white shadow-xl hover:bg-slate-50 transition-all" />
+                <CarouselNext className="relative right-0 translate-y-0 h-12 w-12 rounded-full border-none bg-card shadow-xl hover:bg-muted transition-all" />
               </div>
             </Carousel>
           </div>

@@ -188,7 +188,7 @@ export default function LoyaltyPage() {
                                             />
                                             <span className="absolute right-3 top-2.5 text-slate-400 text-sm">Spent</span>
                                         </div>
-                                        <p className="text-[10px] text-slate-400">Example: 1 = 1 point per RM 1. 0.5 = 1 point per RM 2.</p>
+                                        <p className="text-[10px] text-slate-400">Example: 1 = 1 point per MYR 1. 0.5 = 1 point per MYR 2.</p>
                                     </div>
 
                                     <div className="space-y-2">
@@ -230,7 +230,7 @@ export default function LoyaltyPage() {
                                 </div>
                                 <Dialog open={isAddRewardOpen} onOpenChange={setIsAddRewardOpen}>
                                     <DialogTrigger asChild>
-                                        <Button className="bg-[#F2A93B] hover:bg-[#D99020] text-white">
+                                        <Button className="bg-[#55402f] hover:bg-[#D99020] text-white">
                                             <Plus className="w-4 h-4 mr-2" />
                                             Add Reward
                                         </Button>

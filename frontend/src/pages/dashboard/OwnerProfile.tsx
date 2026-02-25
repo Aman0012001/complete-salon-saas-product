@@ -110,10 +110,10 @@ export default function OwnerProfile() {
             <ResponsiveDashboardLayout>
                 <div className="flex flex-col items-center justify-center h-[70vh] space-y-6">
                     <div className="relative w-20 h-20">
-                        <div className="absolute inset-0 border-4 border-slate-100 rounded-full"></div>
-                        <div className="absolute inset-0 border-4 border-accent rounded-full border-t-transparent animate-spin"></div>
+                        <div className="absolute inset-0 border-4 border-white/5 rounded-full"></div>
+                        <div className="absolute inset-0 border-4 border-[#55402f] rounded-full border-t-transparent animate-spin"></div>
                     </div>
-                    <p className="text-slate-400 font-black uppercase tracking-[0.3em] text-xs">Syncing Station Data...</p>
+                    <p className="text-white/40 font-black uppercase tracking-[0.3em] text-xs">Syncing Station Data...</p>
                 </div>
             </ResponsiveDashboardLayout>
         );
@@ -132,10 +132,10 @@ export default function OwnerProfile() {
                     <div className="text-center space-y-4">
                         <div className="relative w-32 h-32 mx-auto group">
                             <div className="absolute inset-0 bg-accent/20 blur-2xl rounded-[2.5rem] scale-90 group-hover:scale-110 transition-transform duration-500" />
-                            <div className="relative w-full h-full bg-white rounded-[2.5rem] p-1 shadow-2xl overflow-hidden border border-slate-100 flex items-center justify-center">
+                            <div className="relative w-full h-full bg-card rounded-[2.5rem] p-1 shadow-2xl overflow-hidden border border-white/10 flex items-center justify-center">
                                 <Avatar className="w-full h-full rounded-[2.2rem]">
                                     <AvatarImage src={formData.logo_url} className="object-cover" />
-                                    <AvatarFallback className="bg-slate-50 text-slate-300">
+                                    <AvatarFallback className="bg-white/5 text-white/40">
                                         <Store className="w-12 h-12" />
                                     </AvatarFallback>
                                 </Avatar>
@@ -150,18 +150,18 @@ export default function OwnerProfile() {
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <h1 className="text-3xl font-black text-slate-900 tracking-tight">{formData.name || "My Salon"}</h1>
-                            <p className="text-[10px] font-black uppercase text-slate-400 tracking-[0.3em]">Business Profile Registry</p>
+                            <h1 className="text-3xl font-black text-white tracking-tight">{formData.name || "My Salon"}</h1>
+                            <p className="text-[10px] font-black uppercase text-white/40 tracking-[0.3em]">Business Profile Registry</p>
                         </div>
                     </div>
 
                     {/* Form Section */}
-                    <Card className="border-none shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] bg-white/60 backdrop-blur-3xl rounded-[3rem] overflow-hidden border border-white/40">
+                    <Card className="border-none shadow-[0_40px_80px_-20px_rgba(0,0,0,0.5)] bg-card/60 backdrop-blur-3xl rounded-[3rem] overflow-hidden border border-white/10">
                         <CardContent className="p-10 space-y-6">
                             <form onSubmit={handleSave} className="space-y-8">
                                 <div className="space-y-6">
                                     <div className="space-y-3">
-                                        <Label htmlFor="name" className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1 flex items-center gap-2">
+                                        <Label htmlFor="name" className="text-[10px] font-black uppercase text-white/40 tracking-widest ml-1 flex items-center gap-2">
                                             <Globe className="w-3.5 h-3.5" /> Salon Brand Name
                                         </Label>
                                         <Input
@@ -169,23 +169,23 @@ export default function OwnerProfile() {
                                             value={formData.name}
                                             placeholder="Enter Salon Name"
                                             onChange={e => setFormData({ ...formData, name: e.target.value })}
-                                            className="h-16 bg-slate-50 border-none rounded-2xl font-black px-6 text-lg shadow-inner focus:ring-2 focus:ring-accent/20 transition-all"
+                                            className="h-16 bg-muted/10 border-white/10 rounded-2xl font-black px-6 text-lg shadow-inner focus:ring-[#55402f]/20 transition-all text-white"
                                             required
                                         />
                                     </div>
 
                                     <div className="space-y-3">
-                                        <Label htmlFor="phone" className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1 flex items-center gap-2">
+                                        <Label htmlFor="phone" className="text-[10px] font-black uppercase text-white/40 tracking-widest ml-1 flex items-center gap-2">
                                             <Phone className="w-3.5 h-3.5" /> Business Contact
                                         </Label>
                                         <div className="flex gap-3">
                                             <Select value={countryCode} onValueChange={setCountryCode}>
-                                                <SelectTrigger className="w-[120px] h-16 bg-slate-50 border-none rounded-2xl font-black px-4 shadow-inner">
+                                                <SelectTrigger className="w-[120px] h-16 bg-muted/10 border-white/10 rounded-2xl font-black px-4 shadow-inner text-white">
                                                     <SelectValue />
                                                 </SelectTrigger>
-                                                <SelectContent className="rounded-2xl border-none shadow-2xl bg-white max-h-[300px]">
+                                                <SelectContent className="rounded-2xl border border-white/10 shadow-2xl bg-card text-white max-h-[300px]">
                                                     {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
-                                                        <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-bold py-3 rounded-xl focus:bg-accent/10 cursor-pointer">
+                                                        <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-bold py-3 rounded-xl focus:bg-[#55402f]/20 cursor-pointer">
                                                             <span className="flex items-center gap-2">
                                                                 <span>{c.flag}</span>
                                                                 <span>{c.code}</span>
@@ -200,14 +200,14 @@ export default function OwnerProfile() {
                                                 value={formData.phone}
                                                 placeholder="000 000 0000"
                                                 onChange={e => setFormData({ ...formData, phone: e.target.value.replace(/[^0-9]/g, '') })}
-                                                className="h-16 bg-slate-50 border-none rounded-2xl font-black px-6 text-lg shadow-inner flex-1 focus:ring-2 focus:ring-accent/20 transition-all"
+                                                className="h-16 bg-muted/10 border-white/10 rounded-2xl font-black px-6 text-lg shadow-inner flex-1 focus:ring-[#55402f]/20 transition-all text-white"
                                             />
                                         </div>
                                     </div>
 
                                     <div className="grid md:grid-cols-2 gap-6">
                                         <div className="space-y-3">
-                                            <Label htmlFor="address" className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1 flex items-center gap-2">
+                                            <Label htmlFor="address" className="text-[10px] font-black uppercase text-white/40 tracking-widest ml-1 flex items-center gap-2">
                                                 <Globe className="w-3.5 h-3.5" /> Business Address
                                             </Label>
                                             <Input
@@ -215,11 +215,11 @@ export default function OwnerProfile() {
                                                 value={formData.address}
                                                 placeholder="Street Address"
                                                 onChange={e => setFormData({ ...formData, address: e.target.value })}
-                                                className="h-16 bg-slate-50 border-none rounded-2xl font-bold px-6 shadow-inner"
+                                                className="h-16 bg-muted/10 border-white/10 rounded-2xl font-bold px-6 shadow-inner text-white"
                                             />
                                         </div>
                                         <div className="space-y-3">
-                                            <Label htmlFor="city" className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1 flex items-center gap-2">
+                                            <Label htmlFor="city" className="text-[10px] font-black uppercase text-white/40 tracking-widest ml-1 flex items-center gap-2">
                                                 <Globe className="w-3.5 h-3.5" /> City / District
                                             </Label>
                                             <Input
@@ -227,13 +227,13 @@ export default function OwnerProfile() {
                                                 value={formData.city}
                                                 placeholder="e.g. Kuala Lumpur"
                                                 onChange={e => setFormData({ ...formData, city: e.target.value })}
-                                                className="h-16 bg-slate-50 border-none rounded-2xl font-bold px-6 shadow-inner"
+                                                className="h-16 bg-muted/10 border-white/10 rounded-2xl font-bold px-6 shadow-inner text-white"
                                             />
                                         </div>
                                     </div>
                                 </div>
 
-                                <Button disabled={saving} className="w-full h-16 bg-slate-900 hover:bg-black text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-slate-900/10 transition-all transform hover:scale-[1.01] flex items-center justify-center gap-3">
+                                <Button disabled={saving} className="w-full h-16 bg-[#55402f] hover:bg-[#55402f]/90 text-white rounded-[2rem] font-black text-lg shadow-2xl shadow-[#55402f]/10 transition-all transform hover:scale-[1.01] flex items-center justify-center gap-3">
                                     {saving ? <Loader2 className="w-6 h-6 animate-spin" /> : <Save className="w-6 h-6" />}
                                     SAVE STATION IDENTITY
                                 </Button>

@@ -37,7 +37,7 @@ const InsideSpaceSection = () => {
     };
 
     return (
-        <section className="py-24 px-4 bg-[#F8F5F2] overflow-hidden">
+        <section className="py-24 px-4 bg-muted/30 overflow-hidden">
             <div className="container mx-auto">
                 {/* Header Block */}
                 <div className="max-w-4xl mx-auto text-center mb-16 px-4">
@@ -48,8 +48,8 @@ const InsideSpaceSection = () => {
                         transition={{ duration: 0.8 }}
                         className="space-y-4"
                     >
-                        <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold text-black tracking-tight font-['Playfair_Display']">
-                            Inside Our Space
+                        <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold text-foreground tracking-tight font-['Playfair_Display']">
+                            Inside Our Space Salons
                         </h2>
                     </motion.div>
                 </div>
@@ -80,11 +80,11 @@ const InsideSpaceSection = () => {
 
                                     {/* Content Area - CENTERED BELOW CARD */}
                                     <div className="text-center relative">
-                                        <h3 className="font-bold text-2xl md:text-3xl text-black transition-colors">
+                                        <h3 className="font-bold text-2xl md:text-3xl text-foreground transition-colors">
                                             {cat.title}
                                         </h3>
                                         {/* Underline transition */}
-                                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-black scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
+                                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
                                     </div>
                                 </div>
                             </motion.div>

@@ -87,6 +87,7 @@ interface Booking {
     phone: string | null;
   };
   isReturning?: boolean;
+  user_type?: string;
   price_paid?: number;
   discount_amount?: number;
   coupon_code?: string;
@@ -254,7 +255,8 @@ export default function AppointmentsPage() {
             phone: b.phone
           } : undefined,
           user_name: b.full_name,
-          user_phone: b.phone
+          user_phone: b.phone,
+          user_type: b.user_type
         };
       });
 
@@ -416,12 +418,12 @@ export default function AppointmentsPage() {
       case "confirmed":
         return (
           <div className="flex flex-col items-end gap-1">
-            <Badge className="bg-gradient-to-r from-emerald-100 to-emerald-200 text-emerald-700 border-0 font-medium text-xs">
+            <Badge className="bg-emerald-500/10 text-emerald-500 border-0 font-medium text-xs">
               <CheckCircle className="w-3 h-3 mr-1" />
               Confirmed
             </Badge>
             {hasStaff && (
-              <Badge variant="outline" className="border-amber-200 text-amber-600 bg-amber-50/50 font-black text-[8px] uppercase tracking-widest px-1.5 h-4">
+              <Badge variant="outline" className="border-amber-500/20 text-white bg-amber-500/5 font-black text-[8px] uppercase tracking-widest px-1.5 h-4">
                 Assigned
               </Badge>
             )}
@@ -429,21 +431,21 @@ export default function AppointmentsPage() {
         );
       case "completed":
         return (
-          <Badge className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 border-0 font-medium text-xs">
+          <Badge className="bg-blue-500/10 text-blue-400 border-0 font-medium text-xs">
             <Star className="w-3 h-3 mr-1" />
             Completed
           </Badge>
         );
       case "pending":
         return (
-          <Badge className="bg-gradient-to-r from-amber-100 to-amber-200 text-amber-700 border-0 font-medium text-xs">
+          <Badge className="bg-amber-500/10 text-amber-500 border-0 font-medium text-xs">
             <Clock className="w-3 h-3 mr-1" />
             Needs Assignment
           </Badge>
         );
       case "cancelled":
         return (
-          <Badge className="bg-gradient-to-r from-red-100 to-red-200 text-red-700 border-0 font-medium text-xs">
+          <Badge className="bg-red-500/10 text-red-400 border-0 font-medium text-xs">
             <XCircle className="w-3 h-3 mr-1" />
             Cancelled
           </Badge>
@@ -508,7 +510,7 @@ export default function AppointmentsPage() {
       <div className={`space-y-${isMobile ? '4' : '6'} pb-${isMobile ? '20' : '0'}`}>
         {/* Mobile Search Bar */}
         {isMobile && showSearch && (
-          <Card className="border-0 shadow-sm bg-white">
+          <Card className="border-0 shadow-sm bg-card">
             <CardContent className="p-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -516,7 +518,7 @@ export default function AppointmentsPage() {
                   placeholder="Search appointments..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-10 bg-secondary/30 border-border/50 focus:bg-white transition-colors"
+                  className="pl-10 h-10 bg-secondary/30 border-border/50 focus:bg-card transition-colors"
                 />
               </div>
             </CardContent>
@@ -526,29 +528,29 @@ export default function AppointmentsPage() {
         {/* Mobile Header Stats */}
         {isMobile && (
           <div className="grid grid-cols-3 gap-3">
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100">
+            <Card className="border-0 shadow-sm bg-blue-500/10">
               <CardContent className="p-3 text-center">
-                <CalendarDays className="w-5 h-5 text-blue-600 mx-auto mb-1" />
-                <p className="text-xl font-bold text-blue-700">{filteredBookings.length}</p>
-                <p className="text-xs text-blue-600 font-medium">Results</p>
+                <CalendarDays className="w-5 h-5 text-blue-500 mx-auto mb-1" />
+                <p className="text-xl font-bold text-blue-400">{filteredBookings.length}</p>
+                <p className="text-xs text-blue-500/80 font-medium">Results</p>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-emerald-50 to-emerald-100">
+            <Card className="border-0 shadow-sm bg-emerald-500/10">
               <CardContent className="p-3 text-center">
-                <CheckCircle className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
-                <p className="text-xl font-bold text-emerald-700">
+                <CheckCircle className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+                <p className="text-xl font-bold text-emerald-400">
                   {filteredBookings.filter(b => b.status === 'confirmed' || b.status === 'completed').length}
                 </p>
-                <p className="text-xs text-emerald-600 font-medium">Done/Conf</p>
+                <p className="text-xs text-emerald-500/80 font-medium">Done/Conf</p>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-amber-50 to-amber-100">
+            <Card className="border-0 shadow-sm bg-amber-500/10">
               <CardContent className="p-3 text-center">
-                <Clock className="w-5 h-5 text-amber-600 mx-auto mb-1" />
-                <p className="text-xl font-bold text-amber-700">
+                <Clock className="w-5 h-5 text-amber-500 mx-auto mb-1" />
+                <p className="text-xl font-bold text-amber-400">
                   {filteredBookings.filter(b => b.status === 'pending').length}
                 </p>
-                <p className="text-xs text-amber-600 font-medium">Pending</p>
+                <p className="text-xs text-amber-500/80 font-medium">Pending</p>
               </CardContent>
             </Card>
           </div>
@@ -567,7 +569,7 @@ export default function AppointmentsPage() {
                 </Badge>
               </div>
               <p className="text-muted-foreground text-lg font-medium">
-                Manage bookings and walk-ins from your local database
+                Manage bookings and walk-ins from your salon
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -610,7 +612,7 @@ export default function AppointmentsPage() {
                         </SelectTrigger>
                         <SelectContent>
                           {availableServices.map(s => (
-                            <SelectItem key={s.id} value={s.id}>{s.name} - ${s.price}</SelectItem>
+                            <SelectItem key={s.id} value={s.id}>{s.name} - MYR {s.price}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
@@ -670,7 +672,7 @@ export default function AppointmentsPage() {
               variant={statusFilter === "all" ? "default" : "outline"}
               size="sm"
               onClick={() => setStatusFilter("all")}
-              className={`flex-shrink-0 font-bold ${statusFilter === "all" ? "bg-[#F2A93B] text-white" : ""}`}
+              className={`flex-shrink-0 font-bold ${statusFilter === "all" ? "bg-[#55402f] text-white" : ""}`}
             >
               All
             </Button>
@@ -692,7 +694,7 @@ export default function AppointmentsPage() {
               variant={viewType === "list" ? "default" : "ghost"}
               size="sm"
               onClick={() => setViewType("list")}
-              className={`px-4 font-bold ${viewType === "list" ? "bg-white text-slate-900 shadow-sm" : "text-muted-foreground"}`}
+              className={`px-4 font-bold ${viewType === "list" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
             >
               List
             </Button>
@@ -700,7 +702,7 @@ export default function AppointmentsPage() {
               variant={viewType === "calendar" ? "default" : "ghost"}
               size="sm"
               onClick={() => setViewType("calendar")}
-              className={`px-4 font-bold ${viewType === "calendar" ? "bg-white text-slate-900 shadow-sm" : "text-muted-foreground"}`}
+              className={`px-4 font-bold ${viewType === "calendar" ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
             >
               Calendar
             </Button>
@@ -713,7 +715,7 @@ export default function AppointmentsPage() {
                 variant={viewMode === mode ? "default" : "ghost"}
                 size="sm"
                 onClick={() => setViewMode(mode as any)}
-                className={`px-4 font-bold capitalize ${viewMode === mode ? "bg-white text-slate-900 shadow-sm" : "text-muted-foreground"}`}
+                className={`px-4 font-bold capitalize ${viewMode === mode ? "bg-card text-foreground shadow-sm" : "text-muted-foreground"}`}
               >
                 {mode === "all" ? "Upcoming" : mode}
               </Button>
@@ -735,7 +737,7 @@ export default function AppointmentsPage() {
 
         {/* Date Navigation for day/week views - Only in List mode or if specific mode selected */}
         {viewType === "list" && viewMode !== "all" && (
-          <Card className="border-0 shadow-sm bg-white overflow-hidden">
+          <Card className="border-0 shadow-sm bg-card overflow-hidden">
             <CardContent className="p-0">
               <div className="flex items-center justify-between p-4 border-b">
                 <Button variant="ghost" size="icon" onClick={() => setSelectedDate(addDays(selectedDate, viewMode === "day" ? -1 : -7))}>
@@ -781,7 +783,7 @@ export default function AppointmentsPage() {
               placeholder="Filter by customer, service or notes..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 h-14 bg-white border-none shadow-sm rounded-2xl text-lg font-medium"
+              className="pl-12 h-14 bg-card border-none shadow-sm rounded-2xl text-lg font-medium"
             />
           </div>
         )}
@@ -792,10 +794,10 @@ export default function AppointmentsPage() {
           <div className="space-y-4">
             {loading ? (
               [1, 2, 3].map(i => (
-                <Card key={i} className="border-0 shadow-sm animate-pulse h-24 bg-white" />
+                <Card key={i} className="border-0 shadow-sm animate-pulse h-24 bg-card" />
               ))
             ) : filteredBookings.length === 0 ? (
-              <Card className="border-0 shadow-sm bg-white/50 backdrop-blur-sm p-12 text-center">
+              <Card className="border-0 shadow-sm bg-card/50 backdrop-blur-sm p-12 text-center">
                 <Calendar className="w-16 h-16 text-muted-foreground/20 mx-auto mb-4" />
                 <h3 className="text-xl font-bold text-foreground">No bookings found</h3>
                 <p className="text-muted-foreground mt-1">No appointments match your current filters or selected date.</p>
@@ -811,15 +813,15 @@ export default function AppointmentsPage() {
               filteredBookings.map((booking) => (
                 <Card
                   key={booking.id}
-                  className="group border-0 shadow-sm hover:shadow-md transition-all duration-300 bg-white overflow-hidden rounded-2xl"
+                  className="group border-0 shadow-sm hover:shadow-md transition-all duration-300 bg-card overflow-hidden rounded-2xl"
                 >
                   <div className="flex flex-col md:flex-row md:items-center">
                     {/* Time Badge - Styled for prominence */}
-                    <div className="bg-slate-50 md:w-32 p-6 flex md:flex-col items-center justify-center border-b md:border-b-0 md:border-r gap-3 md:gap-1">
-                      <span className="text-2xl font-black text-slate-900 tracking-tighter">
+                    <div className="bg-secondary/30 md:w-32 p-6 flex md:flex-col items-center justify-center border-b md:border-b-0 md:border-r gap-3 md:gap-1">
+                      <span className="text-2xl font-black text-foreground tracking-tighter">
                         {booking.booking_time.slice(0, 5)}
                       </span>
-                      <Badge variant="secondary" className="bg-white border-slate-200 text-slate-500 font-bold text-[10px] uppercase px-2">
+                      <Badge variant="secondary" className="bg-card border-border text-muted-foreground font-bold text-[10px] uppercase px-2">
                         {booking.duration_minutes || booking.service?.duration_minutes || 30} MINS
                       </Badge>
                     </div>
@@ -833,11 +835,15 @@ export default function AppointmentsPage() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="space-y-1">
-                          <h4 className="text-lg font-black text-slate-900 flex items-center gap-2">
+                          <h4 className="text-lg font-black text-white flex items-center gap-2">
                             {(() => {
                               const walkInMatch = booking.notes?.match(/Walk-in:\s*([^|#\n]+)/);
                               if (walkInMatch && walkInMatch[1].trim() && walkInMatch[1].trim() !== "undefined") {
                                 return walkInMatch[1].trim();
+                              }
+
+                              if (booking.user_type === 'customer') {
+                                return "Online service booking";
                               }
 
                               if (booking.user_name && (booking.user_id === user?.id || booking.user_name === user?.full_name)) {
@@ -847,16 +853,16 @@ export default function AppointmentsPage() {
                               return booking.user_name || "Walk-in Customer";
                             })()}
                             {booking.isReturning ? (
-                              <Badge className="bg-blue-500/10 text-blue-600 border-none font-black text-[8px] uppercase tracking-widest px-1.5 h-4">Returning</Badge>
+                              <Badge className="bg-blue-500/10 text-blue-400 border-none font-black text-[8px] uppercase tracking-widest px-1.5 h-4">Returning</Badge>
                             ) : (
-                              <Badge className="bg-[#F2A93B]/10 text-[#F2A93B] border-none font-black text-[8px] uppercase tracking-widest px-1.5 h-4">New</Badge>
+                              <Badge className="bg-[#55402f]/10 text-white border-none font-black text-[8px] uppercase tracking-widest px-1.5 h-4">New</Badge>
                             )}
                             {isSameDay(new Date(booking.booking_date), new Date()) && (
                               <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                             )}
                           </h4>
-                          <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-slate-500">
-                            <span className="flex items-center gap-1.5 bg-slate-100/80 px-2 py-0.5 rounded-lg text-slate-600">
+                          <div className="flex flex-wrap items-center gap-3 text-sm font-medium text-muted-foreground">
+                            <span className="flex items-center gap-1.5 bg-secondary/50 px-2 py-0.5 rounded-lg text-foreground/80">
                               <Scissors className="w-3.5 h-3.5" />
                               {booking.service_name || booking.service?.name || "General Service"}
                             </span>
@@ -868,11 +874,11 @@ export default function AppointmentsPage() {
                             ) : null}
                             {booking.staff_name && (
                               <div className="flex items-center gap-2">
-                                <span className="flex items-center gap-1.5 bg-amber-50 px-2 py-0.5 rounded-lg text-amber-700">
+                                <span className="flex items-center gap-1.5 bg-amber-500/10 px-2 py-0.5 rounded-lg text-white">
                                   <User className="w-3.5 h-3.5" />
                                   {booking.staff_name}
                                 </span>
-                                <Badge className="bg-[#F2A93B]/10 text-[#F2A93B] border-none font-black text-[8px] uppercase tracking-widest px-1.5 h-4">
+                                <Badge className="bg-[#55402f]/10 text-white border-none font-black text-[8px] uppercase tracking-widest px-1.5 h-4">
                                   Assigned
                                 </Badge>
                               </div>
@@ -889,15 +895,15 @@ export default function AppointmentsPage() {
 
                       <div className="flex items-center gap-6 self-end md:self-auto">
                         <div className="text-right">
-                          <p className="text-xl font-black text-slate-900 flex items-center justify-end gap-2">
+                          <p className="text-xl font-black text-foreground flex items-center justify-end gap-2">
                             {booking.discount_amount > 0 && (
-                              <Badge className="bg-green-500/10 text-green-600 border-none text-[8px] font-black uppercase tracking-tighter">
+                              <Badge className="bg-green-500/10 text-green-400 border-none text-[8px] font-black uppercase tracking-tighter">
                                 Discount
                               </Badge>
                             )}
-                            ${Number(booking.price || 0).toFixed(2)}
+                            MYR {Number(booking.price || 0).toFixed(2)}
                           </p>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
                             {booking.coupon_code ? `Promo: ${booking.coupon_code}` : 'Paid Amount'}
                           </p>
                         </div>
@@ -907,11 +913,11 @@ export default function AppointmentsPage() {
 
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="ghost" size="icon" className="rounded-xl hover:bg-slate-100">
-                                <MoreHorizontal className="w-5 h-5 text-slate-400" />
+                              <Button variant="ghost" size="icon" className="rounded-xl hover:bg-secondary">
+                                <MoreHorizontal className="w-5 h-5 text-muted-foreground" />
                               </Button>
                             </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end" className="w-56 p-2 rounded-2xl border-none shadow-2xl">
+                            <DropdownMenuContent align="end" className="w-56 p-2 rounded-2xl border-none shadow-2xl bg-card">
                               {(isOwner || isManager) && (
                                 <>
                                   <DropdownMenuItem
@@ -1007,7 +1013,7 @@ export default function AppointmentsPage() {
                       onClick={() => assignStaffToBooking(staff.id)}
                       className={cn(
                         "flex items-center justify-between p-4 rounded-2xl border-2 transition-all group hover:border-accent hover:bg-accent/5",
-                        selectedBooking?.staff_id === staff.id ? "border-accent bg-accent/5" : "border-slate-100"
+                        selectedBooking?.staff_id === staff.id ? "border-accent bg-accent/5" : "border-border/50"
                       )}
                     >
                       <div className="flex items-center gap-3">
@@ -1018,8 +1024,8 @@ export default function AppointmentsPage() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="text-left">
-                          <p className="font-bold text-slate-900">{staff.display_name}</p>
-                          <p className="text-xs text-slate-500">{staff.role || 'Specialist'}</p>
+                          <p className="font-bold text-foreground">{staff.display_name}</p>
+                          <p className="text-xs text-muted-foreground">{staff.role || 'Specialist'}</p>
                         </div>
                       </div>
                       <Plus className="w-5 h-5 text-slate-300 group-hover:text-accent transition-colors" />
@@ -1080,7 +1086,7 @@ export default function AppointmentsPage() {
                   onChange={(e) => setFollowupTime(e.target.value)}
                 />
               </div>
-              <p className="text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-100">
+              <p className="text-xs text-muted-foreground bg-secondary/30 p-3 rounded-lg border border-border/50">
                 <Clock className="w-3 h-3 inline mr-1 mb-0.5" />
                 This will automatically notify the customer on the selected date.
               </p>

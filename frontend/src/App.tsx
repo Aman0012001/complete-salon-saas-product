@@ -94,24 +94,25 @@ import { CartProvider } from "./context/CartContext";
 import MembershipDetailsPage from "./pages/MembershipDetailsPage";
 import NewsletterPopup from "./components/NewsletterPopup";
 import SiteLoader from "./components/SiteLoader";
+import * as React from "react";
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
+import { ThemeProvider } from "./context/ThemeProvider";
 
 const queryClient = new QueryClient();
 
 const App = () => {
-  const [isInitialLoading, setIsInitialLoading] = useState(true);
+  console.log("[App.tsx] App component rendering...");
+  const [isInitialLoading, setIsInitialLoading] = React.useState(true);
 
-  useEffect(() => {
-    console.log("[App.tsx] App component mounted");
+  React.useEffect(() => {
+    console.log("[App.tsx] Initial loading effect triggered...");
     // Simulate initial load or wait for resources
     const timer = setTimeout(() => {
       setIsInitialLoading(false);
-    }, 2500);
+    }, 2000);
     return () => clearTimeout(timer);
   }, []);
-
-  console.log("[App.tsx] App rendering. Initial loading state:", isInitialLoading);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -120,313 +121,315 @@ const App = () => {
           {isInitialLoading && <SiteLoader key="loader" />}
         </AnimatePresence>
         <AuthProvider>
-          <NewsletterPopup />
-          <SuperAdminProvider>
-            <SalonProvider>
-              <CartProvider>
-                <TooltipProvider>
-                  <Toaster />
-                  <Sonner />
-                  <ScrollToTop />
-                  <Routes>
-                    <Route path="/" element={<AllServicesSimple />} />
-                    <Route path="/about" element={<AboutUs />} />
-                    <Route path="/salons" element={<SalonListing />} />
-                    <Route path="/salons/:id" element={<SalonServices />} />
-                    <Route path="/cart" element={<CartPage />} />
-                    <Route path="/checkout" element={<CheckoutPage />} />
-                    <Route path="/services/:id" element={<ServiceDetail />} />
-                    <Route path="/services-simple" element={<AllServicesSimple />} />
+          <ThemeProvider>
+            <NewsletterPopup />
+            <SuperAdminProvider>
+              <SalonProvider>
+                <CartProvider>
+                  <TooltipProvider>
+                    <Toaster />
+                    <Sonner />
+                    <ScrollToTop />
+                    <div id="app-routes-container">
+                      <Routes>
+                        <Route path="/" element={<Index />} />
+                        <Route path="/about" element={<AboutUs />} />
+                        <Route path="/salons" element={<SalonListing />} />
+                        <Route path="/salons/:id" element={<SalonServices />} />
+                        <Route path="/cart" element={<CartPage />} />
+                        <Route path="/shop" element={<RetailShop />} />
+                        <Route path="/product/:id" element={<ProductDetails />} />
+                        <Route path="/checkout" element={<CheckoutPage />} />
+                        <Route path="/services/:id" element={<ServiceDetail />} />
+                        <Route path="/services-simple" element={<AllServicesSimple />} />
+                        <Route path="/admin-access" element={<SimpleAdminAccess />} />
+                        <Route path="/admin-access-full" element={<AdminAccess />} />
+                        <Route path="/test-admin" element={<TestAdminLogin />} />
+                        <Route path="/debug-supabase" element={<DebugSupabase />} />
+                        <Route path="/supabase-debug" element={<SupabaseDebug />} />
+                        <Route path="/create-admin" element={<CreateAdminCredentials />} />
+                        <Route path="/direct-admin" element={<DirectAdminAccess />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<CustomerSignup />} />
+                        <Route path="/membership" element={<MembershipDetailsPage />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/reset-password" element={<ResetPassword />} />
+                        <Route path="/salon-owner/signup" element={<SalonOwnerSignup />} />
+                        <Route path="/salon-owner/login" element={<Login />} />
+                        <Route path="/book" element={<BookAppointment />} />
+                        <Route path="/book/:id" element={<BookAppointment />} />
+                        <Route path="/contact" element={<ContactUs />} />
+                        <Route path="/test-email" element={<TestEmail />} />
 
-                    <Route path="/shop" element={<RetailShop />} />
-                    <Route path="/product/:id" element={<ProductDetails />} />
-                    <Route path="/contact" element={<ContactUs />} />
-                    <Route path="/admin-setup" element={<AdminSetup />} />
-                    <Route path="/admin-access" element={<SimpleAdminAccess />} />
-                    <Route path="/admin-access-full" element={<AdminAccess />} />
-                    <Route path="/test-admin" element={<TestAdminLogin />} />
-                    <Route path="/debug-supabase" element={<DebugSupabase />} />
-                    <Route path="/supabase-debug" element={<SupabaseDebug />} />
-                    <Route path="/create-admin" element={<CreateAdminCredentials />} />
-                    <Route path="/direct-admin" element={<DirectAdminAccess />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/signup" element={<CustomerSignup />} />
-                    <Route path="/membership" element={<MembershipDetailsPage />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-                    <Route path="/reset-password" element={<ResetPassword />} />
-                    <Route path="/salon-owner/signup" element={<SalonOwnerSignup />} />
-                    <Route path="/salon-owner/login" element={<Login />} />
-                    <Route path="/book" element={<BookAppointment />} />
-                    <Route path="/book/:id" element={<BookAppointment />} />
-                    <Route path="/test-email" element={<TestEmail />} />
+                        {/* USER (Customer) Routes */}
+                        <Route path="/user/dashboard" element={
+                          <RoleProtectedRoute allowedRole="USER">
+                            <ClientHub />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/my-bookings" element={
+                          <RoleProtectedRoute allowedRole="USER">
+                            <MyBookings />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/my-bookings/:id/treatment" element={
+                          <RoleProtectedRoute allowedRole="USER">
+                            <BookingTreatmentPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/user/profile" element={
+                          <RoleProtectedRoute allowedRole="USER">
+                            <UserProfile />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/user/profile/edit" element={
+                          <RoleProtectedRoute allowedRole="USER">
+                            <EditUserProfile />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/user/sessions" element={
+                          <RoleProtectedRoute allowedRole="USER">
+                            <SessionHistory />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/user/health" element={
+                          <RoleProtectedRoute allowedRole="USER">
+                            <ClinicalProfile />
+                          </RoleProtectedRoute>
+                        } />
 
-                    {/* USER (Customer) Routes */}
-                    <Route path="/user/dashboard" element={
-                      <RoleProtectedRoute allowedRole="USER">
-                        <ClientHub />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/my-bookings" element={
-                      <RoleProtectedRoute allowedRole="USER">
-                        <MyBookings />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/my-bookings/:id/treatment" element={
-                      <RoleProtectedRoute allowedRole="USER">
-                        <BookingTreatmentPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/user/profile" element={
-                      <RoleProtectedRoute allowedRole="USER">
-                        <UserProfile />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/user/profile/edit" element={
-                      <RoleProtectedRoute allowedRole="USER">
-                        <EditUserProfile />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/user/sessions" element={
-                      <RoleProtectedRoute allowedRole="USER">
-                        <SessionHistory />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/user/health" element={
-                      <RoleProtectedRoute allowedRole="USER">
-                        <ClinicalProfile />
-                      </RoleProtectedRoute>
-                    } />
+                        {/* SALON_OWNER Routes */}
+                        <Route path="/salon/dashboard" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <DashboardHome />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/create-salon" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <CreateSalon />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/appointments" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <AppointmentsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/staff" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <StaffPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/staff/:id" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <StaffDetailsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/services" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <ServicesPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/customers" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <CustomersPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/customers/:userId" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <CustomerDetailsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/inventory" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <InventoryPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/reports" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <ReportsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/billing" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <BillingPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/offers" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <OffersPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/settings" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <SettingsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/notifications" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <NotificationsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/salon/profile" element={
+                          <RoleProtectedRoute allowedRole="SALON_OWNER">
+                            <OwnerProfile />
+                          </RoleProtectedRoute>
+                        } />
 
-                    {/* SALON_OWNER Routes */}
-                    <Route path="/salon/dashboard" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <DashboardHome />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/create-salon" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <CreateSalon />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/appointments" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <AppointmentsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/staff" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <StaffPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/staff/:id" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <StaffDetailsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/services" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <ServicesPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/customers" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <CustomersPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/customers/:userId" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <CustomerDetailsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/inventory" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <InventoryPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/reports" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <ReportsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/billing" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <BillingPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/offers" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <OffersPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/settings" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <SettingsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/notifications" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <NotificationsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/salon/profile" element={
-                      <RoleProtectedRoute allowedRole="SALON_OWNER">
-                        <OwnerProfile />
-                      </RoleProtectedRoute>
-                    } />
+                        {/* STAFF Routes */}
+                        <Route path="/staff/dashboard" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <DashboardHome />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/staff/attendance" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <StaffAttendancePage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/staff/leaves" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <StaffLeavesPage />
+                          </RoleProtectedRoute>
+                        } />
+                        {/* <Route path="/staff/messages" element={
+                        <RoleProtectedRoute allowedRole="STAFF">
+                          <StaffMessagesPage />
+                        </RoleProtectedRoute>
+                      } /> */}
+                        <Route path="/staff/customers" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <CustomersPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/staff/customers/:userId" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <CustomerDetailsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/staff/profile/:id" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <StaffDetailsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/staff/notifications" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <NotificationsPage />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/staff/profile" element={
+                          <RoleProtectedRoute allowedRole="STAFF">
+                            <Navigate to="/staff/dashboard" replace />
+                          </RoleProtectedRoute>
+                        } />
 
-                    {/* STAFF Routes */}
-                    <Route path="/staff/dashboard" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <DashboardHome />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/staff/attendance" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <StaffAttendancePage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/staff/leaves" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <StaffLeavesPage />
-                      </RoleProtectedRoute>
-                    } />
-                    {/* <Route path="/staff/messages" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <StaffMessagesPage />
-                      </RoleProtectedRoute>
-                    } /> */}
-                    <Route path="/staff/customers" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <CustomersPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/staff/customers/:userId" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <CustomerDetailsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/staff/profile/:id" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <StaffDetailsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/staff/notifications" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <NotificationsPage />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/staff/profile" element={
-                      <RoleProtectedRoute allowedRole="STAFF">
-                        <Navigate to="/staff/dashboard" replace />
-                      </RoleProtectedRoute>
-                    } />
+                        {/* SUPER_ADMIN Routes */}
+                        <Route path="/super-admin/dashboard" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminDashboardEnhanced />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/salons" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminSalons />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/payments" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminPaymentsEnhanced />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/users" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminUsersEnhanced />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/plans" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminMembershipPlans />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/analytics" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminReports />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/marketing" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminMarketing />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/notifications" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminNotifications />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/products" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminProducts />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/products/add" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminAddProduct />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/contact-enquiries" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminContactEnquiries />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/members" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminMembers />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/reviews" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminReviews />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/settings" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminSettings />
+                          </RoleProtectedRoute>
+                        } />
+                        <Route path="/super-admin/orders" element={
+                          <RoleProtectedRoute allowedRole="SUPER_ADMIN">
+                            <AdminOrdersPage />
+                          </RoleProtectedRoute>
+                        } />
 
-                    {/* SUPER_ADMIN Routes */}
-                    <Route path="/super-admin/dashboard" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminDashboardEnhanced />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/salons" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminSalons />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/payments" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminPaymentsEnhanced />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/users" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminUsersEnhanced />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/plans" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminMembershipPlans />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/analytics" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminReports />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/marketing" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminMarketing />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/notifications" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminNotifications />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/products" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminProducts />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/products/add" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminAddProduct />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/contact-enquiries" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminContactEnquiries />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/members" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminMembers />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/reviews" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminReviews />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/settings" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminSettings />
-                      </RoleProtectedRoute>
-                    } />
-                    <Route path="/super-admin/orders" element={
-                      <RoleProtectedRoute allowedRole="SUPER_ADMIN">
-                        <AdminOrdersPage />
-                      </RoleProtectedRoute>
-                    } />
+                        {/* Fallbacks and Legacy Redirects */}
+                        <Route path="/dashboard" element={<Navigate to="/salon/dashboard" replace />} />
+                        <Route path="/dashboard/notifications" element={<Navigate to="/salon/notifications" replace />} />
+                        <Route path="/dashboard/profile" element={<Navigate to="/salon/profile" replace />} />
+                        <Route path="/dashboard/staff" element={<Navigate to="/salon/staff" replace />} />
+                        <Route path="/dashboard/appointments" element={<Navigate to="/salon/appointments" replace />} />
+                        <Route path="/dashboard/customers" element={<Navigate to="/salon/customers" replace />} />
+                        <Route path="/dashboard/billing" element={<Navigate to="/salon/billing" replace />} />
+                        <Route path="/dashboard/services" element={<Navigate to="/salon/services" replace />} />
+                        <Route path="/dashboard/inventory" element={<Navigate to="/salon/inventory" replace />} />
+                        <Route path="/dashboard/reports" element={<Navigate to="/salon/reports" replace />} />
+                        <Route path="/dashboard/offers" element={<Navigate to="/salon/offers" replace />} />
+                        <Route path="/dashboard/settings" element={<Navigate to="/salon/settings" replace />} />
+                        <Route path="/dashboard/create-salon" element={<Navigate to="/salon/create-salon" replace />} />
+                        <Route path="/admin" element={<Navigate to="/super-admin/dashboard" replace />} />
+                        <Route path="/client-hub" element={<Navigate to="/user/dashboard" replace />} />
 
-                    {/* Fallbacks and Legacy Redirects */}
-                    <Route path="/dashboard" element={<Navigate to="/salon/dashboard" replace />} />
-                    <Route path="/dashboard/notifications" element={<Navigate to="/salon/notifications" replace />} />
-                    <Route path="/dashboard/profile" element={<Navigate to="/salon/profile" replace />} />
-                    <Route path="/dashboard/staff" element={<Navigate to="/salon/staff" replace />} />
-                    <Route path="/dashboard/appointments" element={<Navigate to="/salon/appointments" replace />} />
-                    <Route path="/dashboard/customers" element={<Navigate to="/salon/customers" replace />} />
-                    <Route path="/dashboard/billing" element={<Navigate to="/salon/billing" replace />} />
-                    <Route path="/dashboard/services" element={<Navigate to="/salon/services" replace />} />
-                    <Route path="/dashboard/inventory" element={<Navigate to="/salon/inventory" replace />} />
-                    <Route path="/dashboard/reports" element={<Navigate to="/salon/reports" replace />} />
-                    <Route path="/dashboard/offers" element={<Navigate to="/salon/offers" replace />} />
-                    <Route path="/dashboard/settings" element={<Navigate to="/salon/settings" replace />} />
-                    <Route path="/dashboard/create-salon" element={<Navigate to="/salon/create-salon" replace />} />
-                    <Route path="/admin" element={<Navigate to="/super-admin/dashboard" replace />} />
-                    <Route path="/client-hub" element={<Navigate to="/user/dashboard" replace />} />
-
-                    <Route path="/privacy" element={<PrivacyPolicy />} />
-                    <Route path="/terms" element={<TermsOfService />} />
-                    <Route path="/cookies" element={<CookiePolicy />} />
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </TooltipProvider>
-              </CartProvider>
-            </SalonProvider>
-          </SuperAdminProvider>
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/terms" element={<TermsOfService />} />
+                        <Route path="/cookies" element={<CookiePolicy />} />
+                        <Route path="*" element={<NotFound />} />
+                      </Routes>
+                    </div>
+                  </TooltipProvider>
+                </CartProvider>
+              </SalonProvider>
+            </SuperAdminProvider>
+          </ThemeProvider>
         </AuthProvider>
       </BrowserRouter>
-    </QueryClientProvider>
+    </QueryClientProvider >
   );
 };
 

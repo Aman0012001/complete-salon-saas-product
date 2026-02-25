@@ -265,7 +265,7 @@ const MyBookings = () => {
                         {/* 3. Price & Actions */}
                         <div className="flex items-center justify-between lg:justify-end gap-6 flex-shrink-0 pt-4 lg:pt-0 border-t lg:border-t-0 border-slate-100">
                           <div>
-                            <p className="text-3xl font-black text-slate-900 tracking-tight">RM {booking.price}</p>
+                            <p className="text-3xl font-black text-slate-900 tracking-tight">MYR {booking.price}</p>
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">{booking.duration_minutes} MINS</p>
                           </div>
 
@@ -375,13 +375,13 @@ const MyBookings = () => {
                             {Array.isArray(order.items) && order.items.map((item: any, idx: number) => (
                               <div key={idx} className="flex justify-between text-sm">
                                 <span className="text-slate-600">{item.name} x{item.quantity}</span>
-                                <span className="font-bold">RM {(item.price * item.quantity).toFixed(2)}</span>
+                                <span className="font-bold">MYR {(item.price * item.quantity).toFixed(2)}</span>
                               </div>
                             ))}
                           </div>
                           <div className="mt-4 pt-4 border-t border-slate-100 flex justify-between font-bold text-lg">
                             <span>Total</span>
-                            <span>RM {parseFloat(order.total_amount).toFixed(2)}</span>
+                            <span>MYR {parseFloat(order.total_amount).toFixed(2)}</span>
                           </div>
                         </div>
 

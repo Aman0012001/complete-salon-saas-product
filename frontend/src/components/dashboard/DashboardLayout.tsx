@@ -23,6 +23,8 @@ import {
   ShoppingBag,
   Mail,
   BookOpen,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -42,6 +44,7 @@ import { cn } from "@/lib/utils";
 import { SalonNotificationSystem } from "./SalonNotificationSystem";
 import { PendingApproval } from "./PendingApproval";
 import { Loader2 } from "lucide-react";
+import { useTheme } from "@/context/ThemeProvider";
 import api from "@/services/api";
 
 interface DashboardLayoutProps {
@@ -53,6 +56,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const { salons, currentSalon, setCurrentSalon, isOwner, isManager, isStaff, refreshSalons } = useSalon();
   const [appointmentCount, setAppointmentCount] = useState(0);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -244,15 +248,15 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   if (currentSalon?.approval_status === 'pending' && isOwner) {
     return (
-      <div className="min-h-screen bg-[#FDFCFB] flex flex-col items-center justify-center">
-        <header className="fixed top-0 left-0 right-0 h-20 bg-white/80 backdrop-blur-xl border-b border-border/50 px-8 flex items-center justify-between z-50">
+      <div className="min-h-screen bg-background flex flex-col items-center justify-center">
+        <header className="fixed top-0 left-0 right-0 h-20 bg-background/80 backdrop-blur-xl border-b border-border px-8 flex items-center justify-between z-50">
           <div className="flex items-center gap-3 cursor-default">
-            <div className="w-10 h-10 bg-[#F2A93B] rounded-xl flex items-center justify-center shadow-lg">
+            <div className="w-10 h-10 bg-[#55402f] rounded-xl flex items-center justify-center shadow-lg">
               <Scissors className="w-5 h-5 text-white" />
             </div>
             <span className="font-bold text-xl text-foreground">NoamSkin</span>
           </div>
-          <Button variant="ghost" onClick={handleSignOut} className="font-bold text-slate-500 hover:text-red-500 gap-2">
+          <Button variant="ghost" onClick={handleSignOut} className="font-bold text-muted-foreground hover:text-red-500 gap-2">
             <LogOut className="w-4 h-4" /> Sign Out
           </Button>
         </header>
@@ -274,13 +278,13 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50 w-72 h-screen bg-white shadow-[0_0_20px_rgba(0,0,0,0.05)] border-r border-border/50 transform transition-all duration-300 ease-in-out lg:transform-none shadow-2xl lg:shadow-none",
+          "fixed lg:sticky lg:top-0 inset-y-0 left-0 z-50 w-72 h-screen bg-card shadow-sm border-r border-border transform transition-all duration-300 ease-in-out lg:transform-none shadow-2xl lg:shadow-none",
           sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
         )}
       >
         <div className="flex flex-col h-full">
           {/* Logo & Salon Selector */}
-          <div className="p-6 border-b border-border/50">
+          <div className="p-6 border-b border-border">
             <div className="flex items-center justify-between mb-6">
               <Link to={basePath + "/dashboard"} className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-accent to-accent/80 rounded-xl flex items-center justify-center shadow-lg">
@@ -307,7 +311,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="outline"
-                    className="w-full justify-between text-left font-normal h-12 bg-secondary/30 border-border/50 hover:bg-secondary/50 transition-colors"
+                    className="w-full justify-between text-left font-normal h-12 bg-muted/30 border-border hover:bg-muted/50 transition-colors"
                   >
                     <div className="flex items-center gap-3 truncate">
                       <div className="w-8 h-8 bg-accent/10 rounded-lg flex items-center justify-center">
@@ -325,7 +329,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-64 bg-white/95 backdrop-blur-xl border-border/50">
+                <DropdownMenuContent className="w-64 bg-card/95 backdrop-blur-xl border-border">
                   {salons.map((salon) => (
                     <DropdownMenuItem
                       key={salon.id}
@@ -421,8 +425,8 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </nav>
 
           {/* User Menu */}
-          <div className="p-4 border-t border-border/50">
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-secondary/30 transition-colors">
+          <div className="p-4 border-t border-border">
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 transition-colors">
               <div
                 className="flex items-center gap-3 flex-1 min-w-0 cursor-pointer hover:opacity-80 transition-opacity"
                 onClick={() => navigate(`${basePath}/notifications`)}
@@ -462,7 +466,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     <Settings className="w-4 h-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-white/95 backdrop-blur-xl border-border/50">
+                <DropdownMenuContent align="end" className="w-48 bg-card/95 backdrop-blur-xl border-border">
                   <DropdownMenuItem className="cursor-pointer" onClick={() => navigate(`${basePath}/profile`)}>
                     <User className="w-4 h-4 mr-2" />
                     Profile Settings
@@ -485,14 +489,14 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       {/* Main Content */}
       <div className="flex-1 flex flex-col min-h-screen">
         {/* Top Bar */}
-        <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-xl border-b border-border/50 px-8 h-20 flex items-center justify-between shadow-sm">
+        <header className="sticky top-0 z-40 bg-background/80 backdrop-blur-xl border-b border-border px-8 h-20 flex items-center justify-between shadow-sm">
           {/* Left: Mobile Menu & Logo */}
           <div className="flex-1 flex items-center gap-4">
             <div className="flex items-center gap-3 lg:hidden">
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:bg-secondary/50 rounded-xl"
+                className="hover:bg-muted/50 rounded-xl"
                 onClick={() => setSidebarOpen(true)}
               >
                 <Menu className="w-5 h-5 text-foreground" />
@@ -520,10 +524,10 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               </div>
               <Input
                 placeholder="Search customers, appointments, reports..."
-                className="pl-11 pr-4 py-6 bg-secondary/20 border-border/30 rounded-2xl focus:bg-white focus:ring-4 focus:ring-accent/5 focus:border-accent/30 transition-all duration-300 text-sm font-medium placeholder:text-muted-foreground/60 w-full shadow-inner"
+                className="pl-11 pr-4 py-6 bg-muted/20 border-border rounded-2xl focus:bg-background focus:ring-4 focus:ring-accent/5 focus:border-accent/30 transition-all duration-300 text-sm font-medium placeholder:text-muted-foreground/60 w-full shadow-inner"
               />
               <div className="absolute inset-y-0 right-4 flex items-center gap-2 pointer-events-none opacity-0 group-focus-within:opacity-100 transition-opacity">
-                <span className="text-[10px] font-bold text-muted-foreground bg-secondary/50 px-1.5 py-0.5 rounded border border-border/50">⌘K</span>
+                <span className="text-[10px] font-bold text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded border border-border">⌘K</span>
               </div>
             </div>
           </div>
@@ -542,9 +546,18 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               </Button> */}
             </div>
 
-            <Separator orientation="vertical" className="h-6 bg-border/50 hidden md:block" />
+            <Separator orientation="vertical" className="h-6 bg-border hidden md:block" />
 
             <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-muted-foreground hover:text-foreground hover:bg-secondary/50 rounded-xl"
+                onClick={toggleTheme}
+              >
+                {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+              </Button>
+
               <SalonNotificationSystem onUnreadCountChange={setUnreadCount} />
 
               <div className="relative h-11 w-11 rounded-xl border-2 border-border/30 hover:border-accent/50 transition-colors cursor-pointer lg:hidden" onClick={() => navigate(`${basePath}/notifications`)}>
@@ -564,7 +577,7 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-6 lg:p-10 bg-[#f8fafc]">
+        <main className="flex-1 p-6 lg:p-10 bg-background text-foreground">
           <div className="max-w-[1600px] mx-auto">
             {children}
           </div>

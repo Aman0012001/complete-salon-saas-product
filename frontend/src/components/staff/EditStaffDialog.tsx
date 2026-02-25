@@ -191,8 +191,8 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="max-w-2xl rounded-[2rem] border-none shadow-2xl p-0 overflow-hidden bg-white group/modal">
-                <div className="bg-[#F2A93B] p-8 text-white relative overflow-hidden">
+            <DialogContent className="max-w-2xl rounded-[2rem] border border-border/50 shadow-2xl p-0 overflow-hidden bg-card group/modal">
+                <div className="bg-[#55402f] p-8 text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 blur-[100px] rounded-full -translate-y-1/2 translate-x-1/2" />
                     <DialogHeader className="relative z-10">
                         <div className="flex items-center gap-4 mb-2">
@@ -220,43 +220,43 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                 <div className="p-10 space-y-8">
                     <div className="grid md:grid-cols-2 gap-8 max-h-[60vh] overflow-y-auto px-1 scrollbar-hide">
                         <div className="space-y-2">
-                            <Label htmlFor="edit-name" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Legal Name</Label>
+                            <Label htmlFor="edit-name" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Legal Name</Label>
                             <Input
                                 id="edit-name"
                                 value={formData.name}
                                 onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                                className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700"
+                                className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 focus:ring-2 focus:ring-accent/10 transition-all text-foreground placeholder:text-muted-foreground/30"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="edit-role" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Access Designation</Label>
+                            <Label htmlFor="edit-role" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Access Designation</Label>
                             <Select
                                 value={formData.role}
                                 onValueChange={(v: "staff") => setFormData(prev => ({ ...prev, role: v }))}
                                 disabled={!canEditRole}
                             >
-                                <SelectTrigger className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700">
+                                <SelectTrigger className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 focus:ring-2 focus:ring-accent/10 transition-all text-foreground">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="rounded-xl border-none shadow-2xl bg-white">
-                                    <SelectItem value="staff" className="font-bold py-3 rounded-xl">STAFF MEMBER</SelectItem>
+                                <SelectContent className="rounded-xl border border-border/50 shadow-2xl bg-card">
+                                    <SelectItem value="staff" className="font-bold py-3 rounded-xl text-foreground focus:bg-accent/10 cursor-pointer">STAFF MEMBER</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="edit-email" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Registry Email</Label>
+                            <Label htmlFor="edit-email" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Registry Email</Label>
                             <Input
                                 id="edit-email"
                                 type="email"
                                 value={formData.email}
                                 onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-                                className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700"
+                                className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 focus:ring-2 focus:ring-accent/10 transition-all text-foreground placeholder:text-muted-foreground/30"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="edit-password" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Update Access Pass (Optional)</Label>
+                            <Label htmlFor="edit-password" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Update Access Pass (Optional)</Label>
                             <div className="relative">
                                 <Input
                                     id="edit-password"
@@ -264,12 +264,12 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                                     value={formData.password}
                                     onChange={(e) => setFormData(prev => ({ ...prev, password: e.target.value }))}
                                     placeholder="Leave blank to keep current"
-                                    className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 pr-12 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700"
+                                    className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 pr-12 focus:ring-2 focus:ring-accent/10 transition-all text-foreground placeholder:text-muted-foreground/30"
                                 />
                                 <button
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-300 hover:text-slate-600 transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-foreground transition-colors"
                                 >
                                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                                 </button>
@@ -277,18 +277,18 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="edit-phone" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Secure Contact</Label>
+                            <Label htmlFor="edit-phone" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Secure Contact</Label>
                             <div className="flex gap-2">
                                 <Select
                                     value={formData.countryCode}
                                     onValueChange={(v) => setFormData(prev => ({ ...prev, countryCode: v }))}
                                 >
-                                    <SelectTrigger className="w-[100px] h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-3 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all">
+                                    <SelectTrigger className="w-[100px] h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-3 focus:ring-2 focus:ring-accent/10 transition-all text-foreground">
                                         <SelectValue />
                                     </SelectTrigger>
-                                    <SelectContent className="rounded-xl border-none shadow-2xl bg-white max-h-[300px]">
+                                    <SelectContent className="rounded-xl border border-border/50 shadow-2xl bg-card max-h-[300px]">
                                         {countryCodes.sort((a, b) => a.country.localeCompare(b.country)).map((c) => (
-                                            <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-bold py-3 rounded-lg cursor-pointer">
+                                            <SelectItem key={`${c.country}-${c.code}`} value={`${c.country}-${c.code}`} className="font-bold py-3 rounded-lg cursor-pointer text-foreground hover:bg-muted transition-colors">
                                                 <span className="flex items-center gap-2">
                                                     <span>{c.flag}</span>
                                                     <span>{c.code}</span>
@@ -302,22 +302,22 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                                     type="tel"
                                     value={formData.phone}
                                     onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value.replace(/[^0-9]/g, '') }))}
-                                    className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 flex-1 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700"
+                                    className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 flex-1 focus:ring-2 focus:ring-accent/10 transition-all text-foreground placeholder:text-muted-foreground/30"
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-4 md:col-span-2 pt-4 border-t border-slate-50">
-                            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Assigned Services</Label>
+                        <div className="space-y-4 md:col-span-2 pt-4 border-t border-border/30">
+                            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Assigned Services</Label>
                             {loadingServices ? (
-                                <div className="flex items-center gap-2 p-4 justify-center bg-slate-50 rounded-xl">
-                                    <Loader2 className="w-5 h-5 animate-spin text-[#F2A93B]" />
-                                    <span className="text-xs font-black uppercase tracking-widest text-slate-400">Loading Matrix...</span>
+                                <div className="flex items-center gap-2 p-4 justify-center bg-muted/20 rounded-xl border border-border/50">
+                                    <Loader2 className="w-5 h-5 animate-spin text-accent" />
+                                    <span className="text-xs font-black uppercase tracking-widest text-muted-foreground/60">Loading Matrix...</span>
                                 </div>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-60 overflow-y-auto pr-2 scrollbar-thin">
                                     {allServices.map((service) => (
-                                        <div key={service.id} className="flex items-center space-x-3 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-[#F2A93B]/30 transition-all">
+                                        <div key={service.id} className="flex items-center space-x-3 p-4 rounded-xl bg-muted/10 border border-border/50 hover:border-accent/30 transition-all">
                                             <Checkbox
                                                 id={`edit-service-${service.id}`}
                                                 checked={formData.assigned_services.includes(service.id)}
@@ -329,29 +329,30 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                                                             : prev.assigned_services.filter(id => id !== service.id)
                                                     }));
                                                 }}
+                                                className="border-border/50"
                                             />
                                             <div className="flex-1 min-w-0">
                                                 <Label
                                                     htmlFor={`edit-service-${service.id}`}
-                                                    className="text-xs font-black text-slate-700 uppercase cursor-pointer block truncate"
+                                                    className="text-xs font-black text-foreground/90 uppercase cursor-pointer block truncate"
                                                 >
                                                     {service.name}
                                                 </Label>
-                                                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest truncate">{service.category || 'General'}</p>
+                                                <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest truncate">{service.category || 'General'}</p>
                                             </div>
                                         </div>
                                     ))}
                                     {allServices.length === 0 && (
-                                        <div className="col-span-2 text-center py-10 bg-slate-50 rounded-2xl border border-dashed border-slate-200">
-                                            <p className="text-xs font-bold text-slate-400 uppercase">No services registered in this salon's matrix</p>
+                                        <div className="col-span-2 text-center py-10 bg-muted/10 rounded-2xl border border-dashed border-border/50">
+                                            <p className="text-xs font-bold text-muted-foreground/40 uppercase">No services registered in this salon's matrix</p>
                                         </div>
                                     )}
                                 </div>
                             )}
                         </div>
 
-                        <div className="space-y-4 md:col-span-2 pt-4 border-t border-slate-50">
-                            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Profile Intelligence (Avatar)</Label>
+                        <div className="space-y-4 md:col-span-2 pt-4 border-t border-border/30">
+                            <Label className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Profile Intelligence (Avatar)</Label>
 
                             <div className="flex gap-6">
                                 <div
@@ -360,12 +361,12 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                                     onDrop={onDrop}
                                     onClick={() => fileInputRef.current?.click()}
                                     className={`w-32 h-32 rounded-3xl border-2 border-dashed flex flex-col items-center justify-center cursor-pointer transition-all overflow-hidden relative group
-                                        ${isDragging ? 'border-[#F2A93B] bg-[#F2A93B]/5 scale-105 ring-4 ring-[#F2A93B]/10' : formData.avatar_url ? 'border-[#F2A93B]/50' : 'border-slate-200 hover:border-[#F2A93B]/30 bg-slate-50'}`}
+                                        ${isDragging ? 'border-accent bg-accent/5 scale-105 ring-4 ring-accent/10' : formData.avatar_url ? 'border-accent/50' : 'border-border/50 hover:border-accent/30 bg-muted/20'}`}
                                 >
                                     {uploading ? (
                                         <div className="flex flex-col items-center gap-2">
-                                            <Loader2 className="w-6 h-6 text-[#F2A93B] animate-spin" />
-                                            <span className="text-[8px] font-bold text-[#F2A93B] uppercase">Syncing...</span>
+                                            <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                                            <span className="text-[8px] font-bold text-accent uppercase">Syncing...</span>
                                         </div>
                                     ) : formData.avatar_url ? (
                                         <>
@@ -376,15 +377,15 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                                         </>
                                     ) : (
                                         <>
-                                            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-2 group-hover:bg-[#F2A93B]/10 group-hover:scale-110 transition-all">
-                                                {isDragging ? <UploadCloud className="w-5 h-5 text-[#F2A93B] animate-bounce" /> : <ImageIcon className="w-5 h-5 text-slate-400 group-hover:text-[#F2A93B]" />}
+                                            <div className="w-10 h-10 rounded-full bg-muted/30 flex items-center justify-center mb-2 group-hover:bg-accent/10 group-hover:scale-110 transition-all">
+                                                {isDragging ? <UploadCloud className="w-5 h-5 text-accent animate-bounce" /> : <ImageIcon className="w-5 h-5 text-muted-foreground/40 group-hover:text-accent" />}
                                             </div>
-                                            <span className="text-[8px] font-bold text-slate-400 uppercase tracking-tighter">{isDragging ? 'Release Now' : 'Import Asset'}</span>
+                                            <span className="text-[8px] font-bold text-muted-foreground/40 uppercase tracking-tighter">{isDragging ? 'Release Now' : 'Import Asset'}</span>
                                         </>
                                     )}
                                     {isDragging && (
-                                        <div className="absolute inset-0 bg-[#F2A93B]/10 backdrop-blur-[1px] flex items-center justify-center border-2 border-dashed border-[#F2A93B]">
-                                            <UploadCloud className="w-8 h-8 text-[#F2A93B] animate-bounce" />
+                                        <div className="absolute inset-0 bg-accent/10 backdrop-blur-[1px] flex items-center justify-center border-2 border-dashed border-accent">
+                                            <UploadCloud className="w-8 h-8 text-accent animate-bounce" />
                                         </div>
                                     )}
                                     <input
@@ -399,7 +400,7 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="edit-commission" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Commission Protocol (%)</Label>
+                            <Label htmlFor="edit-commission" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Commission Protocol (%)</Label>
                             <Input
                                 id="edit-commission"
                                 type="number"
@@ -407,44 +408,44 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                                 max="100"
                                 value={formData.commission}
                                 onChange={(e) => setFormData(prev => ({ ...prev, commission: e.target.value }))}
-                                className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700"
+                                className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 focus:ring-2 focus:ring-accent/10 transition-all text-foreground"
                             />
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="edit-status" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Duty Status</Label>
+                            <Label htmlFor="edit-status" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Duty Status</Label>
                             <Select
                                 value={formData.is_active ? "active" : "inactive"}
                                 onValueChange={(v) => setFormData(prev => ({ ...prev, is_active: v === "active" }))}
                             >
-                                <SelectTrigger className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700">
+                                <SelectTrigger className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 focus:ring-2 focus:ring-accent/10 transition-all text-foreground">
                                     <SelectValue />
                                 </SelectTrigger>
-                                <SelectContent className="rounded-xl border-none shadow-2xl bg-white">
-                                    <SelectItem value="active" className="font-bold py-3 rounded-xl text-emerald-600">ACTIVE DUTY</SelectItem>
-                                    <SelectItem value="inactive" className="font-bold py-3 rounded-xl text-rose-600">LOGGED OFF (INACTIVE)</SelectItem>
+                                <SelectContent className="rounded-xl border border-border/50 shadow-2xl bg-card">
+                                    <SelectItem value="active" className="font-bold py-3 rounded-xl text-emerald-400 focus:bg-accent/10 cursor-pointer">ACTIVE DUTY</SelectItem>
+                                    <SelectItem value="inactive" className="font-bold py-3 rounded-xl text-rose-400 focus:bg-accent/10 cursor-pointer">LOGGED OFF (INACTIVE)</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
 
                         <div className="space-y-2 md:col-span-2">
-                            <Label htmlFor="edit-specs" className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B] ml-1">Operational Skills (Comma Separated)</Label>
+                            <Label htmlFor="edit-specs" className="text-[10px] font-black uppercase tracking-[0.2em] text-accent ml-1">Operational Skills (Comma Separated)</Label>
                             <Input
                                 id="edit-specs"
                                 placeholder="Hair Styling, Skin Specialist..."
                                 value={formData.specializations}
                                 onChange={(e) => setFormData(prev => ({ ...prev, specializations: e.target.value }))}
-                                className="h-14 bg-slate-50 border-slate-100 rounded-xl font-bold px-5 focus:ring-2 focus:ring-[#F2A93B]/10 transition-all text-slate-700"
+                                className="h-14 bg-muted/20 border-border/50 rounded-xl font-bold px-5 focus:ring-2 focus:ring-accent/10 transition-all text-foreground placeholder:text-muted-foreground/30"
                             />
                         </div>
                     </div>
 
-                    <DialogFooter className="gap-4 pt-6 mt-4 border-t border-slate-100 sm:flex-row">
+                    <DialogFooter className="gap-4 pt-6 mt-4 border-t border-border/30 sm:flex-row">
                         <Button
                             variant="ghost"
                             type="button"
                             onClick={onClose}
-                            className="h-14 px-8 rounded-xl font-black text-slate-400 hover:text-slate-900 transition-colors flex-1 uppercase tracking-widest text-xs"
+                            className="h-14 px-8 rounded-xl font-black text-muted-foreground/60 hover:text-foreground hover:bg-muted/50 transition-all flex-1 uppercase tracking-widest text-xs"
                         >
                             Abort
                         </Button>
@@ -452,7 +453,7 @@ export function EditStaffDialog({ staff, isOpen, onClose, onSuccess, canEditRole
                             type="button"
                             onClick={handleSave}
                             disabled={!formData.name || saving}
-                            className="h-14 px-10 bg-[#F2A93B] hover:bg-[#E29A2B] text-white font-black rounded-xl shadow-[0_10px_20px_-5px_rgba(242,169,59,0.3)] flex-[2] transition-all uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3"
+                            className="h-14 px-10 bg-accent hover:bg-accent/90 text-white font-black rounded-xl shadow-lg shadow-accent/20 flex-[2] transition-all uppercase tracking-[0.2em] text-xs flex items-center justify-center gap-3"
                         >
                             {saving ? <Loader2 className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
                             {saving ? "Synchronizing..." : "Update Dossier"}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Search,
@@ -21,8 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import HeroVideoCarousel from "../components/HeroVideoCarousel";
-import InsideSpaceSection from "../components/InsideSpaceSection";
-import ServicesSection from "../components/ServicesSection";
+import ServicesSection from "@/components/ServicesSection";
 import GlowConfidenceSection from "../components/GlowConfidenceSection";
 import FeaturedFacialSection from "../components/FeaturedFacialSection";
 import SkinConcernSection from "../components/SkinConcernSection";
@@ -216,13 +215,12 @@ const AllServicesSimple = () => {
 
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB]">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <Navbar />
 
       <HeroVideoCarousel />
 
       <ServicesSection />
-      {/* <InsideSpaceSection /> */}
       <GlowConfidenceSection />
       <FeaturedFacialSection />
       <SkinConcernSection />
@@ -233,14 +231,14 @@ const AllServicesSimple = () => {
       <BeforeAfterSection />
 
       {/* Global Search & Luxury Filter Section */}
-      <section className="pt-24 pb-16 bg-white">
+      <section className="pt-24 pb-16 bg-background">
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto space-y-16">
             {/* Title & Filter Block */}
             <div className="flex flex-col items-center space-y-12">
               <div className="text-center space-y-6">
-                <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] block">Curated Rituals</span>
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-[#1A2338] tracking-tight uppercase">
+                <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.4em] block">Curated Rituals</span>
+                <h2 className="text-2xl md:text-3xl font-black text-foreground tracking-tight uppercase">
                   Our Services
                 </h2>
                 <div className="h-1.5 w-16 bg-[#49331c] mx-auto rounded-full" />
@@ -249,13 +247,13 @@ const AllServicesSimple = () => {
               {/* Redesigned Search Bar - Now Below Title */}
               <div className="relative group w-full max-w-4xl mx-auto">
                 <div className="absolute inset-0 bg-accent/5 blur-3xl rounded-[3rem] opacity-0 group-focus-within:opacity-100 transition-opacity duration-1000" />
-                <div className="relative flex items-center bg-slate-50 rounded-[2.5rem] p-2 pr-4 shadow-inner border border-transparent focus-within:border-accent/20 transition-all duration-300">
-                  <Search className="ml-6 text-slate-300 w-6 h-6 group-focus-within:text-accent transition-colors" />
+                <div className="relative flex items-center bg-card rounded-[2.5rem] p-2 pr-4 shadow-inner border border-border focus-within:border-accent/20 transition-all duration-300">
+                  <Search className="ml-6 text-muted-foreground w-6 h-6 group-focus-within:text-accent transition-colors" />
                   <Input
                     placeholder="Search treatments, rituals or creators..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="h-16 px-6 bg-transparent border-none text-xl font-medium shadow-none focus-visible:ring-0 placeholder:text-slate-300"
+                    className="h-16 px-6 bg-transparent border-none text-xl font-medium shadow-none focus-visible:ring-0 placeholder:text-muted-foreground"
                   />
                   <Button
                     className="bg-[#b07d62] text-white rounded-[2rem] px-8 h-12 font-black uppercase tracking-widest text-[10px] hover:bg-[#a06d52] transition-all hover:scale-105 active:scale-95 shadow-xl shadow-[#b07d62]/10 shrink-0"
@@ -275,7 +273,7 @@ const AllServicesSimple = () => {
                         flex items-center gap-3 px-8 py-4 rounded-full font-black text-[11px] uppercase tracking-widest whitespace-nowrap transition-all duration-500
                         ${activeCategory === category
                           ? "bg-[#b07d62] text-white shadow-2xl shadow-[#b07d62]/20 scale-105"
-                          : "bg-white text-slate-400 border border-slate-100 hover:border-slate-200 hover:text-slate-600 hover:bg-slate-50/50 shadow-sm"
+                          : "bg-card text-muted-foreground border border-border hover:border-accent/20 hover:text-foreground transition-all shadow-sm"
                         }
                       `}
                     >
@@ -295,7 +293,7 @@ const AllServicesSimple = () => {
           {loading ? (
             <div className="flex flex-col items-center justify-center py-32 space-y-4">
               <Loader2 className="w-12 h-12 text-accent animate-spin" />
-              <p className="font-black text-slate-400 uppercase tracking-widest text-[10px]">Syncing Local Service Registry...</p>
+              <p className="font-black text-muted-foreground uppercase tracking-widest text-[10px]">Syncing Local Service Registry...</p>
             </div>
           ) : error ? (
             <div className="text-center py-32 space-y-8 max-w-2xl mx-auto">
@@ -303,13 +301,13 @@ const AllServicesSimple = () => {
                 <Clock className="w-12 h-12 text-red-500 animate-pulse" />
               </div>
               <div className="space-y-4">
-                <h3 className="text-3xl font-black text-slate-900 border-b-4 border-red-500 inline-block pb-2">Service Offline</h3>
-                <p className="text-slate-500 text-lg font-medium leading-relaxed">
+                <h3 className="text-3xl font-black text-foreground border-b-4 border-red-500 inline-block pb-2">Service Offline</h3>
+                <p className="text-muted-foreground text-lg font-medium leading-relaxed">
                   {error}
                 </p>
-                <div className="p-4 bg-slate-50 rounded-xl border border-slate-100 mt-6 overflow-hidden">
-                  <p className="text-[10px] text-slate-400 uppercase font-black tracking-widest mb-2">Technical Detail</p>
-                  <code className="text-xs text-slate-600 break-all">{error}</code>
+                <div className="p-4 bg-card rounded-xl border border-border mt-6 overflow-hidden">
+                  <p className="text-[10px] text-muted-foreground uppercase font-black tracking-widest mb-2">Technical Detail</p>
+                  <code className="text-xs text-muted-foreground break-all">{error}</code>
                 </div>
               </div>
               <div className="flex items-center justify-center gap-4">
@@ -335,8 +333,8 @@ const AllServicesSimple = () => {
                 <Scissors className="w-10 h-10 text-slate-200" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-2xl font-black text-slate-900">No matches found locally.</h3>
-                <p className="text-slate-400 font-medium">Try broadening your search or resetting categories.</p>
+                <h3 className="text-2xl font-black text-foreground">No matches found locally.</h3>
+                <p className="text-muted-foreground font-medium">Try broadening your search or resetting categories.</p>
               </div>
               <Button onClick={() => { setSearchQuery(""); setActiveCategory("All"); }} className="bg-slate-900 text-white rounded-2xl px-8 h-12 font-black">
                 Reset Filters
@@ -394,7 +392,7 @@ const AllServicesSimple = () => {
                               {Array.from({ length: 5 }).map((_, i) => (
                                 <Star
                                   key={i}
-                                  className={`w-4 h-4 ${i < Math.floor(service.rating || 0) ? "fill-[#F2A93B] text-[#F2A93B]" : "text-slate-200"}`}
+                                  className={`w-4 h-4 ${i < Math.floor(service.rating || 0) ? "fill-[#55402f] text-[#55402f]" : "text-slate-200"}`}
                                 />
                               ))}
                               <span className="text-xs text-muted-foreground ml-1">({(typeof service.rating === 'number' ? service.rating : Number(service.rating || 0)).toFixed(1)})</span>
@@ -439,83 +437,6 @@ const AllServicesSimple = () => {
 
       <RecommendedProductsSection />
       <FAQSection />
-      {/* Platform Stats Section */}
-      <section className="py-24 px-4 bg-[#F8F9FA]">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
-              Salon: The Ultimate Service Booking Platform
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
-            {[
-              {
-                value: "15k+",
-                label: "Trusted by over 15k+ service providers and customers."
-              },
-              {
-                value: "100k+",
-                label: "Over 100k+ bookings successfully completed across various services."
-              },
-              {
-                value: "95k+",
-                label: "93k+ positive reviews from satisfied customers."
-              }
-            ].map((stat, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bg-white p-12 rounded-[2rem] shadow-[0_10px_40px_-15px_rgba(0,0,0,0.05)] text-center flex flex-col items-center justify-center min-h-[280px]"
-              >
-                <div className="text-5xl md:text-6xl font-black text-slate-900 mb-6 tracking-tighter">
-                  {stat.value}
-                </div>
-                <p className="text-slate-500 font-medium leading-relaxed max-w-[240px]">
-                  {stat.label}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Newsletter Box */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="bg-[#1A1A1A] rounded-[2.5rem] p-12 md:p-16 text-center shadow-2xl"
-          >
-            <div className="space-y-6 max-w-3xl mx-auto">
-              <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight">
-                Stay Updated with the Latest Salon Trends
-              </h2>
-              <p className="text-slate-300 text-base md:text-lg font-normal max-w-2xl mx-auto leading-relaxed">
-                Subscribe to our newsletter and stay ahead in the beauty industry! Get exclusive salon tips and promotions.
-              </p>
-
-              <form onSubmit={handleSubscribe} className="flex flex-col md:flex-row items-center justify-center gap-4 pt-6 max-w-lg mx-auto">
-                <Input
-                  type="email"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.currentTarget.value)}
-                  className="h-14 bg-white/10 border-white/20 text-white rounded-full px-6 focus-visible:ring-white/30"
-                />
-                <Button
-                  type="submit"
-                  className="h-14 px-10 rounded-full bg-white text-black hover:bg-slate-200 font-bold text-base transition-all shrink-0"
-                >
-                  Subscribe Now
-                </Button>
-              </form>
-            </div>
-          </motion.div>
-
-        </div>
-      </section>
 
 
       <Footer />

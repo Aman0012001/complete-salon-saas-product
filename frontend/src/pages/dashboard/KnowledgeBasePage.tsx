@@ -196,7 +196,7 @@ const KnowledgeBasePage = () => {
         return (
             <ResponsiveDashboardLayout showBackButton={true}>
                 <div className="flex items-center justify-center h-64">
-                    <Loader2 className="w-8 h-8 animate-spin text-[#F2A93B]" />
+                    <Loader2 className="w-8 h-8 animate-spin text-[#55402f]" />
                 </div>
             </ResponsiveDashboardLayout>
         );
@@ -216,7 +216,7 @@ const KnowledgeBasePage = () => {
                     {(isOwner || isManager) && (
                         <Button
                             onClick={() => { resetForm(); setIsDialogOpen(true); }}
-                            className="bg-[#F2A93B] hover:bg-[#E29A2B] text-white gap-2 shadow-lg rounded-xl h-12"
+                            className="bg-[#55402f] hover:bg-[#433225] text-white gap-2 shadow-lg rounded-xl h-12"
                         >
                             <Plus className="w-4 h-4" />
                             Add New Entry
@@ -277,7 +277,7 @@ const KnowledgeBasePage = () => {
                 <div className="space-y-4">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-4">
-                            <Loader2 className="w-10 h-10 animate-spin text-[#F2A93B]" />
+                            <Loader2 className="w-10 h-10 animate-spin text-[#55402f]" />
                             <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Syncing Knowledge Base...</p>
                         </div>
                     ) : filteredItems.length === 0 ? (
@@ -329,7 +329,7 @@ const KnowledgeBasePage = () => {
                                                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
                                                     Published {new Date(item.created_at).toLocaleDateString()}
                                                 </p>
-                                                <Button variant="ghost" className="text-[#F2A93B] font-bold text-xs h-8" onClick={() => openEditDialog(item)}>
+                                                <Button variant="ghost" className="text-[#55402f] font-bold text-xs h-8" onClick={() => openEditDialog(item)}>
                                                     Full Detail <ChevronRight className="w-3 h-3 ml-1" />
                                                 </Button>
                                             </div>
@@ -348,7 +348,7 @@ const KnowledgeBasePage = () => {
                             <DialogTitle className="text-xl font-black text-slate-900">
                                 {editingItem ? "Refine Entry" : "Create Knowledge Node"}
                             </DialogTitle>
-                            <DialogDescription className="text-xs font-bold uppercase tracking-widest text-[#F2A93B]">
+                            <DialogDescription className="text-xs font-bold uppercase tracking-widest text-[#55402f]">
                                 {editingItem ? "Updating professional advice" : "Publishing new salon intelligence"}
                             </DialogDescription>
                         </DialogHeader>
@@ -404,7 +404,7 @@ const KnowledgeBasePage = () => {
                                     value={formData.title}
                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                     placeholder={formData.category === 'Skin Care' ? "How to maintain hydration..." : "What is your cancellation policy?"}
-                                    className="h-12 bg-slate-50 border-none rounded-2xl font-bold px-5 focus-visible:ring-2 focus-visible:ring-[#F2A93B]/20"
+                                    className="h-12 bg-slate-50 border-none rounded-2xl font-bold px-5 focus-visible:ring-2 focus-visible:ring-[#55402f]/20"
                                 />
                             </div>
 
@@ -415,7 +415,7 @@ const KnowledgeBasePage = () => {
                                     value={formData.content}
                                     onChange={(e) => setFormData({ ...formData, content: e.target.value })}
                                     placeholder="Provide detailed professional advice or answer..."
-                                    className="bg-slate-50 border-none rounded-2xl font-bold px-5 py-4 focus-visible:ring-2 focus-visible:ring-[#F2A93B]/20 resize-none"
+                                    className="bg-slate-50 border-none rounded-2xl font-bold px-5 py-4 focus-visible:ring-2 focus-visible:ring-[#55402f]/20 resize-none"
                                 />
                             </div>
 

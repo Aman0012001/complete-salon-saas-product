@@ -118,7 +118,7 @@ export const MobileBottomNav = () => {
   const isMoreTabActive = filteredMoreTabs.some(tab => location.pathname === tab.path);
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-border safe-area-bottom">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-card border-t border-border safe-area-bottom">
       <div className="flex items-center justify-around px-2 py-2">
         {mainTabs.map((tab) => {
           const isActive = location.pathname === tab.path;
@@ -183,7 +183,7 @@ export const MobileBottomNav = () => {
               )}
             </button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="h-[70vh] bg-white border-t border-border">
+          <SheetContent side="bottom" className="h-[70vh] bg-card border-t border-border">
             <SheetHeader className="pb-6">
               <SheetTitle className="text-left text-xl font-bold">More Options</SheetTitle>
             </SheetHeader>

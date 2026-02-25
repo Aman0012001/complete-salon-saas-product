@@ -22,6 +22,8 @@ import {
   Star,
   FileText,
   ShoppingCart,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSuperAdmin } from "@/hooks/useSuperAdmin";
@@ -39,6 +41,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { NotificationSystem } from "@/components/admin/NotificationSystem";
 import { cn } from "@/lib/utils";
+import { useTheme } from "@/context/ThemeProvider";
 import "../../styles/admin-dark.css";
 
 interface AdminLayoutProps {
@@ -90,6 +93,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, loading: authLoading, signOut } = useAuth();
+  const { theme, toggleTheme } = useTheme();
   const { isSuperAdmin, loading: adminLoading, stats } = useSuperAdmin();
 
   // No bypass mode for security
@@ -254,6 +258,15 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         {/* Desktop Header */}
         <header className="hidden lg:flex sticky top-0 z-40 h-16 items-center gap-4 border-b border-gray-700 bg-gray-800/80 backdrop-blur-sm px-8 shadow-sm">
           <div className="flex-1" />
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-xl"
+            onClick={toggleTheme}
+          >
+            {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
+          </Button>
 
           <NotificationSystem />
 

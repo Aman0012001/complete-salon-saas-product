@@ -150,7 +150,7 @@ export default function ProductDetails() {
                             <div className="space-y-6">
                                 <div>
                                     <p className="text-2xl md:text-3xl font-bold font-['Outfit'] text-[#1A1A1A]">
-                                        RM {Number(product.price).toFixed(2)}
+                                        MYR {Number(product.price).toFixed(2)}
                                     </p>
                                     <button className="text-sm font-['Outfit'] text-[#1A1A1A] underline underline-offset-4 decoration-1 opacity-80 hover:opacity-100 transition-opacity mt-2">
                                         Shipping
@@ -159,7 +159,7 @@ export default function ProductDetails() {
                                 </div>
 
                                 <div className="text-sm font-['Outfit'] text-[#1A1A1A] py-2 px-1">
-                                    Pay over time for orders over <span className="font-bold">RM 35.00</span> with
+                                    Pay over time for orders over <span className="font-bold">MYR 35.00</span> with
                                     <span className="inline-flex items-center gap-1 mx-1.5 px-2 py-0.5 bg-[#5A31F4]/10 rounded-md text-[#5A31F4] font-black italic">
                                         shop <span className="bg-[#5A31F4] text-white px-1 rounded not-italic text-[10px] font-bold">Pay</span>
                                     </span>

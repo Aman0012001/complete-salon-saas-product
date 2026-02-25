@@ -81,7 +81,7 @@ const FAQSection = () => {
                                 className="w-full px-8 md:px-12 py-8 flex items-center justify-between text-left transition-colors"
                             >
                                 <h3
-                                    className={`text-lg md:text-xl font-black uppercase tracking-tight pr-8 transition-colors ${openIndex === index ? "text-[#B07D62]" : "text-[#1A2338]"
+                                    className={`text-lg md:text-xl font-black uppercase tracking-tight pr-8 transition-colors ${openIndex === index ? "text-[#55402f]" : "text-[#1A2338]"
                                         }`}
                                 >
                                     {faq.question}
@@ -89,7 +89,7 @@ const FAQSection = () => {
                                 <div className="flex-shrink-0 w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 transition-all duration-300"
                                     style={{ transform: openIndex === index ? 'rotate(180deg)' : 'rotate(0deg)' }}>
                                     {openIndex === index ? (
-                                        <Minus className="w-5 h-5 text-[#B07D62]" />
+                                        <Minus className="w-5 h-5 text-[#55402f]" />
                                     ) : (
                                         <Plus className="w-5 h-5" />
                                     )}
@@ -127,8 +127,8 @@ const FAQSection = () => {
                     <div className="inline-flex flex-col items-center gap-6">
                         <p className="text-slate-400 font-medium">Still have questions?</p>
                         <Button
-                            onClick={() => navigate("/salons")}
-                            className="h-16 px-12 bg-[#1A2338] hover:bg-[#B07D62] text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-[0_20px_40px_-10px_rgba(26,35,56,0.3)] hover:-translate-y-1"
+                            onClick={() => navigate("/contact")}
+                            className="h-16 px-12 bg-[#1A2338] hover:bg-[#55402f] text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-[0_20px_40px_-10px_rgba(26,35,56,0.3)] hover:-translate-y-1"
                         >
                             Book a Consultation
                         </Button>

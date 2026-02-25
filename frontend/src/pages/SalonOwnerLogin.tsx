@@ -87,7 +87,7 @@ const SalonOwnerLogin = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-[#F2A93B] flex items-center justify-center p-4 selection:bg-black/10">
+    <div className="min-h-screen bg-[#55402f] flex items-center justify-center p-4 selection:bg-black/10">
       <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
         {/* Branding & Status */}
@@ -128,8 +128,8 @@ const SalonOwnerLogin = () => {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-accent/20 blur-[100px] rounded-full -translate-y-1/2" />
 
             {!authLoading && user && !(user.user_type === 'salon_owner' || user.salon_role) && (
-              <div className="mb-8 p-4 bg-[#F2A93B]/10 border border-[#F2A93B]/20 rounded-2xl animate-fade-in">
-                <p className="text-[#F2A93B] text-sm font-bold mb-3 flex items-center justify-center gap-2">
+              <div className="mb-8 p-4 bg-[#55402f]/10 border border-[#55402f]/20 rounded-2xl animate-fade-in">
+                <p className="text-[#55402f] text-sm font-bold mb-3 flex items-center justify-center gap-2">
                   <User className="w-4 h-4" />
                   Currently logged in as {user.user_type}
                 </p>
@@ -164,7 +164,7 @@ const SalonOwnerLogin = () => {
               </div>
             )}
 
-            <div className="w-20 h-20 bg-[#F2A93B] rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-[#F2A93B]/40 relative z-10">
+            <div className="w-20 h-20 bg-[#55402f] rounded-[2rem] flex items-center justify-center mx-auto mb-8 shadow-2xl shadow-[#55402f]/40 relative z-10">
               <Store className="w-10 h-10 text-white" />
             </div>
             <CardTitle className="text-4xl font-black text-black tracking-tight relative z-10">Station Login</CardTitle>
@@ -182,7 +182,7 @@ const SalonOwnerLogin = () => {
                     placeholder="admin@local.host"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-16 bg-slate-50 border-slate-100 text-black rounded-2xl font-bold px-6 focus:border-[#F2A93B]/50 focus:ring-[#F2A93B]/20 transition-all text-lg"
+                    className="h-16 bg-slate-50 border-slate-100 text-black rounded-2xl font-bold px-6 focus:border-[#55402f]/50 focus:ring-[#55402f]/20 transition-all text-lg"
                     required
                   />
                 </div>
@@ -195,13 +195,13 @@ const SalonOwnerLogin = () => {
                       placeholder="••••••••••••"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="h-16 bg-slate-50 border-slate-100 text-black rounded-2xl font-bold px-6 pr-14 focus:border-[#F2A93B]/50 focus:ring-[#F2A93B]/20 transition-all text-lg"
+                      className="h-16 bg-slate-50 border-slate-100 text-black rounded-2xl font-bold px-6 pr-14 focus:border-[#55402f]/50 focus:ring-[#55402f]/20 transition-all text-lg"
                       required
                     />
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#F2A93B] transition-colors"
+                      className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-300 hover:text-[#55402f] transition-colors"
                     >
                       {showPassword ? <EyeOff className="h-6 h-6" /> : <Eye className="h-6 h-6" />}
                     </button>
@@ -212,7 +212,7 @@ const SalonOwnerLogin = () => {
               <CardFooter className="flex flex-col gap-8 px-0 mt-10">
                 <Button
                   type="submit"
-                  className="w-full h-20 bg-[#F2A93B] hover:bg-black hover:text-white text-black rounded-3xl font-black text-xl shadow-2xl shadow-[#F2A93B]/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full h-20 bg-[#55402f] hover:bg-black hover:text-white text-black rounded-3xl font-black text-xl shadow-2xl shadow-[#55402f]/20 transition-all transform hover:scale-[1.02] active:scale-[0.98]"
                   disabled={loading}
                 >
                   {loading ? (

@@ -78,6 +78,7 @@ const Footer = () => {
               <FooterLink to="/about" label="About Us" />
               <FooterLink to="/salons" label="Our Services" />
               <FooterLink to="/book" label="Book Appointment" />
+              <FooterLink to="/contact" label="Contact Us" />
               {/* <FooterLink to="/admin-access" label="Admin Login" /> */}
             </ul>
           </div>
@@ -129,10 +130,10 @@ const Footer = () => {
 const SocialLink = ({ href, icon: Icon, label }: { href: string; icon: any; label: string }) => (
   <a
     href={href}
-    className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110"
+    className="w-10 h-10 rounded-full bg-secondary/50 flex items-center justify-center text-muted-foreground hover:bg-[#6B4F3B] hover:text-white transition-all duration-300 hover:scale-110"
     aria-label={label}
   >
-    <Icon className="w-5 h-5" />
+    <Icon className="w-5 h-5 transition-colors duration-300" />
   </a>
 );
 

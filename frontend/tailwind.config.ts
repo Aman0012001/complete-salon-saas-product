@@ -1,7 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
-  darkMode: ["class"],
+  darkMode: ["class", ".admin-dark-theme"],
   content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./app/**/*.{ts,tsx}", "./src/**/*.{ts,tsx}"],
   prefix: "",
   theme: {
@@ -52,7 +52,19 @@ export default {
         },
         gold: "hsl(var(--gold))",
         "gold-light": "hsl(var(--gold-light))",
-        amber: "hsl(var(--amber))",
+        amber: {
+          50: "#f8f7f6",
+          100: "#f1efed",
+          200: "#e3dfdb",
+          300: "#d5cfc9",
+          400: "#b9aeaa",
+          500: "#55402f",
+          600: "#4d3a2a",
+          700: "#403023",
+          800: "#33261c",
+          900: "#2a1f17",
+          950: "#1a130e",
+        },
         sage: "hsl(var(--sage))",
         cream: "hsl(var(--cream))",
         sidebar: {

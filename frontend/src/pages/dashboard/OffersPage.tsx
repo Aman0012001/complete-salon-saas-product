@@ -297,7 +297,7 @@ const OffersPage = () => {
           {(isOwner || isManager) && (
             <Button
               onClick={() => { resetForm(); setIsAddDialogOpen(true); }}
-              className="bg-[#F2A93B] hover:bg-[#E29A2B] text-white gap-2 shadow-md"
+              className="bg-[#55402f] hover:bg-[#433225] text-white gap-2 shadow-md"
             >
               <Plus className="w-4 h-4" />
               Create Offer
@@ -373,7 +373,7 @@ const OffersPage = () => {
                           <div className="text-right">
                             <p className="font-medium text-foreground">
                               {offer.type === "percentage" ? `${offer.value}% OFF` :
-                                offer.type === "fixed" ? `RM ${offer.value} OFF` : "BOGO"}
+                                offer.type === "fixed" ? `MYR ${offer.value} OFF` : "BOGO"}
                             </p>
                             <p className="text-xs text-muted-foreground">
                               Expires: {offer.end_date ? new Date(offer.end_date).toLocaleDateString() : "Never"}
@@ -458,7 +458,7 @@ const OffersPage = () => {
                           <div className="text-right">
                             <p className="font-medium text-muted-foreground">
                               {offer.type === "percentage" ? `${offer.value}% OFF` :
-                                offer.type === "fixed" ? `RM ${offer.value} OFF` : "BOGO"}
+                                offer.type === "fixed" ? `MYR ${offer.value} OFF` : "BOGO"}
                             </p>
                             <p className="text-xs text-muted-foreground">
                               End Date: {offer.end_date ? new Date(offer.end_date).toLocaleDateString() : "Never"}
@@ -609,7 +609,7 @@ const OffersPage = () => {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="value">Value {formData.type === 'percentage' ? '(%)' : formData.type === 'fixed' ? '(RM)' : ''}</Label>
+                  <Label htmlFor="value">Value {formData.type === 'percentage' ? '(%)' : formData.type === 'fixed' ? '(MYR)' : ''}</Label>
                   <Input
                     id="value"
                     type="number"
@@ -705,7 +705,7 @@ const OffersPage = () => {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-xs font-black text-accent tracking-widest uppercase">RM {parseFloat(r.discount_amount).toFixed(2)} OFF</p>
+                        <p className="text-xs font-black text-accent tracking-widest uppercase">MYR {parseFloat(r.discount_amount).toFixed(2)} OFF</p>
                         <p className="text-[10px] text-muted-foreground font-medium uppercase tracking-tighter">
                           Used on {new Date(r.booking_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
                         </p>

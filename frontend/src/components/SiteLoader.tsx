@@ -50,7 +50,7 @@ export default function SiteLoader() {
                                 ease: "easeInOut"
                             }}
                         >
-                            <Scissors className="w-10 h-10 text-orange-400" />
+                            <Scissors className="w-10 h-10 text-orange-400 fill-orange-400/10" />
                         </motion.div>
                     </div>
 

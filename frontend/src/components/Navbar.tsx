@@ -15,6 +15,10 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import logo from "@/assets/logo.png";
 import { useAuth } from "@/hooks/useAuth";
@@ -36,8 +40,24 @@ const Navbar = () => {
     services: any[];
   }>({ suggestions: [], products: [], salons: [], services: [] });
   const [isSearching, setIsSearching] = useState(false);
+  const [shopProducts, setShopProducts] = useState<any[]>([]);
+  const [isShopLoading, setIsShopLoading] = useState(true);
   const { user, signOut } = useAuth();
   const { cartCount, addToCart } = useCart();
+
+  useEffect(() => {
+    const fetchShopProducts = async () => {
+      try {
+        const data = await api.platformProducts.getAll('customer');
+        setShopProducts(data || []);
+      } catch (error) {
+        console.error("Shop fetch error:", error);
+      } finally {
+        setIsShopLoading(false);
+      }
+    };
+    fetchShopProducts();
+  }, []);
 
   useEffect(() => {
     const handleSearch = async () => {
@@ -63,16 +83,27 @@ const Navbar = () => {
   const navLinks = [
     { name: "HOME", href: "/" },
     { name: "SALONS", href: "/salons" },
-    { name: "SHOP", href: "/shop" },
-    // { name: "MEMBERSHIP", href: "/membership" },
+    { name: "MEMBERSHIP", href: "/membership" },
+    // SHOP is handled separately for nested dropdown
     { name: "CONTACT US", href: "/contact" },
     { name: "ABOUT US", href: "/about" },
   ];
 
+  const shopGroups = [
+    { name: "Cleanse & Prep", key: "cleanser" },
+    { name: "Treat & Repair", key: "serum|treatment" },
+    { name: "Hydrate & Protect", key: "moisturizer|spf" }
+  ];
+
+  const getProductsByGroup = (categoryKeys: string) => {
+    const keys = categoryKeys.split('|');
+    return shopProducts.filter(p => keys.includes((p.category || "").toLowerCase())).slice(0, 4);
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
 
-      <nav className="bg-[#F3EEEA] border-b border-[#E5E0D8]">
+      <nav className="bg-[#FAF9F6] border-b border-[#F2EEE9] transition-all duration-300">
         <div className="container mx-auto px-4 h-20 md:h-24 flex items-center justify-between">
 
           {/* Logo Section */}
@@ -82,14 +113,72 @@ const Navbar = () => {
 
           {/* Desktop Navigation Links - Center */}
           <div className="hidden lg:flex items-center gap-10 xl:gap-14">
-            {navLinks.map((link) => (
+            {navLinks.slice(0, 3).map((link) => (
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-[16px] font-['Outfit'] font-extrabold tracking-[0.1em] text-[#1A1A1A] transition-all flex items-center gap-1.5 relative py-1 group"
+                className="text-[16px] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group"
               >
                 {link.name}
-                <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-[#1A1A1A] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
+                <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
+              </Link>
+            ))}
+
+            {/* SHOP Nested Dropdown - 3rd Position */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="text-[16px] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group outline-none">
+                  SHOP
+                  <ChevronDown className="w-4 h-4 transition-transform group-data-[state=open]:rotate-180" />
+                  <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="w-56 mt-4 p-2 bg-card rounded-2xl border border-border shadow-2xl backdrop-blur-xl animate-in zoom-in-95 duration-200">
+
+                {shopGroups.map((group) => {
+                  const items = getProductsByGroup(group.key);
+                  if (items.length === 0) return null;
+
+                  return (
+                    <DropdownMenuSub key={group.name}>
+                      <DropdownMenuSubTrigger className="rounded-xl h-12 px-4 focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 cursor-pointer">
+                        <span className="font-bold">{group.name}</span>
+                      </DropdownMenuSubTrigger>
+                      <DropdownMenuPortal>
+                        <DropdownMenuSubContent className="w-64 p-2 bg-card rounded-2xl border border-border shadow-2xl backdrop-blur-xl animate-in slide-in-from-left-2 duration-300">
+                          {items.map((product) => (
+                            <DropdownMenuItem key={product.id} asChild className="rounded-xl h-12 px-4 cursor-pointer focus:bg-accent focus:text-accent-foreground">
+                              <Link to={`/product/${product.id}`} className="flex flex-col items-start w-full">
+                                <span className="font-bold truncate w-full">{product.name}</span>
+                                <span className="text-[10px] text-muted-foreground font-medium truncate w-full">{product.brand || product.category}</span>
+                              </Link>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuPortal>
+                    </DropdownMenuSub>
+                  );
+                })}
+
+                <DropdownMenuSeparator className="my-2" />
+
+                <DropdownMenuItem asChild className="rounded-xl h-10 px-4 cursor-pointer focus:bg-accent focus:text-accent-foreground">
+                  <Link to="/shop" className="flex items-center justify-between w-full group">
+                    <span className="font-black text-xs uppercase tracking-widest">Shop All Rituals</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            {navLinks.slice(3).map((link) => (
+              <Link
+                key={link.name}
+                to={link.href}
+                className="text-[16px] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group"
+              >
+                {link.name}
+                <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
               </Link>
             ))}
           </div>
@@ -98,7 +187,7 @@ const Navbar = () => {
           <div className="flex items-center gap-1 md:gap-2">
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:bg-black/5 rounded-full transition-all"
+              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-black hover:bg-black/5 rounded-full transition-all"
             >
               <Search className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
             </button>
@@ -106,16 +195,16 @@ const Navbar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:bg-black/5 rounded-full transition-all outline-none">
+                  <button className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-black hover:bg-black/5 rounded-full transition-all outline-none">
                     <User className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 mt-4 p-2 bg-white rounded-2xl border-none shadow-2xl">
+                <DropdownMenuContent align="end" className="w-56 mt-4 p-2 bg-card rounded-2xl border border-border shadow-2xl">
                   <div className="px-3 py-2 border-b border-slate-50 mb-1">
                     <p className="text-sm font-black">{user.full_name}</p>
                     <p className="text-[10px] text-slate-400">{user.email}</p>
                   </div>
-                  <DropdownMenuItem asChild className="rounded-xl h-10 focus:bg-[#F3EEEA] focus:text-[#1A1A1A] cursor-pointer transition-colors">
+                  <DropdownMenuItem asChild className="rounded-xl h-10 focus:bg-accent focus:text-accent-foreground cursor-pointer transition-colors">
                     <Link to="/user/profile" className="flex items-center gap-3">
                       <User className="w-4 h-4" /> Profile
                     </Link>
@@ -139,7 +228,7 @@ const Navbar = () => {
                     }
 
                     return (
-                      <DropdownMenuItem asChild className="rounded-xl h-10 focus:bg-[#F3EEEA] focus:text-[#1A1A1A] cursor-pointer font-bold transition-colors">
+                      <DropdownMenuItem asChild className="rounded-xl h-10 focus:bg-accent focus:text-accent-foreground cursor-pointer font-bold transition-colors">
                         <Link to={dashPath} className="flex items-center gap-3">
                           <LayoutDashboard className="w-4 h-4" /> {dashLabel}
                         </Link>
@@ -155,11 +244,11 @@ const Navbar = () => {
             ) : (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:bg-black/5 rounded-full transition-all outline-none">
+                  <button className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-black hover:bg-black/5 rounded-full transition-all outline-none">
                     <User className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-64 mt-4 p-2 bg-white rounded-2xl border-none shadow-2xl">
+                <DropdownMenuContent align="end" className="w-64 mt-4 p-2 bg-card rounded-2xl border border-border shadow-2xl">
                   <div className="px-3 py-3 border-b border-slate-50 mb-1">
                     <p className="text-xs font-black uppercase tracking-widest text-[#1A1A1A]/40">Wellness Registry</p>
                   </div>
@@ -203,10 +292,10 @@ const Navbar = () => {
               </DropdownMenu>
             )}
 
-            <Link to="/cart" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-[#1A1A1A] hover:opacity-100 hover:bg-black/5 rounded-full transition-all relative group">
+            <Link to="/cart" className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-black hover:bg-black/5 rounded-full transition-all relative group">
               <ShoppingBag className="w-5 h-5 md:w-6 md:h-6 stroke-[1.2px]" />
               {cartCount > 0 && (
-                <div className="absolute top-1 right-1 md:top-2 md:right-2 min-w-[18px] h-[18px] bg-accent text-white text-[10px] font-black rounded-full flex items-center justify-center animate-in zoom-in border-2 border-[#F3EEEA] shadow-sm">
+                <div className="absolute top-1 right-1 md:top-2 md:right-2 min-w-[18px] h-[18px] bg-accent text-white text-[10px] font-black rounded-full flex items-center justify-center animate-in zoom-in border-2 border-background shadow-sm">
                   {cartCount}
                 </div>
               )}
@@ -221,7 +310,7 @@ const Navbar = () => {
                     <Menu className="w-6 h-6" />
                   </Button>
                 </SheetTrigger>
-                <SheetContent side="right" className="w-full sm:w-[350px] bg-[#F3EEEA] border-none p-0">
+                <SheetContent side="right" className="w-full sm:w-[350px] bg-background border-none p-0">
                   <div className="flex flex-col h-full">
                     <div className="p-8 pb-4">
                       <SheetHeader>
@@ -241,6 +330,13 @@ const Navbar = () => {
                             {link.name}
                           </Link>
                         ))}
+                        <Link
+                          to="/shop"
+                          onClick={() => setIsOpen(false)}
+                          className="text-[16px] font-black tracking-widest text-[#1A1A1A] hover:opacity-100 transition-colors uppercase py-2 border-b border-[#1A1A1A]/5"
+                        >
+                          SHOP
+                        </Link>
                       </nav>
 
                       <div className="mt-12 space-y-4">
@@ -294,7 +390,7 @@ const Navbar = () => {
         setIsSearchOpen(open);
         if (!open) setSearchQuery("");
       }}>
-        <SheetContent side="right" className="w-full sm:w-[450px] bg-[#F3EEEA] border-none p-0">
+        <SheetContent side="right" className="w-full sm:w-[450px] bg-background border-none p-0">
           <div className="p-8 h-full flex flex-col">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-3xl md:text-4xl font-['DM_Serif_Display'] text-[#1A1A1A]">Search</h2>

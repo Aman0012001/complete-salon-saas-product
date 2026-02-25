@@ -45,6 +45,7 @@ interface InventoryItem {
   stock_quantity: number;
   min_stock_level: number;
   unit_price: number;
+  cost_price: number;
   supplier_name: string;
   last_restocked_at: string | null;
 }
@@ -77,6 +78,7 @@ const InventoryPage = () => {
     stock_quantity: 0,
     min_stock_level: 5,
     unit_price: 0,
+    cost_price: 0,
     supplier_name: "",
   });
 
@@ -134,6 +136,7 @@ const InventoryPage = () => {
         stock_quantity: 0,
         min_stock_level: 5,
         unit_price: 0,
+        cost_price: 0,
         supplier_name: "",
       });
       fetchData();
@@ -210,50 +213,50 @@ const InventoryPage = () => {
       title: "Total Products",
       value: products.length.toString(),
       icon: Package,
-      bg: "bg-blue-50",
-      textColor: "text-blue-700"
+      bg: "bg-blue-500/10",
+      textColor: "text-blue-600 dark:text-blue-400"
     },
     {
       title: "Low Stock Items",
       value: products.filter(p => p.stock_quantity > 0 && p.stock_quantity <= p.min_stock_level).length.toString(),
       icon: AlertTriangle,
       alert: true,
-      bg: "bg-orange-50",
-      textColor: "text-orange-700"
+      bg: "bg-orange-500/10",
+      textColor: "text-orange-600 dark:text-orange-400"
     },
     {
       title: "Out of Stock",
       value: products.filter(p => p.stock_quantity === 0).length.toString(),
       icon: XCircle,
       alert: true,
-      bg: "bg-red-50",
-      textColor: "text-red-700"
+      bg: "bg-red-500/10",
+      textColor: "text-red-600 dark:text-red-400"
     },
     {
       title: "Inventory Value",
-      value: `RM ${products.reduce((acc, p) => acc + (p.stock_quantity * p.unit_price), 0).toLocaleString()}`,
+      value: `MYR ${products.reduce((acc, p) => acc + (p.stock_quantity * p.unit_price), 0).toLocaleString()}`,
       icon: BarChart3,
-      bg: "bg-emerald-50",
-      textColor: "text-emerald-700"
+      bg: "bg-emerald-500/10",
+      textColor: "text-emerald-600 dark:text-emerald-400"
     }
   ];
 
   const getStockStatus = (stock: number, minStock: number) => {
     if (stock === 0) {
       return (
-        <Badge className="bg-red-100 text-red-700 border-0 font-bold px-3 uppercase text-[10px]">
+        <Badge className="bg-red-500/10 text-red-600 dark:text-red-400 border-0 font-bold px-3 uppercase text-[10px]">
           Out of Stock
         </Badge>
       );
     } else if (stock <= minStock) {
       return (
-        <Badge className="bg-orange-100 text-orange-700 border-0 font-bold px-3 uppercase text-[10px]">
+        <Badge className="bg-orange-500/10 text-orange-600 dark:text-orange-400 border-0 font-bold px-3 uppercase text-[10px]">
           Low Stock
         </Badge>
       );
     } else {
       return (
-        <Badge className="bg-emerald-100 text-emerald-700 border-0 font-bold px-3 uppercase text-[10px]">
+        <Badge className="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-0 font-bold px-3 uppercase text-[10px]">
           In Stock
         </Badge>
       );
@@ -308,7 +311,7 @@ const InventoryPage = () => {
               </p>
             </div>
             <div className="flex items-center gap-3">
-              <Button variant="outline" onClick={fetchData} className="rounded-xl font-bold bg-white">
+              <Button variant="outline" onClick={fetchData} className="rounded-xl font-bold bg-card border-border">
                 <RefreshCw className="w-4 h-4 mr-2" /> Refresh
               </Button>
               <Button
@@ -325,14 +328,14 @@ const InventoryPage = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((stat, index) => (
-            <Card key={index} className="border-none shadow-sm bg-white rounded-2xl">
+            <Card key={index} className="border border-border shadow-sm bg-card rounded-2xl">
               <CardContent className="p-4 flex items-center gap-4">
                 <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center ${stat.textColor}`}>
                   <stat.icon className="w-6 h-6" />
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{stat.title}</p>
-                  <p className="text-xl font-black text-slate-900">{stat.value}</p>
+                  <p className="text-xl font-black text-foreground">{stat.value}</p>
                 </div>
               </CardContent>
             </Card>
@@ -341,14 +344,14 @@ const InventoryPage = () => {
 
         {/* Main Content */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 bg-slate-100 p-1 rounded-2xl h-12">
-            <TabsTrigger value="products" className="rounded-xl font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm">Products</TabsTrigger>
-            <TabsTrigger value="suppliers" className="rounded-xl font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm">Suppliers</TabsTrigger>
-            <TabsTrigger value="orders" className="rounded-xl font-bold data-[state=active]:bg-white data-[state=active]:shadow-sm">Orders</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 bg-muted p-1 rounded-2xl h-12">
+            <TabsTrigger value="products" className="rounded-xl font-bold data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground text-muted-foreground">Products</TabsTrigger>
+            <TabsTrigger value="suppliers" className="rounded-xl font-bold data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground text-muted-foreground">Suppliers</TabsTrigger>
+            <TabsTrigger value="orders" className="rounded-xl font-bold data-[state=active]:bg-card data-[state=active]:shadow-sm data-[state=active]:text-foreground text-muted-foreground">Orders</TabsTrigger>
           </TabsList>
 
           <TabsContent value="products" className="space-y-4">
-            <Card className="border-none shadow-sm bg-white rounded-[2rem] overflow-hidden">
+            <Card className="border border-border shadow-sm bg-card rounded-[2rem] overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-xl font-bold">Product List ({filteredProducts.length})</CardTitle>
                 <div className="relative w-64 lg:block hidden">
@@ -357,7 +360,7 @@ const InventoryPage = () => {
                     placeholder="Search products..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 h-10 bg-secondary/30 border-none rounded-xl"
+                    className="pl-10 h-10 bg-muted/30 border-none rounded-xl"
                   />
                 </div>
               </CardHeader>
@@ -371,29 +374,29 @@ const InventoryPage = () => {
                     {filteredProducts.map((product) => (
                       <div
                         key={product.id}
-                        className="flex flex-col md:flex-row md:items-center justify-between p-5 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors gap-4"
+                        className="flex flex-col md:flex-row md:items-center justify-between p-5 rounded-2xl bg-muted/30 hover:bg-muted/50 transition-colors gap-4"
                       >
                         <div className="flex items-center gap-4">
-                          <div className="w-12 h-12 rounded-xl bg-white shadow-sm flex items-center justify-center text-accent">
+                          <div className="w-12 h-12 rounded-xl bg-card shadow-sm flex items-center justify-center text-accent">
                             <Package className="w-6 h-6" />
                           </div>
                           <div>
-                            <p className="font-black text-slate-900">{product.name}</p>
+                            <p className="font-black text-foreground">{product.name}</p>
                             <div className="flex items-center gap-2 mt-1">
-                              <Badge className="bg-slate-200 text-slate-600 border-0 font-bold text-[9px] uppercase px-2">{product.category}</Badge>
-                              <p className="text-xs font-bold text-slate-400">Supplier: {product.supplier_name || "N/A"}</p>
+                              <Badge className="bg-muted text-muted-foreground border-0 font-bold text-[9px] uppercase px-2">{product.category}</Badge>
+                              <p className="text-xs font-bold text-muted-foreground">Supplier: {product.supplier_name || "N/A"}</p>
                             </div>
                           </div>
                         </div>
 
                         <div className="flex-1 px-4 flex flex-col md:flex-row items-center gap-4 md:gap-12 justify-center">
                           <div className="text-center">
-                            <p className="text-lg font-black text-slate-900">{product.stock_quantity}</p>
-                            <p className="text-[10px] font-black uppercase text-slate-400 tracking-tighter">Current Stock</p>
+                            <p className="text-lg font-black text-foreground">{product.stock_quantity}</p>
+                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter">Current Stock</p>
                           </div>
                           <div className="text-center">
-                            <p className="text-lg font-black text-slate-500">RM {product.unit_price}</p>
-                            <p className="text-[10px] font-black uppercase text-slate-400 tracking-tighter">Unit Price</p>
+                            <p className="text-lg font-black text-muted-foreground">MYR {product.unit_price}</p>
+                            <p className="text-[10px] font-black uppercase text-muted-foreground tracking-tighter">Unit Price</p>
                           </div>
                         </div>
 
@@ -403,7 +406,7 @@ const InventoryPage = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="rounded-xl h-9 w-9 bg-white shadow-sm hover:text-accent"
+                              className="rounded-xl h-9 w-9 bg-card shadow-sm hover:text-accent border border-border"
                               onClick={() => handleEditClick(product)}
                             >
                               <Edit className="w-4 h-4" />
@@ -411,7 +414,7 @@ const InventoryPage = () => {
                             <Button
                               variant="ghost"
                               size="icon"
-                              className="rounded-xl h-9 w-9 bg-white shadow-sm hover:text-red-500"
+                              className="rounded-xl h-9 w-9 bg-card shadow-sm hover:text-red-500 border border-border"
                               onClick={() => handleDeleteItem(product.id)}
                             >
                               <Trash2 className="w-4 h-4" />
@@ -427,7 +430,7 @@ const InventoryPage = () => {
           </TabsContent>
 
           <TabsContent value="suppliers" className="space-y-4">
-            <Card className="border-none shadow-sm bg-white rounded-[2rem] overflow-hidden">
+            <Card className="border border-border shadow-sm bg-card rounded-[2rem] overflow-hidden">
               <CardHeader className="flex flex-row items-center justify-between pb-2">
                 <CardTitle className="text-xl font-bold">Suppliers ({suppliers.length})</CardTitle>
                 <Button
@@ -445,15 +448,15 @@ const InventoryPage = () => {
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {suppliers.map(sup => (
-                      <div key={sup.id} className="p-5 rounded-3xl bg-slate-50 border border-slate-100 relative group">
+                      <div key={sup.id} className="p-5 rounded-3xl bg-muted/30 border border-border relative group">
                         <div className="flex items-start justify-between">
                           <div className="flex items-center gap-4">
-                            <div className="w-12 h-12 rounded-2xl bg-white shadow-sm flex items-center justify-center text-blue-600">
+                            <div className="w-12 h-12 rounded-2xl bg-card shadow-sm flex items-center justify-center text-blue-600">
                               <Boxes className="w-6 h-6" />
                             </div>
                             <div>
-                              <p className="font-black text-slate-900 text-lg">{sup.name}</p>
-                              <p className="text-sm font-bold text-slate-500">{sup.contact_person || "No Contact Person"}</p>
+                              <p className="font-black text-foreground text-lg">{sup.name}</p>
+                              <p className="text-sm font-bold text-muted-foreground">{sup.contact_person || "No Contact Person"}</p>
                             </div>
                           </div>
                           <Button
@@ -466,10 +469,10 @@ const InventoryPage = () => {
                           </Button>
                         </div>
                         <div className="mt-4 space-y-2">
-                          <p className="text-sm font-medium flex items-center gap-2 text-slate-600">
+                          <p className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
                             <Truck className="w-4 h-4" /> {sup.phone || "No phone"}
                           </p>
-                          <p className="text-sm font-medium flex items-center gap-2 text-slate-600">
+                          <p className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
                             <ShoppingCart className="w-4 h-4" /> {sup.email || "No email"}
                           </p>
                         </div>
@@ -482,10 +485,10 @@ const InventoryPage = () => {
           </TabsContent>
 
           <TabsContent value="orders" className="space-y-4">
-            <Card className="border-none shadow-sm bg-white rounded-[2rem] overflow-hidden">
+            <Card className="border border-border shadow-sm bg-card rounded-[2rem] overflow-hidden">
               <CardContent className="py-20 text-center">
-                <ShoppingCart className="w-16 h-16 mx-auto mb-4 text-slate-200" />
-                <p className="text-xl font-black text-slate-400">Restock Center</p>
+                <ShoppingCart className="w-16 h-16 mx-auto mb-4 text-muted" />
+                <p className="text-xl font-black text-muted-foreground">Restock Center</p>
                 <p className="text-muted-foreground font-medium max-w-xs mx-auto mt-2">
                   Platform orders and restock requests will appear here once you connect with suppliers.
                 </p>
@@ -497,7 +500,7 @@ const InventoryPage = () => {
 
       {/* Add Product Dialog */}
       <Dialog open={showAddDialog} onOpenChange={setShowAddDialog}>
-        <DialogContent className="max-w-md rounded-3xl border-none p-6">
+        <DialogContent className="max-w-md rounded-3xl border border-border bg-card p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black">Add Product</DialogTitle>
             <DialogDescription className="font-medium">Populate your salon's local inventory.</DialogDescription>
@@ -509,27 +512,37 @@ const InventoryPage = () => {
                 placeholder="e.g. Lavender Shampoo"
                 value={newItem.name}
                 onChange={e => setNewItem({ ...newItem, name: e.target.value })}
-                className="bg-secondary/30 border-none h-12 rounded-xl"
+                className="bg-muted/30 border-none h-12 rounded-xl"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Category</Label>
                 <Input
                   placeholder="Hair Care"
                   value={newItem.category}
                   onChange={e => setNewItem({ ...newItem, category: e.target.value })}
-                  className="bg-secondary/30 border-none h-12 rounded-xl"
+                  className="bg-muted/30 border-none h-12 rounded-xl"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Unit Price (RM)</Label>
+                <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Unit Price (MYR)</Label>
                 <Input
                   type="number"
                   placeholder="0.00"
                   value={newItem.unit_price}
                   onChange={e => setNewItem({ ...newItem, unit_price: parseFloat(e.target.value) })}
-                  className="bg-secondary/30 border-none h-12 rounded-xl"
+                  className="bg-muted/30 border-none h-12 rounded-xl"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Cost Price (MYR)</Label>
+                <Input
+                  type="number"
+                  placeholder="0.00"
+                  value={newItem.cost_price}
+                  onChange={e => setNewItem({ ...newItem, cost_price: parseFloat(e.target.value) })}
+                  className="bg-muted/30 border-none h-12 rounded-xl text-emerald-600 dark:text-emerald-400"
                 />
               </div>
             </div>
@@ -541,7 +554,7 @@ const InventoryPage = () => {
                   placeholder="0"
                   value={newItem.stock_quantity}
                   onChange={e => setNewItem({ ...newItem, stock_quantity: parseInt(e.target.value) })}
-                  className="bg-secondary/30 border-none h-12 rounded-xl"
+                  className="bg-muted/30 border-none h-12 rounded-xl"
                 />
               </div>
               <div className="space-y-2">
@@ -551,7 +564,7 @@ const InventoryPage = () => {
                   placeholder="5"
                   value={newItem.min_stock_level}
                   onChange={e => setNewItem({ ...newItem, min_stock_level: parseInt(e.target.value) })}
-                  className="bg-secondary/30 border-none h-12 rounded-xl"
+                  className="bg-muted/30 border-none h-12 rounded-xl"
                 />
               </div>
             </div>
@@ -570,7 +583,7 @@ const InventoryPage = () => {
 
       {/* Edit Product Dialog */}
       <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-md rounded-3xl border-none p-6">
+        <DialogContent className="max-w-md rounded-3xl border border-border bg-card p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black">Edit Product</DialogTitle>
             <DialogDescription className="font-medium">Update product details in your inventory.</DialogDescription>
@@ -582,27 +595,37 @@ const InventoryPage = () => {
                 placeholder="e.g. Lavender Shampoo"
                 value={editingItem?.name || ""}
                 onChange={e => setEditingItem(prev => prev ? { ...prev, name: e.target.value } : null)}
-                className="bg-secondary/30 border-none h-12 rounded-xl"
+                className="bg-muted/30 border-none h-12 rounded-xl"
               />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Category</Label>
                 <Input
                   placeholder="Hair Care"
                   value={editingItem?.category || ""}
                   onChange={e => setEditingItem(prev => prev ? { ...prev, category: e.target.value } : null)}
-                  className="bg-secondary/30 border-none h-12 rounded-xl"
+                  className="bg-muted/30 border-none h-12 rounded-xl"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Unit Price (RM)</Label>
+                <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Sale Price (MYR)</Label>
                 <Input
                   type="number"
                   placeholder="0.00"
                   value={editingItem?.unit_price || 0}
                   onChange={e => setEditingItem(prev => prev ? { ...prev, unit_price: parseFloat(e.target.value) } : null)}
-                  className="bg-secondary/30 border-none h-12 rounded-xl"
+                  className="bg-muted/30 border-none h-12 rounded-xl"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Cost Price (MYR)</Label>
+                <Input
+                  type="number"
+                  placeholder="0.00"
+                  value={editingItem?.cost_price || 0}
+                  onChange={e => setEditingItem(prev => prev ? { ...prev, cost_price: parseFloat(e.target.value) } : null)}
+                  className="bg-muted/30 border-none h-12 rounded-xl text-emerald-600 dark:text-emerald-400"
                 />
               </div>
             </div>
@@ -652,7 +675,7 @@ const InventoryPage = () => {
 
       {/* Add Supplier Dialog */}
       <Dialog open={showSupplierDialog} onOpenChange={setShowSupplierDialog}>
-        <DialogContent className="max-w-md rounded-3xl border-none p-6">
+        <DialogContent className="max-w-md rounded-3xl border border-border bg-card p-6">
           <DialogHeader>
             <DialogTitle className="text-2xl font-black">New Supplier</DialogTitle>
             <DialogDescription className="font-medium">Add a supplier to your network.</DialogDescription>

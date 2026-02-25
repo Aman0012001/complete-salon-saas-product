@@ -97,7 +97,7 @@ export default function CustomersPage() {
   const handleExport = () => {
     if (customers.length === 0) return;
 
-    const headers = ["Name", "Phone", "Visits", "Total Spent (RM)", "Last Visit"];
+    const headers = ["Name", "Phone", "Visits", "Total Spent (MYR)", "Last Visit"];
     const csvContent = [
       headers.join(","),
       ...filteredCustomers.map(c => [
@@ -340,7 +340,7 @@ export default function CustomersPage() {
       <div className={`space-y-${isMobile ? '4' : '6'} pb-${isMobile ? '20' : '0'}`}>
         {/* Mobile Search Bar */}
         {isMobile && showSearch && (
-          <Card className="border-0 shadow-sm bg-white">
+          <Card className="border-0 shadow-sm bg-card">
             <CardContent className="p-4">
               <div className="relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -348,7 +348,7 @@ export default function CustomersPage() {
                   placeholder="Search customers..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 h-10 bg-secondary/30 border-border/50 focus:bg-white transition-colors"
+                  className="pl-10 h-10 bg-secondary/30 border-border/50 focus:bg-card transition-colors"
                 />
               </div>
             </CardContent>
@@ -358,25 +358,25 @@ export default function CustomersPage() {
         {/* Mobile Stats Cards */}
         {isMobile && (
           <div className="grid grid-cols-3 gap-3">
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-blue-50 to-blue-100">
+            <Card className="border-0 shadow-sm bg-blue-500/10">
               <CardContent className="p-3 text-center">
-                <Users className="w-5 h-5 text-blue-600 mx-auto mb-1" />
-                <p className="text-xl font-bold text-blue-700">{customers.length}</p>
-                <p className="text-xs text-blue-600 font-medium">Total</p>
+                <Users className="w-5 h-5 text-blue-500 mx-auto mb-1" />
+                <p className="text-xl font-bold text-blue-400">{customers.length}</p>
+                <p className="text-xs text-blue-500/80 font-medium">Total</p>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-emerald-50 to-emerald-100">
+            <Card className="border-0 shadow-sm bg-emerald-500/10">
               <CardContent className="p-3 text-center">
-                <Banknote className="w-5 h-5 text-emerald-600 mx-auto mb-1" />
-                <p className="text-xl font-bold text-emerald-700">RM {Math.round(totalRevenue / 1000)}K</p>
-                <p className="text-xs text-emerald-600 font-medium">Revenue</p>
+                <Banknote className="w-5 h-5 text-emerald-500 mx-auto mb-1" />
+                <p className="text-xl font-bold text-emerald-400">MYR {Math.round(totalRevenue / 1000)}K</p>
+                <p className="text-xs text-emerald-500/80 font-medium">Revenue</p>
               </CardContent>
             </Card>
-            <Card className="border-0 shadow-sm bg-gradient-to-br from-amber-50 to-amber-100">
+            <Card className="border-0 shadow-sm bg-amber-500/10">
               <CardContent className="p-3 text-center">
-                <TrendingUp className="w-5 h-5 text-amber-600 mx-auto mb-1" />
-                <p className="text-lg font-bold text-amber-700">RM {Math.round(avgSpentPerCustomer)}</p>
-                <p className="text-xs text-amber-600 font-medium">Avg</p>
+                <TrendingUp className="w-5 h-5 text-amber-500 mx-auto mb-1" />
+                <p className="text-lg font-bold text-amber-400">MYR {Math.round(avgSpentPerCustomer)}</p>
+                <p className="text-xs text-amber-500/80 font-medium">Avg</p>
               </CardContent>
             </Card>
           </div>
@@ -400,42 +400,42 @@ export default function CustomersPage() {
         {/* Desktop Stats Cards */}
         {!isMobile && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100">
+            <Card className="border-0 shadow-lg bg-blue-500/10">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-blue-600">Total Customers</p>
-                    <p className="text-3xl font-bold text-blue-700 mt-2">{customers.length}</p>
+                    <p className="text-sm font-medium text-blue-500">Total Customers</p>
+                    <p className="text-3xl font-bold text-blue-400 mt-2">{customers.length}</p>
                   </div>
-                  <div className="w-12 h-12 bg-blue-200 rounded-xl flex items-center justify-center">
-                    <Users className="w-6 h-6 text-blue-600" />
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center">
+                    <Users className="w-6 h-6 text-blue-500" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-emerald-50 to-emerald-100">
+            <Card className="border-0 shadow-lg bg-emerald-500/10">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-emerald-600">Total Revenue</p>
-                    <p className="text-3xl font-bold text-emerald-700">RM {totalRevenue.toLocaleString()}</p>
+                    <p className="text-sm font-medium text-emerald-500">Total Revenue</p>
+                    <p className="text-3xl font-bold text-emerald-400">MYR {totalRevenue.toLocaleString()}</p>
                   </div>
-                  <div className="w-12 h-12 bg-emerald-200 rounded-xl flex items-center justify-center">
-                    <Banknote className="w-6 h-6 text-emerald-600" />
+                  <div className="w-12 h-12 bg-emerald-500/20 rounded-xl flex items-center justify-center">
+                    <Banknote className="w-6 h-6 text-emerald-500" />
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-0 shadow-lg bg-gradient-to-br from-amber-50 to-amber-100">
+            <Card className="border-0 shadow-lg bg-amber-500/10">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-amber-600">Avg. Spent</p>
-                    <p className="text-3xl font-bold text-amber-700">RM {Math.round(avgSpentPerCustomer).toLocaleString()}</p>
+                    <p className="text-sm font-medium text-amber-500">Avg. Spent</p>
+                    <p className="text-3xl font-bold text-amber-400">MYR {Math.round(avgSpentPerCustomer).toLocaleString()}</p>
                   </div>
-                  <div className="w-12 h-12 bg-amber-200 rounded-xl flex items-center justify-center">
+                  <div className="w-12 h-12 bg-amber-500/20 rounded-xl flex items-center justify-center">
                     <TrendingUp className="w-6 h-6 text-amber-600" />
                   </div>
                 </div>
@@ -478,7 +478,7 @@ export default function CustomersPage() {
 
         {/* Desktop Search & Filters */}
         {!isMobile && (
-          <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm">
+          <Card className="border-0 shadow-lg bg-card/80 backdrop-blur-sm">
             <CardContent className="p-6">
               <div className="flex flex-col lg:flex-row gap-4">
                 <div className="flex-1 relative">
@@ -487,7 +487,7 @@ export default function CustomersPage() {
                     placeholder="Search by name, phone, or email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="pl-12 h-12 bg-secondary/30 border-border/50 focus:bg-white transition-colors text-base"
+                    className="pl-12 h-12 bg-secondary/30 border-border/50 focus:bg-card transition-colors text-base"
                   />
                 </div>
                 <Select value={sortBy} onValueChange={(v: "visits" | "spent" | "recent") => setSortBy(v)}>
@@ -506,7 +506,7 @@ export default function CustomersPage() {
         )}
 
         {/* Customers List */}
-        <Card className="border-0 shadow-sm bg-white">
+        <Card className="border-0 shadow-sm bg-card">
           <CardHeader className={`${isMobile ? 'pb-3 px-4 pt-4' : 'pb-4'}`}>
             <div className="flex items-center justify-between">
               <CardTitle className={`${isMobile ? 'text-lg' : 'text-xl'} font-semibold`}>
@@ -599,7 +599,7 @@ export default function CustomersPage() {
                         {isMobile && (
                           <div className="flex items-center gap-4 mt-1 text-xs">
                             <span className="text-accent font-medium">{customer.total_visits} visits</span>
-                            <span className="text-emerald-600 font-medium">RM {customer.total_spent.toLocaleString()}</span>
+                            <span className="text-emerald-500 font-medium">MYR {customer.total_spent.toLocaleString()}</span>
                           </div>
                         )}
                       </div>
@@ -612,7 +612,7 @@ export default function CustomersPage() {
                             <p className="text-xs text-muted-foreground font-medium">Visits</p>
                           </div>
                           <div className="text-center">
-                            <p className="text-lg font-bold text-foreground">RM {customer.total_spent.toLocaleString()}</p>
+                            <p className="text-lg font-bold text-foreground">MYR {customer.total_spent.toLocaleString()}</p>
                             <p className="text-xs text-muted-foreground font-medium">Total Spent</p>
                           </div>
                           <div className="text-center min-w-[100px]">

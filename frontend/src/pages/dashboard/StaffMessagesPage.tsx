@@ -147,7 +147,7 @@ export default function StaffMessagesPage() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 shrink-0">
                     <div className="space-y-1">
                         <h1 className="text-4xl font-black text-slate-900 tracking-tight flex items-center gap-4">
-                            <Mail className="w-10 h-10 text-[#F2A93B]" />
+                            <Mail className="w-10 h-10 text-[#55402f]" />
                             Mail System
                         </h1>
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
@@ -159,7 +159,7 @@ export default function StaffMessagesPage() {
                         <Dialog open={isComposeOpen} onOpenChange={setIsComposeOpen}>
                             <DialogTrigger asChild>
                                 <Button
-                                    className="h-12 px-6 bg-[#F2A93B] hover:bg-[#E29A2B] text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg flex items-center gap-2"
+                                    className="h-12 px-6 bg-[#55402f] hover:bg-[#433225] text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-lg flex items-center gap-2"
                                 >
                                     <Send className="w-4 h-4" />
                                     New Dispatch
@@ -171,7 +171,7 @@ export default function StaffMessagesPage() {
                                 </DialogHeader>
                                 <div className="space-y-6 pt-4">
                                     <div className="space-y-2">
-                                        <Label className="text-[10px] font-black uppercase tracking-widest text-[#F2A93B]">Priority Target</Label>
+                                        <Label className="text-[10px] font-black uppercase tracking-widest text-[#55402f]">Priority Target</Label>
                                         <Select
                                             value={composeData.recipient_type}
                                             onValueChange={(v: any) => setComposeData(prev => ({ ...prev, recipient_type: v }))}
@@ -209,7 +209,7 @@ export default function StaffMessagesPage() {
                                     <Button
                                         onClick={handleSendMessage}
                                         disabled={sending || !composeData.content.trim()}
-                                        className="w-full h-14 bg-[#F2A93B] hover:bg-[#E29A2B] text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all"
+                                        className="w-full h-14 bg-[#55402f] hover:bg-[#433225] text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all"
                                     >
                                         {sending ? <Loader2 className="w-5 h-5 animate-spin" /> : "TRANSMIT SIGNAL"}
                                     </Button>
@@ -253,7 +253,7 @@ export default function StaffMessagesPage() {
                         <div className="flex-1 overflow-y-auto space-y-3 pr-2 scrollbar-hide">
                             {loading && filteredMessages.length === 0 ? (
                                 <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                                    <Loader2 className="w-8 h-8 animate-spin text-[#F2A93B]" />
+                                    <Loader2 className="w-8 h-8 animate-spin text-[#55402f]" />
                                 </div>
                             ) : filteredMessages.length === 0 ? (
                                 <div className="text-center py-20 space-y-4 opacity-40">
@@ -270,8 +270,8 @@ export default function StaffMessagesPage() {
                                         }}
                                         className={cn(
                                             "border-none shadow-sm rounded-[2rem] cursor-pointer transition-all hover:shadow-xl",
-                                            activeMessage?.id === msg.id ? "bg-[#F2A93B] text-white" : "bg-white",
-                                            activeTab === 'inbox' && !msg.is_read && activeMessage?.id !== msg.id && "ring-2 ring-[#F2A93B]/20"
+                                            activeMessage?.id === msg.id ? "bg-[#55402f] text-white" : "bg-white",
+                                            activeTab === 'inbox' && !msg.is_read && activeMessage?.id !== msg.id && "ring-2 ring-[#55402f]/20"
                                         )}
                                     >
                                         <CardContent className="p-6">
@@ -281,12 +281,12 @@ export default function StaffMessagesPage() {
                                                         "w-12 h-12 rounded-2xl flex items-center justify-center shadow-inner",
                                                         activeMessage?.id === msg.id ? "bg-white/10" : "bg-slate-50"
                                                     )}>
-                                                        {activeTab === 'sent' ? <Send className={cn("w-5 h-5", activeMessage?.id === msg.id ? "text-[#F2A93B]" : "text-slate-400")} /> : <Mail className={cn("w-5 h-5", activeMessage?.id === msg.id ? "text-[#F2A93B]" : "text-slate-400")} />}
+                                                        {activeTab === 'sent' ? <Send className={cn("w-5 h-5", activeMessage?.id === msg.id ? "text-[#55402f]" : "text-slate-400")} /> : <Mail className={cn("w-5 h-5", activeMessage?.id === msg.id ? "text-[#55402f]" : "text-slate-400")} />}
                                                     </div>
                                                     <div className="space-y-1">
                                                         <div className="flex items-center gap-2">
                                                             <h4 className="text-sm font-black tracking-tight line-clamp-1">{msg.subject || "No Subject"}</h4>
-                                                            {activeTab === 'inbox' && !msg.is_read && <div className="w-2 h-2 rounded-full bg-[#F2A93B] shadow-[0_0_10px_rgba(242,169,59,0.5)]" />}
+                                                            {activeTab === 'inbox' && !msg.is_read && <div className="w-2 h-2 rounded-full bg-[#55402f] shadow-[0_0_10px_rgba(242,169,59,0.5)]" />}
                                                         </div>
                                                         <p className={cn("text-[9px] font-black uppercase tracking-widest", activeMessage?.id === msg.id ? "text-white/40" : "text-slate-400")}>
                                                             {activeTab === 'inbox' ? `FROM: ${msg.sender_name || 'System'}` : `TO: ${msg.recipient_type.toUpperCase()}`} • {format(new Date(msg.created_at), "MMM dd")}
@@ -316,13 +316,13 @@ export default function StaffMessagesPage() {
                                     {/* Message Header */}
                                     <div className="flex items-start justify-between pb-10 border-b border-slate-50">
                                         <div className="flex items-center gap-6">
-                                            <div className="w-16 h-16 rounded-[1.5rem] bg-[#F2A93B] text-white flex items-center justify-center text-xl font-black shadow-2xl">
+                                            <div className="w-16 h-16 rounded-[1.5rem] bg-[#55402f] text-white flex items-center justify-center text-xl font-black shadow-2xl">
                                                 {(activeTab === 'inbox' ? activeMessage.sender_name : activeMessage.recipient_type)[0].toUpperCase()}
                                             </div>
                                             <div>
                                                 <h2 className="text-2xl font-black text-slate-900 tracking-tight">{activeMessage.subject || "Tactical Signal"}</h2>
                                                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mt-1 flex items-center gap-2">
-                                                    <Clock className="w-3 h-3 text-[#F2A93B]" />
+                                                    <Clock className="w-3 h-3 text-[#55402f]" />
                                                     {activeTab === 'inbox' ? `FROM: ${activeMessage.sender_name || 'System'}` : `TO: ${activeMessage.recipient_type.toUpperCase()}`}
                                                     • {format(new Date(activeMessage.created_at), "eeee, MMM dd, yyyy")}
                                                 </p>
@@ -365,7 +365,7 @@ export default function StaffMessagesPage() {
                                                     });
                                                     setIsComposeOpen(true);
                                                 }}
-                                                className="h-14 px-10 bg-[#F2A93B] hover:bg-[#E29A2B] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl transition-all flex items-center gap-4"
+                                                className="h-14 px-10 bg-[#55402f] hover:bg-[#433225] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-xl transition-all flex items-center gap-4"
                                             >
                                                 <Send className="w-4 h-4" /> Reply Signal
                                             </Button>

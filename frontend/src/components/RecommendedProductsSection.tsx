@@ -92,18 +92,17 @@ const RecommendedProductsSection = () => {
                         >
                             <CarouselContent className="-ml-4 md:-ml-6 py-4 items-stretch min-h-[500px]">
                                 {products.map((product) => (
-                                    <CarouselItem key={product.id} className="pl-4 md:pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 h-full flex flex-col">
+                                    <CarouselItem key={product.id} className="pl-4 md:pl-6 md:basis-1/2 lg:basis-1/3 xl:basis-1/4 flex flex-col">
                                         <motion.div
                                             initial={{ opacity: 0, y: 20 }}
                                             whileInView={{ opacity: 1, y: 0 }}
                                             viewport={{ once: true }}
                                             transition={{ duration: 0.5 }}
-                                            className="h-full flex flex-col flex-grow"
-                                            style={{ height: "100%" }}
+                                            className="flex flex-col flex-1"
                                         >
                                             <div
                                                 onClick={() => navigate(`/product/${product.id}`)}
-                                                className="group bg-white rounded-[2.5rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] hover:shadow-[0_48px_80px_-16px_rgba(0,0,0,0.1)] transition-all duration-500 cursor-pointer h-[500px] border border-slate-50 flex flex-col"
+                                                className="group bg-white rounded-[2.5rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] hover:shadow-[0_48px_80px_-16px_rgba(0,0,0,0.1)] transition-all duration-500 cursor-pointer border border-slate-50 flex flex-col flex-1"
                                             >
                                                 {/* Product Image */}
                                                 <div className="relative h-64 overflow-hidden bg-[#F9F9F9] flex items-center justify-center">
@@ -137,7 +136,7 @@ const RecommendedProductsSection = () => {
                                                     <div className="mb-3">
                                                         <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">{product.brand || product.category || "General"}</span>
                                                     </div>
-                                                    <h3 className="font-black text-xl text-[#1A2338] tracking-tight uppercase line-clamp-2 mb-3 group-hover:text-[#B07D62] transition-colors">{product.name}</h3>
+                                                    <h3 className="font-black text-xl text-[#1A2338] tracking-tight uppercase line-clamp-2 mb-3 group-hover:text-[#55402f] transition-colors">{product.name}</h3>
                                                     <p className="text-sm text-slate-500 font-medium line-clamp-2 mb-6 flex-grow">{product.description}</p>
 
                                                     <div className="flex items-center justify-between mt-auto pt-6 border-t border-slate-50">
@@ -149,7 +148,7 @@ const RecommendedProductsSection = () => {
                                                         </div>
                                                         <Button
                                                             size="sm"
-                                                            className="rounded-full px-6 bg-[#1A2338] text-white hover:bg-[#B07D62] font-black text-[10px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-[#1A2338]/10"
+                                                            className="rounded-full px-6 bg-[#1A2338] text-white hover:bg-[#55402f] font-black text-[10px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-[#1A2338]/10"
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
                                                                 addToCart({

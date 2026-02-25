@@ -81,42 +81,42 @@ export default function StaffAttendancePage() {
             <div className="max-w-[1200px] mx-auto py-10 px-6 space-y-6 animate-in fade-in duration-700">
                 {/* Header */}
                 <div className="space-y-1">
-                    <h1 className="text-4xl font-black text-slate-900 tracking-tight flex items-center gap-4">
-                        <Timer className="w-10 h-10 text-[#F2A93B]" />
+                    <h1 className="text-4xl font-black text-foreground tracking-tight flex items-center gap-4">
+                        <Timer className="w-10 h-10 text-[#55402f]" />
                         Deployment Logs
                     </h1>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
                         Attendance Matrix • Real-time Force Tracking
                     </p>
                 </div>
 
                 {/* Global Performance Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Card className="rounded-[2.5rem] border-none shadow-sm bg-white overflow-hidden p-8 flex items-center gap-6 group hover:shadow-xl transition-all">
-                        <div className="w-16 h-16 rounded-2xl bg-[#F2A93B]/10 flex items-center justify-center group-hover:bg-[#F2A93B] group-hover:text-white transition-all shadow-inner">
+                    <Card className="rounded-[2.5rem] border-none shadow-sm bg-card overflow-hidden p-8 flex items-center gap-6 group hover:shadow-xl transition-all">
+                        <div className="w-16 h-16 rounded-2xl bg-[#55402f]/10 flex items-center justify-center group-hover:bg-[#55402f] group-hover:text-white transition-all shadow-inner text-[#55402f]">
                             <History className="w-8 h-8" />
                         </div>
                         <div>
-                            <p className="text-3xl font-black text-slate-900">{stats.daysWorked}</p>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Active Deployments</p>
+                            <p className="text-3xl font-black text-foreground">{stats.daysWorked}</p>
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Active Deployments</p>
                         </div>
                     </Card>
-                    <Card className="rounded-[2.5rem] border-none shadow-sm bg-white overflow-hidden p-8 flex items-center gap-6 group hover:shadow-xl transition-all">
-                        <div className="w-16 h-16 rounded-2xl bg-blue-50 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all shadow-inner">
+                    <Card className="rounded-[2.5rem] border-none shadow-sm bg-card overflow-hidden p-8 flex items-center gap-6 group hover:shadow-xl transition-all">
+                        <div className="w-16 h-16 rounded-2xl bg-blue-500/10 flex items-center justify-center group-hover:bg-blue-500 group-hover:text-white transition-all shadow-inner">
                             <Clock className="w-8 h-8 text-blue-500 group-hover:text-white" />
                         </div>
                         <div>
-                            <p className="text-3xl font-black text-slate-900">{stats.totalHours}h</p>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Force Output (Hrs)</p>
+                            <p className="text-3xl font-black text-foreground">{stats.totalHours}h</p>
+                            <p className="text-[10px] font-black text-white/50 uppercase tracking-widest">Force Output (Hrs)</p>
                         </div>
                     </Card>
-                    <Card className="rounded-[2.5rem] border-none shadow-sm bg-white overflow-hidden p-8 flex items-center gap-6 group hover:shadow-xl transition-all">
-                        <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-inner">
+                    <Card className="rounded-[2.5rem] border-none shadow-sm bg-card overflow-hidden p-8 flex items-center gap-6 group hover:shadow-xl transition-all">
+                        <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 flex items-center justify-center group-hover:bg-emerald-500 group-hover:text-white transition-all shadow-inner">
                             <BarChart3 className="w-8 h-8 text-emerald-500 group-hover:text-white" />
                         </div>
                         <div>
-                            <p className="text-3xl font-black text-slate-900">{stats.avgPunctuality}</p>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tactical Punctuality</p>
+                            <p className="text-3xl font-black text-foreground">{stats.avgPunctuality}</p>
+                            <p className="text-[10px] font-black text-white/50 uppercase tracking-widest">Tactical Punctuality</p>
                         </div>
                     </Card>
                 </div>
@@ -124,8 +124,8 @@ export default function StaffAttendancePage() {
                 {/* Attendance Ledger */}
                 <div className="space-y-6">
                     <div className="flex items-center justify-between px-2">
-                        <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Deployment Ledger</h3>
-                        <Badge className="bg-slate-100 text-slate-600 border-none font-black text-[10px] uppercase tracking-widest px-4 py-1.5">
+                        <h3 className="text-xl font-black text-foreground uppercase tracking-tight">Deployment Ledger</h3>
+                        <Badge className="bg-white/10 text-white border-none font-black text-[10px] uppercase tracking-widest px-4 py-1.5">
                             {attendance.length} Total Logs
                         </Badge>
                     </div>
@@ -133,13 +133,13 @@ export default function StaffAttendancePage() {
                     <div className="space-y-4">
                         {loading ? (
                             <div className="py-20 flex flex-col items-center justify-center space-y-4">
-                                <Loader2 className="w-10 h-10 animate-spin text-[#F2A93B]" />
-                                <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Decrypting Force Logs...</p>
+                                <Loader2 className="w-10 h-10 animate-spin text-[#55402f]" />
+                                <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">Decrypting Force Logs...</p>
                             </div>
                         ) : attendance.length === 0 ? (
-                            <div className="py-32 bg-slate-50/50 rounded-[3rem] border-4 border-dashed border-slate-100 flex flex-col items-center justify-center text-center">
-                                <ShieldCheck className="w-12 h-12 text-slate-200 mb-4" />
-                                <p className="text-sm font-black text-slate-400 uppercase tracking-widest">No Tactical Logs Synchronized</p>
+                            <div className="py-32 bg-muted/20 rounded-[3rem] border-4 border-dashed border-border flex flex-col items-center justify-center text-center">
+                                <ShieldCheck className="w-12 h-12 text-muted-foreground/30 mb-4" />
+                                <p className="text-sm font-black text-muted-foreground uppercase tracking-widest">No Tactical Logs Synchronized</p>
                             </div>
                         ) : (
                             attendance.map((rec, i) => {
@@ -159,23 +159,23 @@ export default function StaffAttendancePage() {
                                         animate={{ opacity: 1, x: 0 }}
                                         transition={{ delay: i * 0.05 }}
                                     >
-                                        <Card className="rounded-[2rem] border-none shadow-sm bg-white overflow-hidden group hover:shadow-2xl transition-all">
+                                        <Card className="rounded-[2rem] border-none shadow-sm bg-card overflow-hidden group hover:shadow-2xl transition-all">
                                             <CardContent className="p-8 flex flex-wrap items-center justify-between gap-8">
                                                 <div className="flex items-center gap-6">
-                                                    <div className="w-16 h-16 rounded-2xl bg-slate-900 text-white flex flex-col items-center justify-center shadow-xl shadow-slate-900/10 transition-transform group-hover:scale-105">
+                                                    <div className="w-16 h-16 rounded-2xl bg-[#55402f] text-white flex flex-col items-center justify-center shadow-xl shadow-[#55402f]/20 transition-transform group-hover:scale-105">
                                                         <span className="text-[8px] font-black uppercase opacity-60">{format(checkIn, "MMM")}</span>
                                                         <span className="text-xl font-black">{format(checkIn, "dd")}</span>
                                                     </div>
                                                     <div className="space-y-1">
-                                                        <h4 className="text-lg font-black text-slate-900 tracking-tight">{format(checkIn, "EEEE")}</h4>
+                                                        <h4 className="text-lg font-black text-foreground tracking-tight">{format(checkIn, "EEEE")}</h4>
                                                         <div className="flex items-center gap-4">
-                                                            <Badge className="bg-emerald-50 text-emerald-600 border-none font-black text-[9px] uppercase px-3">
+                                                            <Badge className="bg-emerald-500/10 text-emerald-500 border-none font-black text-[9px] uppercase px-3">
                                                                 {format(checkIn, "h:mm a")}
                                                             </Badge>
-                                                            <span className="text-slate-200">/</span>
+                                                            <span className="text-muted-foreground/30">/</span>
                                                             <Badge className={cn(
                                                                 "border-none font-black text-[9px] uppercase px-3",
-                                                                checkOut ? "bg-rose-50 text-rose-600" : "bg-blue-50 text-blue-600 animate-pulse"
+                                                                checkOut ? "bg-rose-500/10 text-rose-500" : "bg-blue-500/10 text-blue-500 animate-pulse"
                                                             )}>
                                                                 {checkOut ? format(checkOut, "h:mm a") : "Active Duty"}
                                                             </Badge>
@@ -185,14 +185,14 @@ export default function StaffAttendancePage() {
 
                                                 <div className="flex items-center gap-6">
                                                     <div className="text-right">
-                                                        <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Tactical Runtime</p>
-                                                        <p className="text-xl font-black text-slate-900">
+                                                        <p className="text-[9px] font-black text-white/40 uppercase tracking-widest">Tactical Runtime</p>
+                                                        <p className="text-xl font-black text-foreground">
                                                             {rec.check_out ? `${hours}h ${mins}m` : "Synchronizing..."}
                                                         </p>
                                                     </div>
                                                     <div className={cn(
                                                         "w-3 h-3 rounded-full shadow-[0_0_10px_rgba(0,0,0,0.1)]",
-                                                        rec.check_out ? "bg-slate-200" : "bg-[#F2A93B] animate-ping"
+                                                        rec.check_out ? "bg-muted" : "bg-[#55402f] animate-ping"
                                                     )} />
                                                 </div>
                                             </CardContent>

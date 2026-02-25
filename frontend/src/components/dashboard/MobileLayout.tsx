@@ -138,7 +138,7 @@ export const MobileLayout = ({
   return (
     <div className="min-h-screen bg-background flex flex-col">
       {/* Mobile Header - Full Screen App Style */}
-      <header className="sticky top-0 z-50 bg-white border-b border-border px-4 h-14 flex items-center gap-3 safe-area-top">
+      <header className="sticky top-0 z-50 bg-card border-b border-border px-4 h-14 flex items-center gap-3 safe-area-top">
         {/* Back Button or Menu */}
         {showBackButton ? (
           <Button
@@ -156,7 +156,7 @@ export const MobileLayout = ({
                 <Menu className="w-5 h-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className="w-80 bg-white">
+            <SheetContent side="left" className="w-80 bg-card">
               <SheetHeader className="pb-6">
                 <SheetTitle className="text-left">Menu</SheetTitle>
               </SheetHeader>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
-import { api } from "@/services/api";
+import api from "@/services/api";
 import { toast } from "sonner";
 import { Instagram } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";

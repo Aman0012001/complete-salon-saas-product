@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { api } from "@/services/api";
+import api from "@/services/api";
 import { getImageUrl } from "@/utils/imageUrl";
 
 const BestSellersSection = () => {

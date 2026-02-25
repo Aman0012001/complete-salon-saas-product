@@ -8,7 +8,7 @@ const slides = [
     {
         type: "video",
         url: "https://assets.mixkit.co/videos/preview/mixkit-beauty-treatment-of-a-woman-in-a-spa-3184-large.mp4", // Placeholder stock video
-        mainLine: "Every skin is different.",
+        mainLine: "EVERY SKIN IS DIFFERENT.",
         secondaryLine: "Solutions based on your skin’s needs.",
         smallLine: "No fixed routines. No one-size-fits-all treatments.",
         accent: "Personalized Skincare",
@@ -16,7 +16,7 @@ const slides = [
     {
         type: "image",
         url: "/images/salon_banner_1.png",
-        mainLine: "Luxury Minimalist Spaces",
+        mainLine: "EVERY SKIN IS DIFFERENT.",
         secondaryLine: "Experience the ultimate salon atmosphere.",
         smallLine: "Curated environments for your relaxation.",
         accent: "Premium Comfort",
@@ -37,7 +37,7 @@ const HeroVideoCarousel = () => {
     }, []);
 
     return (
-        <section className="relative w-full h-[700px] md:h-[800px] lg:h-[1056px] overflow-hidden bg-black">
+        <section className="relative w-full h-[700px] md:h-[800px] lg:h-[1056px] overflow-hidden bg-[#FAF9F6]">
             {/* Background Layer */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 overflow-hidden">
@@ -47,7 +47,7 @@ const HeroVideoCarousel = () => {
                         loop
                         playsInline
                         poster="/images/salon_banner_1.png"
-                        className="w-full h-full object-cover scale-105 brightness-[0.7] contrast-[1.1]"
+                        className="w-full h-full object-cover scale-105 brightness-[1.05] contrast-[1.0]"
                     >
                         <source
                             src="https://assets.mixkit.co/videos/preview/mixkit-beauty-treatment-of-a-woman-in-a-spa-3184-large.mp4"
@@ -57,15 +57,13 @@ const HeroVideoCarousel = () => {
                     </video>
                 </div>
 
-                {/* Overlays - Perfected as requested */}
-                <div className="absolute inset-0 bg-black/20" />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                {/* Professional Overlay System - Uniform Dimming */}
+                <div className="absolute inset-0 bg-black/60" />
             </div>
 
             {/* Content Container */}
             <div className="container relative h-full flex items-center justify-center px-6 lg:px-12 mx-auto z-10">
-                <div className="max-w-4xl text-center">
+                <div className="max-w-5xl text-center">
                     <motion.div
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -75,16 +73,16 @@ const HeroVideoCarousel = () => {
                         {/* Typography Block */}
                         <div className="space-y-4">
                             <motion.h1
-                                className="text-5xl md:text-7xl lg:text-9xl font-bold text-white leading-[0.9] tracking-tighter uppercase font-sans"
+                                className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter uppercase font-sans"
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2, duration: 0.8 }}
                             >
-                                Every skin is different.
+                                EVERY SKIN IS<br />DIFFERENT.
                             </motion.h1>
 
                             <motion.p
-                                className="text-lg md:text-2xl text-white/90 font-medium tracking-tight italic"
+                                className="text-lg md:text-2xl text-white/95 font-bold tracking-tight italic"
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.4, duration: 0.8 }}
@@ -102,7 +100,7 @@ const HeroVideoCarousel = () => {
                         >
                             <Button
                                 onClick={() => navigate('/salons')}
-                                className="h-14 px-12 bg-white hover:bg-white/90 text-black rounded-full font-bold text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl"
+                                className="h-16 px-12 bg-white text-slate-900 hover:bg-slate-100 rounded-full font-black text-sm uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-2xl shadow-black/20"
                             >
                                 BOOK A RITUAL
                             </Button>

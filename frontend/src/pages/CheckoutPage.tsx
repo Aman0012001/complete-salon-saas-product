@@ -9,7 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/hooks/useAuth";
-import { api } from "@/services/api";
+import api from "@/services/api";
 
 const CheckoutPage = () => {
     const { cart, cartTotal, cartCount, clearCart } = useCart();
@@ -367,7 +367,7 @@ const CheckoutPage = () => {
                                             <h3 className="text-sm font-medium pr-4 leading-tight">{item.name}</h3>
                                             {item.type && <p className="text-[10px] text-slate-400 uppercase tracking-widest mt-1">{item.type}</p>}
                                         </div>
-                                        <p className="text-sm font-bold">RM {(item.price * item.quantity).toFixed(2)}</p>
+                                        <p className="text-sm font-bold">MYR {(item.price * item.quantity).toFixed(2)}</p>
                                     </div>
                                 ))}
                             </div>
@@ -382,7 +382,7 @@ const CheckoutPage = () => {
                             <div className="space-y-4 pb-6 mr-4">
                                 <div className="flex justify-between text-sm">
                                     <span className="text-slate-600">Subtotal</span>
-                                    <span className="font-bold text-[#1A1A1A]">RM {cartTotal.toFixed(2)}</span>
+                                    <span className="font-bold text-[#1A1A1A]">MYR {cartTotal.toFixed(2)}</span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <div className="flex items-center gap-1.5 text-slate-600">
@@ -390,12 +390,12 @@ const CheckoutPage = () => {
                                         <HelpCircle className="w-3 h-3 cursor-help text-slate-400" />
                                     </div>
                                     <span className="text-slate-400 font-medium">
-                                        {shippingCost === 0 ? 'Free' : `RM ${shippingCost.toFixed(2)}`}
+                                        {shippingCost === 0 ? 'Free' : `MYR ${shippingCost.toFixed(2)}`}
                                     </span>
                                 </div>
                                 <div className="flex justify-between text-sm">
                                     <span className="text-slate-600">Estimated Taxes (6%)</span>
-                                    <span className="font-bold text-[#1A1A1A]">RM {taxAmount.toFixed(2)}</span>
+                                    <span className="font-bold text-[#1A1A1A]">MYR {taxAmount.toFixed(2)}</span>
                                 </div>
                             </div>
 
@@ -404,7 +404,7 @@ const CheckoutPage = () => {
                                 <span className="text-lg font-bold text-[#1A1A1A]">Total</span>
                                 <div className="flex items-baseline gap-2">
                                     <span className="text-xs text-slate-400 font-bold uppercase tracking-widest">MYR</span>
-                                    <span className="text-2xl font-black text-[#1A1A1A]">RM {finalTotal.toFixed(2)}</span>
+                                    <span className="text-2xl font-black text-[#1A1A1A]">MYR {finalTotal.toFixed(2)}</span>
                                 </div>
                             </div>
                         </div>

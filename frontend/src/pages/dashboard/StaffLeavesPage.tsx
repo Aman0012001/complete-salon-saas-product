@@ -107,11 +107,11 @@ export default function StaffLeavesPage() {
     const getStatusBadge = (status: string) => {
         switch (status) {
             case 'approved':
-                return <Badge className="bg-emerald-500 text-white border-none font-black text-[10px] uppercase">Approved</Badge>;
+                return <Badge variant="outline" className="border-emerald-500 !text-emerald-900 font-black text-[10px] uppercase bg-emerald-50/50">Approved</Badge>;
             case 'rejected':
-                return <Badge className="bg-rose-500 text-white border-none font-black text-[10px] uppercase">Rejected</Badge>;
+                return <Badge variant="outline" className="border-rose-500 !text-rose-900 font-black text-[10px] uppercase bg-rose-50/50">Rejected</Badge>;
             default:
-                return <Badge className="bg-amber-500 text-white border-none font-black text-[10px] uppercase">Pending</Badge>;
+                return <Badge variant="outline" className="border-amber-500 !text-amber-900 font-black text-[10px] uppercase bg-amber-50/50">Pending</Badge>;
         }
     };
 
@@ -121,8 +121,8 @@ export default function StaffLeavesPage() {
                 {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div className="space-y-1">
-                        <h1 className="text-4xl font-black text-slate-900 tracking-tight flex items-center gap-4">
-                            <CalendarDays className="w-10 h-10 text-[#F2A93B]" />
+                        <h1 className="text-4xl font-black text-white tracking-tight flex items-center gap-4">
+                            <CalendarDays className="w-10 h-10 text-[#55402f]" />
                             Staff Leaves
                         </h1>
                         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400">
@@ -132,7 +132,7 @@ export default function StaffLeavesPage() {
 
                     <Button
                         onClick={() => setIsRequestOpen(true)}
-                        className="h-14 px-10 bg-[#F2A93B] hover:bg-[#E29A2B] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-2xl transition-all active:scale-95 flex items-center gap-4"
+                        className="h-14 px-10 bg-[#55402f] hover:bg-[#433225] text-white font-black text-[10px] uppercase tracking-[0.2em] rounded-2xl shadow-2xl transition-all active:scale-95 flex items-center gap-4"
                     >
                         <Plus className="w-5 h-5" />
                         New Request
@@ -142,8 +142,8 @@ export default function StaffLeavesPage() {
                 {/* Tactical Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <Card className="rounded-[2rem] border-none shadow-sm bg-white overflow-hidden p-8 flex items-center gap-6">
-                        <div className="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center">
-                            <CheckCircle className="w-7 h-7 text-emerald-500" />
+                        <div className="w-14 h-14 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-200/50">
+                            <CheckCircle className="w-7 h-7 text-white" />
                         </div>
                         <div>
                             <p className="text-2xl font-black text-slate-900">{leaves.filter(l => l.status === 'approved').length}</p>
@@ -151,17 +151,21 @@ export default function StaffLeavesPage() {
                         </div>
                     </Card>
                     <Card className="rounded-[2rem] border-none shadow-sm bg-white overflow-hidden p-8 flex items-center gap-6">
-                        <div className="w-14 h-14 rounded-2xl bg-amber-50 flex items-center justify-center">
-                            <Clock className="w-7 h-7 text-amber-500" />
+                        <div className="w-14 h-14 rounded-2xl bg-[#55402f] flex items-center justify-center shadow-lg shadow-amber-200/50">
+                            <Clock className="w-7 h-7 text-white" />
                         </div>
                         <div>
                             <p className="text-2xl font-black text-slate-900">{leaves.filter(l => l.status === 'pending').length}</p>
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Pending Clearances</p>
-                        </div>
+                            <p
+                                className="text-[10px] font-black uppercase tracking-widest"
+                                style={{ color: '#000 !important' }}
+                            >
+                                Pending Clearances
+                            </p>                        </div>
                     </Card>
                     <Card className="rounded-[2rem] border-none shadow-sm bg-white overflow-hidden p-8 flex items-center gap-6">
-                        <div className="w-14 h-14 rounded-2xl bg-rose-50 flex items-center justify-center">
-                            <AlertCircle className="w-7 h-7 text-rose-500" />
+                        <div className="w-14 h-14 rounded-2xl bg-rose-500 flex items-center justify-center shadow-lg shadow-rose-200/50">
+                            <AlertCircle className="w-7 h-7 text-white" />
                         </div>
                         <div>
                             <p className="text-2xl font-black text-slate-900">{leaves.filter(l => l.status === 'rejected').length}</p>
@@ -174,7 +178,7 @@ export default function StaffLeavesPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     {loading ? (
                         <div className="col-span-full py-20 flex flex-col items-center justify-center space-y-4">
-                            <Loader2 className="w-10 h-10 animate-spin text-[#F2A93B]" />
+                            <Loader2 className="w-10 h-10 animate-spin text-[#55402f]" />
                             <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Synchronizing Local Records...</p>
                         </div>
                     ) : leaves.length === 0 ? (
@@ -198,24 +202,24 @@ export default function StaffLeavesPage() {
                                     <CardContent className="p-10 space-y-8">
                                         <div className="flex items-center justify-between">
                                             {getStatusBadge(leave.status)}
-                                            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{leave.leave_type}</span>
+                                            <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">{leave.leave_type}</span>
                                         </div>
 
                                         <div className="flex justify-between items-center bg-slate-50 p-6 rounded-[2rem] border border-slate-100">
                                             <div className="text-center">
-                                                <p className="text-[9px] font-black text-slate-300 uppercase mb-2">Start</p>
+                                                <p className="text-[9px] font-black text-slate-500 uppercase mb-2">Start</p>
                                                 <p className="text-sm font-black text-slate-900">{format(new Date(leave.start_date), "MMM dd, yyyy")}</p>
                                             </div>
-                                            <ChevronRight className="w-6 h-6 text-slate-200" />
+                                            <ChevronRight className="w-6 h-6 text-slate-400" />
                                             <div className="text-center">
-                                                <p className="text-[9px] font-black text-slate-300 uppercase mb-2">End</p>
+                                                <p className="text-[9px] font-black text-slate-500 uppercase mb-2">End</p>
                                                 <p className="text-sm font-black text-slate-900">{format(new Date(leave.end_date), "MMM dd, yyyy")}</p>
                                             </div>
                                         </div>
 
                                         <div className="space-y-2">
-                                            <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Reason / Narrative</p>
-                                            <p className="text-xs font-bold text-slate-600 italic bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">
+                                            <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Reason / Narrative</p>
+                                            <p className="text-xs font-bold text-slate-900 italic bg-slate-50/50 p-4 rounded-xl border border-slate-100/50">
                                                 {leave.reason || "Operational narrative not provided."}
                                             </p>
                                         </div>
@@ -228,9 +232,9 @@ export default function StaffLeavesPage() {
 
                 {/* Request Dialog */}
                 <Dialog open={isRequestOpen} onOpenChange={setIsRequestOpen}>
-                    <DialogContent className="max-w-md rounded-[2.5rem] border-none shadow-2xl p-10 bg-white">
+                    <DialogContent className="max-w-md rounded-[2.5rem] border-none shadow-2xl p-10 bg-slate-900 border border-white/5">
                         <DialogHeader className="space-y-4">
-                            <DialogTitle className="text-3xl font-black text-slate-900 tracking-tight uppercase">Pause Deployment</DialogTitle>
+                            <DialogTitle className="text-3xl font-black text-white tracking-tight uppercase">Pause Deployment</DialogTitle>
                             <DialogDescription className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                                 Submit a narrative for management authorization.
                             </DialogDescription>
@@ -264,7 +268,7 @@ export default function StaffLeavesPage() {
                                     value={newLeave.leave_type}
                                     onValueChange={v => setNewLeave({ ...newLeave, leave_type: v })}
                                 >
-                                    <SelectTrigger className="h-12 bg-slate-50 border-none rounded-xl text-xs font-bold">
+                                    <SelectTrigger className="h-12 bg-white/5 border-none rounded-xl text-xs font-bold text-white uppercase tracking-widest">
                                         <SelectValue placeholder="Select type" />
                                     </SelectTrigger>
                                     <SelectContent className="rounded-xl border-none shadow-xl">
@@ -282,14 +286,14 @@ export default function StaffLeavesPage() {
                                     value={newLeave.reason}
                                     onChange={e => setNewLeave({ ...newLeave, reason: e.target.value })}
                                     placeholder="Provide details for authorization..."
-                                    className="min-h-[100px] bg-slate-50 border-none rounded-xl text-xs font-bold p-4 focus:ring-[#F2A93B]"
+                                    className="min-h-[100px] bg-white/5 border-none rounded-xl text-xs font-bold p-4 focus:ring-[#55402f] text-white"
                                 />
                             </div>
                         </div>
 
                         <DialogFooter className="gap-3">
                             <Button variant="ghost" onClick={() => setIsRequestOpen(false)} className="h-14 flex-1 font-black text-[10px] uppercase tracking-widest text-slate-400">Abort</Button>
-                            <Button onClick={handleCreateLeave} className="h-14 flex-1 bg-slate-900 hover:bg-slate-800 text-white font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-xl">Submit Leave</Button>
+                            <Button onClick={handleCreateLeave} className="h-14 flex-1 bg-white text-slate-900 hover:bg-slate-100 font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-xl">Submit Leave</Button>
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

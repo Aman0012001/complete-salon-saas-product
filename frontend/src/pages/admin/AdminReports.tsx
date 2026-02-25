@@ -96,11 +96,12 @@ export default function AdminReports() {
       return {
         date: format(day, 'MMM dd'),
         originalDate: format(day, 'yyyy-MM-dd'),
-        value: found ? Number(found.value) : 0
+        value: found ? Number(found.value) : 0,
+        profit: found ? Number(found.profit) : 0
       };
     });
 
-    return [{ date: '', value: 0 }, ...filledData];
+    return [{ date: '', value: 0, profit: 0 }, ...filledData];
   })();
 
   return (
@@ -148,8 +149,8 @@ export default function AdminReports() {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {[
             { label: "Gross Intake", value: reportData.total_revenue ?? 0, icon: TrendingUp, color: "text-emerald-500", bg: "bg-emerald-50" },
+            { label: "Net Profit", value: reportData.total_profit ?? 0, icon: Activity, color: "text-blue-500", bg: "bg-blue-50" },
             { label: "Plan Sales", value: reportData.plan_revenue ?? 0, icon: Zap, color: "text-indigo-500", bg: "bg-indigo-50" },
-            { label: "Product Sales", value: reportData.product_revenue ?? 0, icon: Banknote, color: "text-rose-500", bg: "bg-rose-50" },
             { label: "Bookings", value: reportData.total_bookings ?? 0, icon: Calendar, color: "text-amber-500", bg: "bg-amber-50" },
           ].map((stat, i) => (
             <Card key={i} className="border-none shadow-sm bg-white rounded-3xl p-6 group hover:shadow-xl transition-all">
@@ -160,7 +161,7 @@ export default function AdminReports() {
                 <div>
                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none">{stat.label}</p>
                   <p className="text-xl font-black text-slate-900 mt-2">
-                    {stat.label.includes("Intake") || stat.label.includes("Sales") ? `RM ${formatCompactNumber(stat.value)}` : formatCompactNumber(stat.value)}
+                    {stat.label.includes("Intake") || stat.label.includes("Sales") || stat.label.includes("Profit") ? `RM ${formatCompactNumber(stat.value)}` : formatCompactNumber(stat.value)}
                   </p>
                 </div>
               </div>
@@ -189,6 +190,10 @@ export default function AdminReports() {
                       <stop offset="0%" stopColor="#06b6d4" stopOpacity={0.5} />
                       <stop offset="100%" stopColor="#06b6d4" stopOpacity={0} />
                     </linearGradient>
+                    <linearGradient id="emeraldGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#10b981" stopOpacity={0.3} />
+                      <stop offset="100%" stopColor="#10b981" stopOpacity={0} />
+                    </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#1e293b" />
                   <XAxis
@@ -216,16 +221,30 @@ export default function AdminReports() {
                     }}
                     labelStyle={{ color: '#94a3b8', fontWeight: 600, marginBottom: '8px', fontSize: '12px' }}
                     itemStyle={{ color: '#fff', fontWeight: 700, fontSize: '14px' }}
-                    formatter={(value: number) => [`RM ${formatCompactNumber(value)}`, 'Revenue']}
+                    formatter={(value: number, name: string) => [
+                      `RM ${formatCompactNumber(value)}`,
+                      name === 'value' ? 'Gross Revenue' : 'Net Profit'
+                    ]}
                   />
                   <Area type="monotone" dataKey="value" stroke="none" fill="url(#cyanGradient)" fillOpacity={0.4} />
+                  <Area type="monotone" dataKey="profit" stroke="none" fill="url(#emeraldGradient)" fillOpacity={0.4} />
                   <Line
                     type="monotone"
                     dataKey="value"
+                    name="Revenue"
                     stroke="#06b6d4"
                     strokeWidth={4}
                     dot={{ r: 4, strokeWidth: 2, fill: '#0f172a', stroke: '#06b6d4' }}
                     activeDot={{ r: 6, strokeWidth: 0, fill: '#fff' }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="profit"
+                    name="Profit"
+                    stroke="#10b981"
+                    strokeWidth={3}
+                    dot={{ r: 3, strokeWidth: 2, fill: '#0f172a', stroke: '#10b981' }}
+                    activeDot={{ r: 5, strokeWidth: 0, fill: '#fff' }}
                   />
                 </ComposedChart>
               </ResponsiveContainer>

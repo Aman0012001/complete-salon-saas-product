@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
@@ -51,10 +51,14 @@ interface Product {
 
 export default function RetailShop() {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
+    const initialCategory = searchParams.get("category") || "all";
+    const initialProduct = searchParams.get("product") || "";
+
     const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
-    const [searchTerm, setSearchTerm] = useState("");
-    const [selectedCategory, setSelectedCategory] = useState("all");
+    const [searchTerm, setSearchTerm] = useState(initialProduct);
+    const [selectedCategory, setSelectedCategory] = useState(initialCategory);
     const [sortBy, setSortBy] = useState("default");
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     const [currentPage, setCurrentPage] = useState(1);
@@ -180,7 +184,7 @@ export default function RetailShop() {
                                         {/* Discount Badge */}
                                         {(product.discount && product.discount > 0) && (
                                             <div className="absolute top-3 left-3 bg-red-500 text-white px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider">
-                                                SAVE RM {product.discount}
+                                                SAVE MYR {product.discount}
                                             </div>
                                         )}
                                     </div>
@@ -196,9 +200,9 @@ export default function RetailShop() {
                                         <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-50">
                                             <div className="flex flex-col">
                                                 <span className="text-xs text-slate-400 font-medium line-through">
-                                                    {(product.discount && product.discount > 0) ? `RM ${(Number(product.price) + Number(product.discount)).toFixed(2)}` : ''}
+                                                    {(product.discount && product.discount > 0) ? `MYR ${(Number(product.price) + Number(product.discount)).toFixed(2)}` : ''}
                                                 </span>
-                                                <span className="text-xl font-black text-slate-900">RM {product.price}</span>
+                                                <span className="text-xl font-black text-slate-900">MYR {product.price}</span>
                                             </div>
                                             <Button size="sm" className="rounded-xl px-4 bg-slate-900 text-white hover:bg-accent font-bold" onClick={(e) => {
                                                 e.stopPropagation();

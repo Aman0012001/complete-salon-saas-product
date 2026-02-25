@@ -90,20 +90,20 @@ export default function SalonServices() {
 
     if (loading) {
         return (
-            <div className="min-h-screen bg-[#FDFCFB] flex flex-col items-center justify-center">
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center">
                 <Loader2 className="w-12 h-12 text-accent animate-spin mb-4" />
-                <p className="font-black text-slate-400 uppercase tracking-widest text-xs">Loading Experience Registry...</p>
+                <p className="font-black text-muted-foreground uppercase tracking-widest text-xs">Loading Experience Registry...</p>
             </div>
         );
     }
 
     if (error || !salon) {
         return (
-            <div className="min-h-screen bg-[#FDFCFB] flex flex-col items-center justify-center p-4">
-                <Scissors className="w-16 h-16 text-slate-200 mb-6" />
-                <h2 className="text-2xl font-black text-slate-900 mb-2">Registry Entry Not Found</h2>
-                <p className="text-slate-500 mb-8 text-center max-w-md">{error || "The salon you are looking for does not exist in our active database."}</p>
-                <Button onClick={() => navigate("/salons")} className="bg-slate-900 hover:bg-accent text-white font-black px-8 rounded-2xl">
+            <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+                <Scissors className="w-16 h-16 text-muted-foreground mb-6" />
+                <h2 className="text-2xl font-black text-foreground mb-2">Registry Entry Not Found</h2>
+                <p className="text-muted-foreground mb-8 text-center max-w-md">{error || "The salon you are looking for does not exist in our active database."}</p>
+                <Button onClick={() => navigate("/salons")} className="bg-foreground text-background hover:bg-accent hover:text-white font-black px-8 rounded-2xl">
                     Return to Registry
                 </Button>
             </div>
@@ -111,7 +111,7 @@ export default function SalonServices() {
     }
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
             <Navbar />
 
             <main className="container mx-auto px-4 pt-32 pb-20 max-w-6xl">
@@ -134,7 +134,7 @@ export default function SalonServices() {
                     <div className="flex items-start gap-6">
                         {/* Circular Logo */}
                         <div className="relative -mt-16 md:-mt-20">
-                            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-[6px] border-white overflow-hidden shadow-md bg-white">
+                            <div className="w-24 h-24 md:w-32 md:h-32 rounded-full border-[6px] border-background overflow-hidden shadow-md bg-card">
                                 <img
                                     src={getImageUrl(salon.logo_url, 'logo', salon.id)}
                                     alt={`${salon.name} logo`}
@@ -149,13 +149,13 @@ export default function SalonServices() {
                         </div>
 
                         <div className="space-y-1">
-                            <h1 className="text-3xl md:text-3xl font-bold text-slate-900 flex items-center">
-                                <span className="px-2 rounded mr-2 h-8 inline-flex items-center text-slate-700">
+                            <h1 className="text-3xl md:text-3xl font-bold text-foreground flex items-center">
+                                <span className="px-2 rounded mr-2 h-8 inline-flex items-center text-foreground/80">
                                     {salon.name.split(' ')[0]}
                                 </span>
                                 {salon.name.split(' ').slice(1).join(' ')}
                             </h1>
-                            <p className="text-sm font-medium text-slate-500">{salon.address}, {salon.city}.</p>
+                            <p className="text-sm font-medium text-muted-foreground">{salon.address}, {salon.city}.</p>
                             <div className="flex items-center gap-2 mt-1">
                                 <div className="flex items-center gap-0.5">
                                     {[1, 2, 3, 4, 5].map((star) => (
@@ -165,10 +165,10 @@ export default function SalonServices() {
                                         />
                                     ))}
                                 </div>
-                                <span className="text-sm font-black text-slate-900 ml-1">
+                                <span className="text-sm font-black text-foreground ml-1">
                                     {(Number(salon.rating || 0)).toFixed(1)}
                                 </span>
-                                <span className="text-xs font-medium text-slate-400">
+                                <span className="text-xs font-medium text-muted-foreground">
                                     ({salon.review_count || 0} reviews)
                                 </span>
                             </div>
@@ -185,7 +185,7 @@ export default function SalonServices() {
 
                 {/* Salon Description */}
                 <div className="mt-8 px-2">
-                    <p className="text-slate-600 text-[15px] leading-relaxed max-w-4xl">
+                    <p className="text-muted-foreground text-[15px] leading-relaxed max-w-4xl">
                         {salon.description || `A modern grooming hub offering premium haircuts, styling, and skincare services for men and women who value sophistication and precision.`}
                     </p>
                 </div>
@@ -194,8 +194,8 @@ export default function SalonServices() {
                 <div className="mt-16 grid grid-cols-1 lg:grid-cols-12 gap-12">
                     {/* Left Column: Intro & Info */}
                     <div className="lg:col-span-5 space-y-6">
-                        <h2 className="text-xl font-bold text-slate-900">Our Services</h2>
-                        <p className="text-slate-500 text-[15px] leading-relaxed">
+                        <h2 className="text-xl font-bold text-foreground">Our Services</h2>
+                        <p className="text-muted-foreground text-[15px] leading-relaxed">
                             {salon.name} provides a wide range of services to meet the needs of our clients. We offer the best grooming solutions using high-quality products.
                         </p>
 
@@ -206,12 +206,12 @@ export default function SalonServices() {
                                 { icon: Clock, label: "Timings", val: "09:00 AM - 09:00 PM" }
                             ].map((item, i) => (
                                 <div key={i} className="flex items-center gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-slate-50 flex items-center justify-center text-slate-500">
+                                    <div className="w-10 h-10 rounded-full bg-card border border-border flex items-center justify-center text-muted-foreground">
                                         <item.icon className="w-4 h-4" />
                                     </div>
                                     <div>
-                                        <p className="text-[10px] font-bold uppercase text-slate-400 tracking-wider leading-none">{item.label}</p>
-                                        <p className="text-sm font-bold text-slate-700 mt-1">{item.val}</p>
+                                        <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-wider leading-none">{item.label}</p>
+                                        <p className="text-sm font-bold text-foreground mt-1">{item.val}</p>
                                     </div>
                                 </div>
                             ))}
@@ -220,43 +220,43 @@ export default function SalonServices() {
 
                     {/* Right Column: Services with Pricing */}
                     <div className="lg:col-span-7">
-                        <Card className="border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
-                            <div className="p-6 border-b border-slate-50 bg-slate-50/30">
-                                <h3 className="text-lg font-bold text-slate-900">Services With Pricing</h3>
+                        <Card className="border border-border shadow-sm rounded-2xl overflow-hidden bg-card">
+                            <div className="p-6 border-b border-border bg-muted/30">
+                                <h3 className="text-lg font-bold text-foreground">Services With Pricing</h3>
                             </div>
                             <CardContent className="p-0 max-h-[480px] overflow-y-auto overflow-x-hidden custom-scrollbar">
-                                <div className="divide-y divide-slate-50">
+                                <div className="divide-y divide-border">
                                     {services.length === 0 ? (
-                                        <div className="py-12 text-center text-slate-400 font-medium">No services currently listed.</div>
+                                        <div className="py-12 text-center text-muted-foreground font-medium">No services currently listed.</div>
                                     ) : services.map((service, index) => (
                                         <div
                                             key={service.id}
-                                            className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-slate-50/50 transition-colors group"
+                                            className="p-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 hover:bg-muted/50 transition-colors group"
                                         >
                                             <div className="flex-1 space-y-1">
                                                 <div className="flex items-center gap-2">
                                                     <h4
-                                                        className="font-bold text-slate-900 group-hover:text-[#214E78] transition-colors cursor-pointer"
+                                                        className="font-bold text-foreground group-hover:text-accent transition-colors cursor-pointer"
                                                         onClick={() => navigate(`/services/${service.id}`)}
                                                     >
                                                         {service.name}
                                                     </h4>
-                                                    <Badge variant="outline" className="text-[9px] font-bold h-5 px-2 rounded font-sans">
+                                                    <Badge variant="outline" className="text-[9px] font-bold h-5 px-2 rounded font-sans border-border">
                                                         {service.category || "General"}
                                                     </Badge>
                                                 </div>
-                                                <p className="text-sm text-slate-500 line-clamp-1">{service.description || "Premium bespoke treatment curated for you."}</p>
-                                                <div className="flex items-center gap-4 text-[10px] font-bold text-slate-400 uppercase mt-1">
+                                                <p className="text-sm text-muted-foreground line-clamp-1">{service.description || "Premium bespoke treatment curated for you."}</p>
+                                                <div className="flex items-center gap-4 text-[10px] font-bold text-muted-foreground uppercase mt-1">
                                                     <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {service.duration_minutes} Mins</span>
                                                 </div>
                                             </div>
                                             <div className="flex items-center gap-6">
-                                                <div className="text-xl font-bold text-slate-900 tracking-tight">
-                                                    RM {service.price}
+                                                <div className="text-xl font-bold text-foreground tracking-tight">
+                                                    MYR {service.price}
                                                 </div>
                                                 <Button
                                                     onClick={() => navigate(`/book?salonId=${salon.id}&serviceId=${service.id}`)}
-                                                    className="h-10 bg-slate-900 hover:bg-[#214E78] text-white font-bold rounded-lg px-6 text-xs transition-all"
+                                                    className="h-10 bg-foreground text-background hover:bg-accent hover:text-white font-bold rounded-lg px-6 text-xs transition-all"
                                                 >
                                                     Book Now
                                                 </Button>
@@ -273,19 +273,19 @@ export default function SalonServices() {
                 {knowledgeItems.filter(i => i.category === 'FAQ' && i.is_active).length > 0 && (
                     <div className="mt-24 space-y-12">
                         <div className="text-center max-w-2xl mx-auto">
-                            <h2 className="text-3xl font-black text-slate-900 mb-4">Frequently Asked Questions</h2>
-                            <p className="text-slate-500 font-medium">Clear answers to common inquiries at {salon.name}.</p>
+                            <h2 className="text-3xl font-black text-foreground mb-4">Frequently Asked Questions</h2>
+                            <p className="text-muted-foreground font-medium">Clear answers to common inquiries at {salon.name}.</p>
                         </div>
 
                         <div className="max-w-4xl mx-auto space-y-4">
                             {knowledgeItems.filter(i => i.category === 'FAQ' && i.is_active).map((item) => (
-                                <div key={item.id} className="p-8 rounded-[2rem] bg-white border border-slate-100 shadow-sm hover:shadow-md transition-all group">
-                                    <h4 className="text-lg font-bold text-slate-900 mb-3 flex items-start gap-4">
-                                        <span className="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center text-amber-600 text-sm flex-shrink-0 mt-0.5">Q</span>
+                                <div key={item.id} className="p-8 rounded-[2rem] bg-card border border-border shadow-sm hover:shadow-md transition-all group">
+                                    <h4 className="text-lg font-bold text-foreground mb-3 flex items-start gap-4">
+                                        <span className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center text-accent text-sm flex-shrink-0 mt-0.5">Q</span>
                                         {item.title}
                                     </h4>
                                     <div className="pl-12">
-                                        <p className="text-slate-500 leading-relaxed font-medium italic">
+                                        <p className="text-muted-foreground leading-relaxed font-medium italic">
                                             "{item.content}"
                                         </p>
                                     </div>

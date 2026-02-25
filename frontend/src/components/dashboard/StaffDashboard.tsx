@@ -210,7 +210,7 @@ export function StaffDashboard() {
     if (loading || (!currentSalon && !user)) {
         return (
             <div className="flex flex-col items-center justify-center h-[60vh] space-y-4">
-                <div className="w-10 h-10 border-4 border-[#F2A93B] border-t-transparent rounded-full animate-spin" />
+                <div className="w-10 h-10 border-4 border-[#55402f] border-t-transparent rounded-full animate-spin" />
                 <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">
                     {loading ? "Restoring Staff Session..." : "authenticating..."}
                 </p>
@@ -222,7 +222,7 @@ export function StaffDashboard() {
         return (
             <div className="flex flex-col items-center justify-center h-[60vh] space-y-6">
                 <div className="p-6 bg-orange-50 rounded-full">
-                    <AlertCircle className="w-12 h-12 text-[#F2A93B]" />
+                    <AlertCircle className="w-12 h-12 text-[#55402f]" />
                 </div>
                 <div className="text-center space-y-2">
                     <h2 className="text-xl font-black text-slate-900">No Salon Assigned</h2>
@@ -240,10 +240,10 @@ export function StaffDashboard() {
             {/* Welcome & Clock Header */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div className="space-y-1">
-                    <h1 className="text-4xl font-black text-slate-900 tracking-tight">
+                    <h1 className="text-4xl font-black text-foreground tracking-tight">
                         Hello, {staffInfo?.display_name?.split(' ')?.[0] || 'Staff'} 👋
                     </h1>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#F2A93B]">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
                         {isClockedIn && currentSession?.check_in
                             ? `Duty Active • Started ${format(parseISO(currentSession.check_in.replace(' ', 'T')), "h:mm a")}`
                             : "Shift Pending • System Ready"}
@@ -253,7 +253,7 @@ export function StaffDashboard() {
                 <div className="flex items-center gap-4">
                     <Card className={cn(
                         "border-none shadow-xl rounded-2xl p-1 pr-6 flex items-center gap-4 transition-all overflow-hidden relative",
-                        isClockedIn ? "bg-emerald-500 text-white" : "bg-white border border-slate-100"
+                        isClockedIn ? "bg-emerald-500 text-white" : "bg-card border border-border"
                     )}>
                         {isClockedIn && <div className="absolute top-0 right-0 w-24 h-24 bg-white/20 blur-2xl rounded-full" />}
                         <Button
@@ -261,7 +261,7 @@ export function StaffDashboard() {
                             disabled={clockLoading}
                             className={cn(
                                 "h-12 w-12 rounded-xl flex items-center justify-center transition-all active:scale-95 shadow-lg",
-                                isClockedIn ? "bg-white text-emerald-500 hover:bg-slate-50" : "bg-[#F2A93B] text-white hover:bg-[#E29A2B]"
+                                isClockedIn ? "bg-card text-emerald-500 hover:bg-muted" : "bg-[#55402f] text-white hover:bg-[#433225]"
                             )}
                         >
                             {clockLoading ? (
@@ -294,8 +294,8 @@ export function StaffDashboard() {
                 {/* Today's Mission (Appointments) */}
                 <div className="lg:col-span-2 space-y-6">
                     <div className="flex items-center justify-between px-2">
-                        <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight">Today's Schedule</h3>
-                        <Badge className="bg-slate-100 text-slate-600 border-none font-black text-[10px] uppercase tracking-widest px-3">
+                        <h3 className="text-xl font-black text-foreground uppercase tracking-tight">Today's Schedule</h3>
+                        <Badge className="bg-muted text-muted-foreground border-none font-black text-[10px] uppercase tracking-widest px-3">
                             {todayBookings.length} Missions
                         </Badge>
                     </div>
@@ -308,10 +308,10 @@ export function StaffDashboard() {
                             </div>
                         ) : (
                             todayBookings.map((b, i) => (
-                                <Card key={i} className="rounded-[2rem] border-none shadow-sm bg-white overflow-hidden group hover:shadow-2xl transition-all">
+                                <Card key={i} className="rounded-[2rem] border-none shadow-sm bg-card overflow-hidden group hover:shadow-2xl transition-all">
                                     <CardContent className="p-6 flex flex-wrap items-center justify-between gap-6">
                                         <div className="flex items-center gap-5">
-                                            <div className="flex flex-col items-center justify-center w-20 h-20 bg-[#F2A93B] text-white rounded-[1.5rem] shadow-xl shadow-[#F2A93B]/10">
+                                            <div className="flex flex-col items-center justify-center w-20 h-20 bg-[#55402f] text-white rounded-[1.5rem] shadow-xl shadow-[#55402f]/10">
                                                 <span className="text-[10px] font-black uppercase tracking-tighter opacity-60">
                                                     {format(parseISO(b.booking_date), "MMM")}
                                                 </span>
@@ -320,11 +320,15 @@ export function StaffDashboard() {
                                                 </span>
                                             </div>
                                             <div className="space-y-1">
-                                                <h4 className="text-lg font-black text-slate-900 tracking-tight">
+                                                <h4 className="text-lg font-black text-foreground tracking-tight">
                                                     {(() => {
                                                         const walkInMatch = b.notes?.match(/Walk-in:\s*([^|#\n]+)/);
                                                         if (walkInMatch && walkInMatch[1].trim() && walkInMatch[1].trim() !== "undefined") {
                                                             return walkInMatch[1].trim();
+                                                        }
+
+                                                        if (b.user_type === 'customer') {
+                                                            return "Online service booking";
                                                         }
 
                                                         if (b.user_name && (b.user_id === user?.id || b.user_name === user?.full_name)) {
@@ -335,10 +339,10 @@ export function StaffDashboard() {
                                                     })()}
                                                 </h4>
                                                 <div className="flex items-center gap-3">
-                                                    <Badge variant="outline" className="rounded-lg border-slate-100 text-[9px] font-black uppercase tracking-widest px-2 text-[#F2A93B]">
+                                                    <Badge variant="outline" className="rounded-lg border-border text-[9px] font-black uppercase tracking-widest px-2 text-[#55402f]">
                                                         {b.service_name}
                                                     </Badge>
-                                                    <span className="text-[10px] font-bold text-slate-400 flex items-center gap-1">
+                                                    <span className="text-[10px] font-bold text-muted-foreground flex items-center gap-1">
                                                         <Clock className="w-3 h-3" /> {b.booking_time}
                                                     </span>
                                                 </div>
@@ -372,7 +376,7 @@ export function StaffDashboard() {
                                                     onClick={() => updateBookingStatus(b.id, 'completed')}
                                                     disabled={!isClockedIn}
                                                     className={cn(
-                                                        "bg-[#F2A93B] hover:bg-[#E29A2B] text-white font-black text-[10px] uppercase tracking-widest h-12 px-8 rounded-2xl",
+                                                        "bg-[#55402f] hover:bg-[#433225] text-white font-black text-[10px] uppercase tracking-widest h-12 px-8 rounded-2xl",
                                                         !isClockedIn && "opacity-50 cursor-not-allowed"
                                                     )}
                                                 >
@@ -380,7 +384,7 @@ export function StaffDashboard() {
                                                 </Button>
                                             )}
                                             {!isClockedIn && (b.status === 'pending' || b.status === 'confirmed') && (
-                                                <p className="hidden md:block text-[8px] font-black uppercase tracking-widest text-[#F2A93B] animate-pulse">
+                                                <p className="hidden md:block text-[8px] font-black uppercase tracking-widest text-[#55402f] animate-pulse">
                                                     Clock-in required
                                                 </p>
                                             )}
@@ -400,11 +404,11 @@ export function StaffDashboard() {
                     {upcomingBookings.length > 0 && (
                         <div className="space-y-6 pt-6">
                             <div className="flex items-center justify-between px-2">
-                                <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight opacity-50">Upcoming </h3>
+                                <h3 className="text-xl font-black text-foreground uppercase tracking-tight opacity-50">Upcoming </h3>
                             </div>
                             <div className="space-y-4">
                                 {upcomingBookings.map((b, i) => (
-                                    <Card key={i} className="rounded-[2rem] border-none shadow-sm bg-white/50 overflow-hidden group hover:shadow-xl transition-all grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
+                                    <Card key={i} className="rounded-[2rem] border-none shadow-sm bg-card/50 overflow-hidden group hover:shadow-xl transition-all grayscale hover:grayscale-0 opacity-70 hover:opacity-100">
                                         <CardContent className="p-6 flex flex-wrap items-center justify-between gap-6">
                                             <div className="flex items-center gap-5">
                                                 <div className="flex flex-col items-center justify-center w-16 h-16 bg-slate-200 text-slate-500 rounded-[1.2rem] transition-all group-hover:bg-slate-800 group-hover:text-white">
@@ -422,7 +426,7 @@ export function StaffDashboard() {
                                                     </p>
                                                 </div>
                                             </div>
-                                            <Badge variant="outline" className="rounded-lg border-slate-100 text-[8px] font-black uppercase tracking-widest px-3 text-slate-400">
+                                            <Badge variant="outline" className="rounded-lg border-border text-[8px] font-black uppercase tracking-widest px-3 text-muted-foreground">
                                                 Next Deployment
                                             </Badge>
                                         </CardContent>
@@ -436,7 +440,7 @@ export function StaffDashboard() {
                 {/* Tactical Links & Messages */}
                 <div className="space-y-8">
                     <div className="space-y-4">
-                        <h3 className="text-xl font-black text-slate-900 uppercase tracking-tight px-2">Operational Hub</h3>
+                        <h3 className="text-xl font-black text-foreground uppercase tracking-tight px-2">Operational Hub</h3>
                         <div className="grid grid-cols-1 gap-4">
                             {[
                                 {
@@ -460,14 +464,14 @@ export function StaffDashboard() {
                                     }}
                                     className={cn(
                                         "p-5 rounded-3xl border flex items-center gap-5 text-left group transition-all hover:shadow-xl",
-                                        link.isGold ? "bg-[#F2A93B] border-[#F2A93B] text-white hover:bg-[#E29A2B]" : "bg-white border-slate-100 text-slate-900 hover:bg-slate-50",
+                                        link.isGold ? "bg-[#55402f] border-[#55402f] text-white hover:bg-[#433225]" : "bg-card border-border text-foreground hover:bg-muted/50",
                                         link.disabled ? "opacity-50 cursor-not-allowed" : ""
                                     )}
                                     disabled={!!link.disabled}
                                 >
                                     <div className={cn(
                                         "w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-inner",
-                                        link.isGold ? "bg-white/20 text-white" : "bg-slate-50 text-slate-900 group-hover:bg-[#F2A93B] group-hover:text-white"
+                                        link.isGold ? "bg-white/20 text-white" : "bg-muted text-foreground group-hover:bg-[#55402f] group-hover:text-white"
                                     )}>
                                         <link.icon className="w-5 h-5" />
                                     </div>
@@ -475,35 +479,35 @@ export function StaffDashboard() {
                                         <div className="flex items-center gap-2">
                                             <span className={cn(
                                                 "text-sm font-black",
-                                                link.isGold ? "text-white" : "text-slate-900"
+                                                link.isGold ? "text-white" : "text-white"
                                             )}>{link.label}</span>
                                             {link.alert && unreadMessagesCount > 0 && (
                                                 <div className={cn(
                                                     "w-1.5 h-1.5 rounded-full animate-ping",
-                                                    link.isGold ? "bg-white" : "bg-[#F2A93B]"
+                                                    link.isGold ? "bg-white" : "bg-[#55402f]"
                                                 )} />
                                             )}
                                         </div>
                                         <p className={cn(
                                             "text-[10px] font-bold uppercase tracking-widest mt-0.5",
-                                            link.isGold ? "text-white/80" : "text-slate-400"
+                                            link.isGold ? "text-white/80" : "text-white/40"
                                         )}>{link.desc}</p>
                                     </div>
                                     <ChevronRight className={cn(
                                         "w-4 h-4 transition-all group-hover:translate-x-1",
-                                        link.isGold ? "text-white/40 group-hover:text-white" : "text-slate-200 group-hover:text-slate-900"
+                                        link.isGold ? "text-white/40 group-hover:text-white" : "text-slate-200 group-hover:text-white"
                                     )} />
                                 </button>
                             ))}
                         </div>
                     </div>
 
-                    <Card className="rounded-[2.5rem] bg-[#F2A93B] text-white overflow-hidden relative border-none shadow-2xl p-8">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#F2A93B]/20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
+                    <Card className="rounded-[2.5rem] bg-[#55402f] text-white overflow-hidden relative border-none shadow-2xl p-8">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-[#55402f]/20 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
                         <div className="relative z-10 space-y-6">
                             <div className="flex items-center justify-between">
                                 <div className="p-3 bg-white/10 rounded-2xl">
-                                    <AlertCircle className="w-6 h-6 text-[#F2A93B]" />
+                                    <AlertCircle className="w-6 h-6 text-[#55402f]" />
                                 </div>
                                 <Badge className="bg-emerald-500/20 text-emerald-400 border-none font-black text-[8px] uppercase tracking-widest">System Live</Badge>
                             </div>
@@ -515,7 +519,7 @@ export function StaffDashboard() {
                             </div>
                             <Button
                                 onClick={() => fetchData()}
-                                className="w-full h-12 bg-white text-slate-900 font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-slate-100 transition-all shadow-xl shadow-white/5"
+                                className="w-full h-12 bg-background text-foreground font-black text-[10px] uppercase tracking-widest rounded-2xl hover:bg-accent hover:text-white transition-all shadow-xl"
                             >
                                 {loading ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
                                 Refresh Matrix
@@ -527,9 +531,9 @@ export function StaffDashboard() {
 
             {/* Treatment Record Dialog */}
             <Dialog open={!!recordBookingId} onOpenChange={() => setRecordBookingId(null)}>
-                <DialogContent className="max-w-md rounded-[2.5rem] border-none shadow-2xl p-10 bg-white">
+                <DialogContent className="max-w-md rounded-[2.5rem] border-none shadow-2xl p-10 bg-card">
                     <DialogHeader className="space-y-4">
-                        <DialogTitle className="text-3xl font-black text-slate-900 tracking-tight uppercase">Treatment Log</DialogTitle>
+                        <DialogTitle className="text-3xl font-black text-foreground tracking-tight uppercase">Treatment Log</DialogTitle>
                         <DialogDescription className="text-xs font-bold text-slate-400 uppercase tracking-widest">
                             Document the details of the accomplished mission.
                         </DialogDescription>
@@ -570,7 +574,7 @@ export function StaffDashboard() {
                         <Button
                             onClick={handleSaveRecord}
                             disabled={savingRecord}
-                            className="h-14 flex-1 bg-[#F2A93B] hover:bg-[#E29A2B] text-white font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-xl"
+                            className="h-14 flex-1 bg-[#55402f] hover:bg-[#433225] text-white font-black text-[10px] uppercase tracking-widest rounded-2xl shadow-xl"
                         >
                             {savingRecord ? <Loader2 className="w-4 h-4 animate-spin" /> : "Finalize Log"}
                         </Button>

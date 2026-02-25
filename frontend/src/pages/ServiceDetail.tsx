@@ -232,7 +232,7 @@ export default function ServiceDetail() {
                                     </div>
                                     <div>
                                         <p className="text-[10px] font-bold uppercase text-slate-400 tracking-widest leading-none">Investment</p>
-                                        <p className="text-lg font-bold text-slate-900 mt-1">RM {service.price}</p>
+                                        <p className="text-lg font-bold text-slate-900 mt-1">MYR {service.price}</p>
                                     </div>
                                 </div>
 

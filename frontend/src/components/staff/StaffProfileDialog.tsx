@@ -89,13 +89,13 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
             <DialogContent className="max-w-5xl h-[90vh] rounded-[2rem] border-none shadow-2xl p-0 overflow-hidden bg-white flex flex-col">
-                <div className="bg-[#F2A93B] p-8 text-white relative flex-shrink-0">
+                <div className="bg-[#55402f] p-8 text-white relative flex-shrink-0">
                     <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 blur-[120px] rounded-full -translate-y-1/2 translate-x-1/2" />
 
                     <div className="flex items-center gap-6 relative z-10">
                         <Avatar className="w-24 h-24 border-4 border-white/20 shadow-2xl">
                             <AvatarImage src={staff.avatar_url || ""} />
-                            <AvatarFallback className="bg-white text-[#F2A93B] text-3xl font-black">
+                            <AvatarFallback className="bg-white text-[#55402f] text-3xl font-black">
                                 {staff.display_name.charAt(0)}
                             </AvatarFallback>
                         </Avatar>
@@ -134,12 +134,12 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                     <TabsTrigger
                                         key={tab.value}
                                         value={tab.value}
-                                        className="bg-transparent border-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-[#F2A93B] rounded-none h-full text-xs font-black uppercase tracking-widest text-slate-400 relative"
+                                        className="bg-transparent border-none data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:text-[#55402f] rounded-none h-full text-xs font-black uppercase tracking-widest text-slate-400 relative"
                                     >
                                         <tab.icon className="w-3.5 h-3.5 mr-2" />
                                         {tab.label}
                                         <TabsContent value={tab.value} />
-                                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#F2A93B] opacity-0 transition-opacity peer-data-[state=active]:opacity-100" />
+                                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-[#55402f] opacity-0 transition-opacity peer-data-[state=active]:opacity-100" />
                                     </TabsTrigger>
                                 ))}
                             </TabsList>
@@ -149,7 +149,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                             <AnimatePresence mode="wait">
                                 {loading ? (
                                     <div className="flex flex-col items-center justify-center h-full space-y-4 opacity-50">
-                                        <Loader2 className="w-10 h-10 animate-spin text-[#F2A93B]" />
+                                        <Loader2 className="w-10 h-10 animate-spin text-[#55402f]" />
                                         <p className="text-[10px] font-black uppercase tracking-widest text-slate-400">Synchronizing Dossier...</p>
                                     </div>
                                 ) : (
@@ -159,7 +159,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                 <Card className="rounded-3xl border-none shadow-sm bg-slate-50">
                                                     <CardContent className="p-6">
                                                         <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-4">
-                                                            <Users className="w-5 h-5 text-[#F2A93B]" />
+                                                            <Users className="w-5 h-5 text-[#55402f]" />
                                                         </div>
                                                         <p className="text-2xl font-black text-slate-900">{stats?.customers || 0}</p>
                                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Customers Month</p>
@@ -168,7 +168,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                 <Card className="rounded-3xl border-none shadow-sm bg-slate-50">
                                                     <CardContent className="p-6">
                                                         <div className="w-10 h-10 rounded-2xl bg-white shadow-sm flex items-center justify-center mb-4">
-                                                            <Clock className="w-5 h-5 text-[#F2A93B]" />
+                                                            <Clock className="w-5 h-5 text-[#55402f]" />
                                                         </div>
                                                         <p className="text-2xl font-black text-slate-900">{stats?.total_hours || 0}h</p>
                                                         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mt-1">Logged Hours</p>
@@ -197,7 +197,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                                 <Card className="rounded-[2rem] border-slate-100 shadow-sm overflow-hidden bg-white">
                                                     <CardHeader className="p-8 pb-4">
-                                                        <CardTitle className="text-sm font-black uppercase tracking-widest text-[#F2A93B]">Performance Chart</CardTitle>
+                                                        <CardTitle className="text-sm font-black uppercase tracking-widest text-[#55402f]">Performance Chart</CardTitle>
                                                         <CardDescription className="text-xs font-bold text-slate-400">Monthly revenue generation vs targets.</CardDescription>
                                                     </CardHeader>
                                                     <CardContent className="px-8 pb-8">
@@ -206,9 +206,9 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                                 <div key={i} className="flex-1 group relative">
                                                                     <div
                                                                         style={{ height: `${h}%` }}
-                                                                        className="w-full bg-slate-100 rounded-t-lg group-hover:bg-[#F2A93B]/20 transition-all cursor-pointer relative"
+                                                                        className="w-full bg-slate-100 rounded-t-lg group-hover:bg-[#55402f]/20 transition-all cursor-pointer relative"
                                                                     >
-                                                                        {h > 80 && <div className="absolute -top-1 left-0 right-0 h-1 bg-[#F2A93B] rounded-full shadow-[0_0_10px_#F2A93B]" />}
+                                                                        {h > 80 && <div className="absolute -top-1 left-0 right-0 h-1 bg-[#55402f] rounded-full shadow-[0_0_10px_#55402f]" />}
                                                                     </div>
                                                                     <div className="text-[8px] font-black text-slate-300 mt-2 text-center">WED {i + 1}</div>
                                                                 </div>
@@ -220,7 +220,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                 <Card className="rounded-[2rem] border-slate-100 shadow-sm overflow-hidden bg-white">
                                                     <CardHeader className="p-8 pb-4 flex flex-row items-center justify-between">
                                                         <div>
-                                                            <CardTitle className="text-sm font-black uppercase tracking-widest text-[#F2A93B]">Recent Activity</CardTitle>
+                                                            <CardTitle className="text-sm font-black uppercase tracking-widest text-[#55402f]">Recent Activity</CardTitle>
                                                             <CardDescription className="text-xs font-bold text-slate-400">Latest business transformations.</CardDescription>
                                                         </div>
                                                         <Button variant="ghost" size="sm" className="text-[10px] font-black uppercase tracking-widest text-slate-400 hover:text-slate-900">View All</Button>
@@ -284,7 +284,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                                 </TableCell>
                                                                 <TableCell className="px-6 py-5 font-bold text-slate-500">${log.price}</TableCell>
                                                                 <TableCell className="px-6 py-5 font-bold text-slate-400">{staff.commission_percentage}%</TableCell>
-                                                                <TableCell className="px-6 py-5 text-right font-black text-[#F2A93B]">
+                                                                <TableCell className="px-6 py-5 text-right font-black text-[#55402f]">
                                                                     ${(log.price * (staff.commission_percentage / 100)).toFixed(2)}
                                                                 </TableCell>
                                                             </TableRow>
@@ -339,9 +339,9 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                             {Array.from({ length: 31 }, (_, i) => i + 1).map(day => (
                                                                 <div key={day} className={cn(
                                                                     "aspect-square rounded-xl border flex flex-col items-center justify-center gap-1 transition-all group cursor-pointer",
-                                                                    day % 7 === 0 ? "bg-slate-50/50 border-slate-100 opacity-30" : "bg-white border-slate-100 hover:border-[#F2A93B] hover:shadow-lg"
+                                                                    day % 7 === 0 ? "bg-slate-50/50 border-slate-100 opacity-30" : "bg-white border-slate-100 hover:border-[#55402f] hover:shadow-lg"
                                                                 )}>
-                                                                    <span className="text-[10px] font-black text-slate-400 group-hover:text-[#F2A93B]">{day}</span>
+                                                                    <span className="text-[10px] font-black text-slate-400 group-hover:text-[#55402f]">{day}</span>
                                                                     {day < 20 && day % 3 === 0 && <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
                                                                 </div>
                                                             ))}
@@ -357,7 +357,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                     <h4 className="text-xl font-black text-slate-900">Leave Matrix</h4>
                                                     <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-1">Management of absence logs and requests.</p>
                                                 </div>
-                                                <Button className="h-12 px-8 bg-[#F2A93B] hover:bg-[#E29A2B] text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-xl shadow-[#F2A93B]/20 flex items-center gap-3">
+                                                <Button className="h-12 px-8 bg-[#55402f] hover:bg-[#433225] text-white font-black text-[10px] uppercase tracking-widest rounded-xl shadow-xl shadow-[#55402f]/20 flex items-center gap-3">
                                                     <Plus className="w-4 h-4" /> Log Absence
                                                 </Button>
                                             </div>
@@ -413,7 +413,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                             <TableRow key={i} className="border-b border-slate-50 hover:bg-slate-50/50 transition-colors">
                                                                 <TableCell className="px-8 py-6">
                                                                     <div className="flex items-center gap-4">
-                                                                        <div className="w-10 h-10 rounded-2xl bg-[#F2A93B]/5 flex items-center justify-center font-black text-[#F2A93B] text-xs">
+                                                                        <div className="w-10 h-10 rounded-2xl bg-[#55402f]/5 flex items-center justify-center font-black text-[#55402f] text-xs">
                                                                             {log.full_name?.charAt(0) || "U"}
                                                                         </div>
                                                                         <div>
@@ -423,7 +423,7 @@ export function StaffProfileDialog({ staff, isOpen, onClose }: StaffProfileDialo
                                                                     </div>
                                                                 </TableCell>
                                                                 <TableCell className="px-8 py-6">
-                                                                    <Badge variant="outline" className="rounded-full border-[#F2A93B]/20 text-[#F2A93B] text-[8px] font-black uppercase tracking-widest px-3">
+                                                                    <Badge variant="outline" className="rounded-full border-[#55402f]/20 text-[#55402f] text-[8px] font-black uppercase tracking-widest px-3">
                                                                         {log.service_name}
                                                                     </Badge>
                                                                 </TableCell>

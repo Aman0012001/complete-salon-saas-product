@@ -165,7 +165,7 @@ export default function SupplyStore() {
                                     )}
                                     <div className="absolute top-6 right-6">
                                         <Badge className="bg-white/90 backdrop-blur-md text-slate-900 border-0 font-black px-4 py-2 text-sm shadow-xl rounded-full italic tracking-tighter">
-                                            RM {product.price}
+                                            MYR {product.price}
                                         </Badge>
                                     </div>
                                     <div className="absolute inset-0 bg-indigo-900/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">

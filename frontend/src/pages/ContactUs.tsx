@@ -135,13 +135,13 @@ const ContactUs = () => {
       <section className="pt-24 pb-16 px-4 bg-gradient-to-br from-accent/5 to-accent/10 relative overflow-hidden">
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-purple-500/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <div className="container mx-auto text-center relative z-10">
-          <Badge className="mt-8 mb-6 bg-accent/10 text-accent border-accent/20 px-4 py-1.5 text-sm">
+          {/* <Badge className="mt-8 mb-6 bg-accent/10 text-accent border-accent/20 px-4 py-1.5 text-sm">
             Get In Touch
-          </Badge>
-          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
+          </Badge> */}
+          <h1 className="text-4xl mt-8 md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
             Contact
             <br />
             <span className="text-accent">Noamskin</span>
@@ -163,8 +163,8 @@ const ContactUs = () => {
               return (
                 <Card key={method.title} className="text-center hover:shadow-xl transition-all duration-300 group border-0 shadow-lg bg-white/80 backdrop-blur-sm">
                   <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent group-hover:text-white transition-colors duration-300">
-                      <IconComponent className="w-8 h-8 text-accent group-hover:text-white transition-colors duration-300" />
+                    <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent/20 transition-all duration-300 group-hover:scale-110">
+                      <IconComponent className="w-8 h-8 text-accent transition-colors duration-300" />
                     </div>
                     <h3 className="font-bold mb-2 text-lg">{method.title}</h3>
                     <p className="text-sm text-muted-foreground mb-3">{method.description}</p>
@@ -189,7 +189,7 @@ const ContactUs = () => {
           <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
             {/* Contact Form */}
             <Card className="border-0 shadow-xl overflow-hidden">
-              <div className="h-2 w-full bg-gradient-to-r from-accent to-purple-500" />
+              <div className="h-2 w-full bg-gradient-to-r from-accent to-[#433225]" />
               <CardHeader>
                 <CardTitle className="text-2xl">Send Us a Message</CardTitle>
                 <p className="text-muted-foreground">
@@ -302,7 +302,7 @@ const ContactUs = () => {
             <div className="space-y-8">
               {/* Main Location */}
               <Card className="border-0 shadow-xl overflow-hidden group">
-                <div className="h-2 w-full bg-gradient-to-r from-purple-500 to-accent" />
+                <div className="h-2 w-full bg-gradient-to-r from-[#433225] to-accent" />
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-accent" />
@@ -348,7 +348,7 @@ const ContactUs = () => {
 
               {/* Business Hours */}
               {/* <Card className="border-0 shadow-xl overflow-hidden">
-                <div className="h-2 w-full bg-gradient-to-r from-accent to-purple-500" />
+                <div className="h-2 w-full bg-gradient-to-r from-accent to-[#433225]" />
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Clock className="w-5 h-5 text-accent" />
@@ -386,9 +386,9 @@ const ContactUs = () => {
 const SocialButton = ({ icon: Icon, href }: { icon: any, href: string }) => (
   <a
     href={href}
-    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-accent hover:text-white transition-all duration-300 hover:scale-110"
+    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-[#6B4F3B] hover:text-white transition-all duration-300 hover:scale-110"
   >
-    <Icon className="w-5 h-5" />
+    <Icon className="w-5 h-5 transition-colors duration-300" />
   </a>
 );
 

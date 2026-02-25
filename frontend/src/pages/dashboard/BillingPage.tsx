@@ -153,7 +153,7 @@ const BillingPage = () => {
       return;
     }
 
-    const message = `Hello ${selectedInvoice.customer}, your invoice for ${selectedInvoice.service} at ${currentSalon?.name} is ready. Total: RM ${selectedInvoice.amount}.`;
+    const message = `Hello ${selectedInvoice.customer}, your invoice for ${selectedInvoice.service} at ${currentSalon?.name} is ready. Total: MYR ${selectedInvoice.amount}.`;
 
     const encodedMsg = encodeURIComponent(message);
     const url = type === 'whatsapp'
@@ -319,7 +319,7 @@ const BillingPage = () => {
             <p className="text-muted-foreground font-medium">Financial operations connected to your local MySQL database</p>
           </div>
           <div className="flex items-center gap-3">
-            <Button variant="outline" onClick={fetchInvoices} disabled={refreshing} className="rounded-xl font-bold bg-white">
+            <Button variant="outline" onClick={fetchInvoices} disabled={refreshing} className="rounded-xl font-bold bg-muted/50 border-border hover:bg-muted transition-all">
               <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
             </Button>
             <Button onClick={() => { fetchServices(); setShowCreateDialog(true); }} className="bg-accent text-white font-black rounded-xl shadow-lg shadow-accent/20">
@@ -331,19 +331,19 @@ const BillingPage = () => {
         {/* Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { title: "Today Revenue", value: `RM ${stats.todayRevenue}`, icon: Wallet, color: "text-emerald-600", bg: "bg-emerald-50" },
-            { title: "Pending", value: `RM ${stats.pendingAmount}`, icon: Clock, color: "text-amber-600", bg: "bg-amber-50" },
-            { title: "Monthly", value: `RM ${stats.monthlyRevenue}`, icon: TrendingUp, color: "text-blue-600", bg: "bg-blue-50" },
-            { title: "UPI Total", value: `RM ${stats.upiPayments}`, icon: Smartphone, color: "text-purple-600", bg: "bg-purple-50" },
+            { title: "Today Revenue", value: `MYR ${stats.todayRevenue}`, icon: Wallet, color: "text-emerald-500", bg: "bg-emerald-500/10" },
+            { title: "Pending", value: `MYR ${stats.pendingAmount}`, icon: Clock, color: "text-amber-500", bg: "bg-amber-500/10" },
+            { title: "Monthly", value: `MYR ${stats.monthlyRevenue}`, icon: TrendingUp, color: "text-blue-500", bg: "bg-blue-500/10" },
+            { title: "UPI Total", value: `MYR ${stats.upiPayments}`, icon: Smartphone, color: "text-purple-500", bg: "bg-purple-500/10" },
           ].map((s, i) => (
-            <Card key={i} className="border-none shadow-sm bg-white rounded-2xl">
+            <Card key={i} className="border-none shadow-sm bg-card rounded-2xl border border-border/50">
               <CardContent className="p-4 flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-xl ${s.bg} flex items-center justify-center ${s.color}`}>
+                <div className={`w-12 h-12 rounded-xl ${s.bg} flex items-center justify-center ${s.color} border border-current/10`}>
                   <s.icon className="w-6 h-6" />
                 </div>
                 <div>
                   <p className="text-[10px] font-black uppercase text-muted-foreground tracking-widest">{s.title}</p>
-                  <p className="text-xl font-black text-slate-900">{s.value}</p>
+                  <p className="text-xl font-black text-foreground">{s.value}</p>
                 </div>
               </CardContent>
             </Card>
@@ -351,16 +351,16 @@ const BillingPage = () => {
         </div>
 
         {/* Invoices List */}
-        <Card className="border-none shadow-sm bg-white rounded-[2rem] overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xl font-bold">Transaction History</CardTitle>
+        <Card className="border-none shadow-sm bg-card rounded-[2rem] overflow-hidden border border-border/50">
+          <CardHeader className="flex flex-row items-center justify-between pb-6">
+            <CardTitle className="text-xl font-black text-foreground">Transaction History</CardTitle>
             <div className="relative w-64 lg:block hidden">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 placeholder="Search ID or Customer"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
-                className="pl-10 h-10 bg-secondary/30 border-none rounded-xl"
+                className="pl-10 h-10 bg-muted/50 border-border rounded-xl focus:ring-accent"
               />
             </div>
           </CardHeader>
@@ -370,30 +370,30 @@ const BillingPage = () => {
                 <div className="py-20 text-center text-muted-foreground">No invoices found.</div>
               ) : (
                 filteredInvoices.map(inv => (
-                  <div key={inv.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl bg-slate-50 hover:bg-slate-100 transition-colors gap-4">
+                  <div key={inv.id} className="flex flex-col md:flex-row md:items-center justify-between p-4 rounded-2xl bg-muted/20 hover:bg-muted/40 transition-all border border-transparent hover:border-border/50 gap-4 group">
                     <div className="flex items-center gap-4">
                       <div className="w-10 h-10 rounded-xl bg-white shadow-sm flex items-center justify-center text-accent">
                         <Receipt className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="font-black text-slate-900">{inv.id}</p>
-                        <p className="text-xs font-bold text-slate-500 flex items-center gap-2">
+                        <p className="font-black text-foreground">{inv.id}</p>
+                        <p className="text-xs font-bold text-muted-foreground flex items-center gap-2">
                           <User className="w-3 h-3" /> {inv.customer}
                         </p>
                       </div>
                     </div>
 
                     <div className="flex-1 px-4">
-                      <p className="font-bold text-slate-700">{inv.service}</p>
-                      <p className="text-[10px] font-black uppercase text-slate-400 tracking-tighter">
+                      <p className="font-bold text-foreground/90">{inv.service}</p>
+                      <p className="text-[10px] font-black uppercase text-muted-foreground/60 tracking-[0.05em]">
                         {format(new Date(inv.date), "MMM d, yyyy")} • {inv.time}
                       </p>
                     </div>
 
                     <div className="flex items-center gap-6">
                       <div className="text-right">
-                        <p className="text-lg font-black text-slate-900">RM {inv.amount}</p>
-                        <p className="text-[10px] font-black uppercase text-slate-400">{inv.paymentMethod}</p>
+                        <p className="text-lg font-black text-foreground">MYR {inv.amount}</p>
+                        <p className="text-[10px] font-black uppercase text-muted-foreground/60">{inv.paymentMethod}</p>
                       </div>
                       <div className="min-w-20 text-center">
                         {getStatusBadge(inv.status)}
@@ -402,18 +402,18 @@ const BillingPage = () => {
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="rounded-xl h-9 w-9 bg-white shadow-sm"
+                          className="rounded-xl h-9 w-9 bg-card shadow-sm border border-border/50 hover:bg-muted"
                           onClick={() => {
                             setSelectedInvoice(inv);
                             setShowDetailDialog(true);
                           }}
                         >
-                          <Eye className="w-4 h-4 text-slate-400" />
+                          <Eye className="w-4 h-4 text-muted-foreground group-hover:text-foreground transition-colors" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="rounded-xl h-9 w-9 bg-white shadow-sm hover:text-accent"
+                          className="rounded-xl h-9 w-9 bg-card shadow-sm border border-border/50 hover:text-accent hover:bg-muted"
                           onClick={() => handleDirectDownload(inv)}
                         >
                           <Download className="w-4 h-4" />
@@ -429,10 +429,10 @@ const BillingPage = () => {
 
         {/* Invoice Detail Dialog */}
         <Dialog open={showDetailDialog} onOpenChange={setShowDetailDialog}>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-none bg-white rounded-3xl shadow-2xl">
+          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto p-0 border-none bg-card rounded-3xl shadow-2xl border border-border/50">
             {selectedInvoice && (
               <div className="flex flex-col">
-                <div className="p-8 md:p-12 space-y-12 text-sm text-[#444] print-only">
+                <div className="p-8 md:p-12 space-y-12 text-sm text-foreground/80 print:text-slate-900 print-only">
                   {/* Row 1: Logo and Title */}
                   <div className="flex justify-between items-start">
                     <div className="flex items-center gap-2">
@@ -446,30 +446,29 @@ const BillingPage = () => {
                       )}
                     </div>
                     <div className="text-right">
-                      <h2 className="text-3xl font-black text-slate-900 mb-4 uppercase tracking-tighter">Tax Invoice</h2>
-                      <div className="space-y-1 text-slate-500 font-medium text-sm">
-                        <p>Invoice no: <span className="text-slate-900">{selectedInvoice.id.replace('L-INV-', '')}</span></p>
-                        <p>Invoice date: <span className="text-slate-900">{format(new Date(selectedInvoice.date), "MMM d, yyyy")}</span></p>
+                      <div className="space-y-1 text-muted-foreground print:text-slate-500 font-medium text-sm">
+                        <p>Invoice no: <span className="text-foreground print:text-slate-900">{selectedInvoice.id.replace('L-INV-', '')}</span></p>
+                        <p>Invoice date: <span className="text-foreground print:text-slate-900">{format(new Date(selectedInvoice.date), "MMM d, yyyy")}</span></p>
                       </div>
                     </div>
                   </div>
 
                   {/* Row 2: Addresses */}
                   <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-8">
-                    <div className="space-y-3 border-l-4 border-slate-50 pl-4">
-                      <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">From</p>
+                    <div className="space-y-3 border-l-4 border-border/10 print:border-slate-100 pl-4">
+                      <p className="font-bold text-muted-foreground/60 print:text-slate-400 uppercase tracking-widest text-[10px]">From</p>
                       <div>
-                        <p className="text-lg font-black text-slate-900 mb-1">{currentSalon?.name || "Salon Name"}</p>
-                        <p className="font-medium">{currentSalon?.email}</p>
-                        <p className="font-medium text-slate-500">{currentSalon?.address || "No Address Provided"}</p>
-                        <p className="font-medium text-slate-500">{currentSalon?.phone}</p>
+                        <p className="text-lg font-black text-foreground print:text-slate-900 mb-1">{currentSalon?.name || "Salon Name"}</p>
+                        <p className="font-medium text-foreground/90 print:text-slate-700">{currentSalon?.email}</p>
+                        <p className="font-medium text-muted-foreground print:text-slate-500">{currentSalon?.address || "No Address Provided"}</p>
+                        <p className="font-medium text-muted-foreground print:text-slate-500">{currentSalon?.phone}</p>
                       </div>
                     </div>
-                    <div className="space-y-3 border-l-4 border-slate-50 pl-4">
-                      <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Bill to</p>
+                    <div className="space-y-3 border-l-4 border-border/10 print:border-slate-100 pl-4">
+                      <p className="font-bold text-muted-foreground/60 print:text-slate-400 uppercase tracking-widest text-[10px]">Bill to</p>
                       <div>
-                        <p className="text-lg font-black text-slate-900 mb-1">{selectedInvoice.customer}</p>
-                        <p className="font-medium text-slate-500">{selectedInvoice.customerPhone}</p>
+                        <p className="text-lg font-black text-foreground print:text-slate-900 mb-1">{selectedInvoice.customer}</p>
+                        <p className="font-medium text-muted-foreground print:text-slate-500">{selectedInvoice.customerPhone}</p>
                       </div>
                     </div>
                     {selectedInvoice.type === 'product' && (
@@ -498,14 +497,14 @@ const BillingPage = () => {
                       <tbody>
                         <tr className="font-medium border-b border-slate-50">
                           <td className="px-6 py-5">
-                            <p className="text-slate-900 font-bold">{selectedInvoice.service}</p>
-                            <p className="text-slate-400 text-xs mt-1">Professional salon services provided by our staff.</p>
+                            <p className="text-foreground print:text-slate-900 font-bold">{selectedInvoice.service}</p>
+                            <p className="text-muted-foreground print:text-slate-500 text-xs mt-1">Professional salon services provided by our staff.</p>
                           </td>
-                          <td className="px-6 py-5 text-center">RM {selectedInvoice.subtotal}</td>
-                          <td className="px-6 py-5 text-center">1</td>
-                          <td className="px-6 py-5 text-center">0%</td>
-                          <td className="px-6 py-5 text-center">RM {selectedInvoice.discount}</td>
-                          <td className="px-6 py-5 text-right font-bold text-slate-900">RM {selectedInvoice.amount}</td>
+                          <td className="px-6 py-5 text-center text-foreground/90 print:text-slate-700">MYR {selectedInvoice.subtotal}</td>
+                          <td className="px-6 py-5 text-center text-foreground/90 print:text-slate-700">1</td>
+                          <td className="px-6 py-5 text-center text-foreground/90 print:text-slate-700">0%</td>
+                          <td className="px-6 py-5 text-center text-foreground/90 print:text-slate-700">MYR {selectedInvoice.discount}</td>
+                          <td className="px-6 py-5 text-right font-bold text-foreground print:text-slate-900">MYR {selectedInvoice.amount}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -515,23 +514,23 @@ const BillingPage = () => {
                   <div className="flex flex-col md:flex-row justify-between pt-6">
                     <div className="space-y-8 max-w-sm">
                       <div className="space-y-2">
-                        <p className="font-bold text-slate-900">Payment instruction</p>
-                        <div className="text-slate-500 space-y-1">
-                          <p>UPI/Paypal: <span className="font-bold text-slate-700">{currentSalon?.upi_id || "pay@example.com"}</span></p>
-                          <p>Bank: <span className="font-bold text-slate-700">{currentSalon?.bank_details || "No Bank Info"}</span></p>
+                        <p className="font-bold text-foreground print:text-slate-900">Payment instruction</p>
+                        <div className="text-muted-foreground print:text-slate-500 space-y-1">
+                          <p>UPI/Paypal: <span className="font-bold text-foreground/90 print:text-slate-700">{currentSalon?.upi_id || "pay@example.com"}</span></p>
+                          <p>Bank: <span className="font-bold text-foreground/90 print:text-slate-700">{currentSalon?.bank_details || "No Bank Info"}</span></p>
                         </div>
                       </div>
                     </div>
 
                     <div className="w-full md:w-72 space-y-3 mt-8 md:mt-0">
                       <div className="flex justify-between font-medium">
-                        <span className="text-slate-500">Subtotal</span>
-                        <span>RM {selectedInvoice.subtotal.toFixed(2)}</span>
+                        <span className="text-muted-foreground print:text-slate-500">Subtotal</span>
+                        <span className="text-foreground/90 print:text-slate-700">MYR {selectedInvoice.subtotal.toFixed(2)}</span>
                       </div>
                       {selectedInvoice.discount > 0 && (
                         <div className="flex justify-between font-medium text-amber-600">
                           <span>Coupons/Discount</span>
-                          <span>- RM {selectedInvoice.discount.toFixed(2)}</span>
+                          <span>- MYR {selectedInvoice.discount.toFixed(2)}</span>
                         </div>
                       )}
                       {(selectedInvoice.coinsUsed > 0 || selectedInvoice.loyaltyPointsUsed > 0) && (
@@ -542,31 +541,31 @@ const BillingPage = () => {
                               ({selectedInvoice.coinsUsed + selectedInvoice.loyaltyPointsUsed} pts)
                             </span>
                           </span>
-                          <span>- RM {selectedInvoice.coinValue.toFixed(2)}</span>
+                          <span>- MYR {selectedInvoice.coinValue.toFixed(2)}</span>
                         </div>
                       )}
-                      <div className="h-px bg-slate-100 my-2" />
-                      <div className="flex justify-between text-lg font-black text-slate-900">
+                      <div className="h-px bg-border/50 print:bg-slate-100 my-2" />
+                      <div className="flex justify-between text-lg font-black text-foreground print:text-slate-900">
                         <span>Total Paid</span>
-                        <span>RM {selectedInvoice.amount.toFixed(2)}</span>
+                        <span className="print:text-slate-900">MYR {selectedInvoice.amount.toFixed(2)}</span>
                       </div>
-                      <div className="flex justify-between font-medium text-emerald-600">
+                      <div className="flex justify-between font-medium text-emerald-500 print:text-emerald-700">
                         <span>Amount Settled</span>
-                        <span>- RM {selectedInvoice.status === 'paid' ? selectedInvoice.amount.toFixed(2) : '0.00'}</span>
+                        <span className="print:text-emerald-700">- MYR {selectedInvoice.status === 'paid' ? selectedInvoice.amount.toFixed(2) : '0.00'}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Modal Footer */}
-                <div className="p-6 bg-slate-50 flex items-center justify-end gap-3 rounded-b-3xl print:hidden">
-                  <Button variant="ghost" onClick={() => setShowDetailDialog(false)} className="rounded-xl font-bold">
+                <div className="p-6 bg-muted/20 border-t border-border/50 flex items-center justify-end gap-3 rounded-b-3xl print:hidden">
+                  <Button variant="ghost" onClick={() => setShowDetailDialog(false)} className="rounded-xl font-bold hover:bg-muted transition-all">
                     Close
                   </Button>
-                  <Button variant="outline" onClick={handleDownloadPDF} className="rounded-xl font-bold border-slate-200">
+                  <Button variant="outline" onClick={handleDownloadPDF} className="rounded-xl font-bold bg-muted/30 border-border hover:bg-muted transition-all">
                     <Download className="w-4 h-4 mr-2" /> Download PDF
                   </Button>
-                  <Button onClick={() => handleSendNotify('whatsapp')} className="bg-accent text-white font-black rounded-xl px-6 min-w-32 shadow-xl shadow-accent/20">
+                  <Button onClick={() => handleSendNotify('whatsapp')} className="bg-accent hover:bg-accent/90 text-white font-black rounded-xl px-6 min-w-32 shadow-xl shadow-accent/20 transition-all">
                     <Smartphone className="w-4 h-4 mr-2" /> SMS/WhatsApp
                   </Button>
                 </div>
@@ -603,7 +602,7 @@ const BillingPage = () => {
                   </SelectTrigger>
                   <SelectContent>
                     {services.map(s => (
-                      <SelectItem key={s.id} value={s.id}>{s.name} (RM {s.price})</SelectItem>
+                      <SelectItem key={s.id} value={s.id}>{s.name} (MYR {s.price})</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -622,7 +621,7 @@ const BillingPage = () => {
       {
         selectedInvoice && (
           <div className="hidden print:block fixed inset-0 bg-white z-[9999] pointer-events-none print-invoice-container">
-            <div className="p-12 space-y-12 text-sm text-[#444]">
+            <div className="p-12 space-y-12 text-sm text-slate-700">
               {/* Logo and Title */}
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-2">
@@ -646,16 +645,16 @@ const BillingPage = () => {
 
               {/* Addresses */}
               <div className="grid grid-cols-3 gap-8">
-                <div className="space-y-3 border-l-4 border-slate-50 pl-4">
+                <div className="space-y-3 border-l-4 border-slate-100 pl-4">
                   <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">From</p>
                   <div>
                     <p className="text-lg font-black text-slate-900 mb-1">{currentSalon?.name || "Salon Name"}</p>
-                    <p className="font-medium">{currentSalon?.email}</p>
+                    <p className="font-medium text-slate-700">{currentSalon?.email}</p>
                     <p className="font-medium text-slate-500">{currentSalon?.address || "No Address Provided"}</p>
                     <p className="font-medium text-slate-500">{currentSalon?.phone}</p>
                   </div>
                 </div>
-                <div className="space-y-3 border-l-4 border-slate-50 pl-4">
+                <div className="space-y-3 border-l-4 border-slate-100 pl-4">
                   <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Bill to</p>
                   <div>
                     <p className="text-lg font-black text-slate-900 mb-1">{selectedInvoice.customer}</p>
@@ -663,7 +662,7 @@ const BillingPage = () => {
                   </div>
                 </div>
                 {selectedInvoice.type === 'product' && (
-                  <div className="space-y-3 border-l-4 border-slate-50 pl-4">
+                  <div className="space-y-3 border-l-4 border-slate-100 pl-4">
                     <p className="font-bold text-slate-400 uppercase tracking-widest text-[10px]">Ship to</p>
                     <div>
                       <p className="font-medium text-slate-500 italic">Deliverables same as billing address.</p>
@@ -691,11 +690,11 @@ const BillingPage = () => {
                         <p className="font-bold text-slate-900">{selectedInvoice.service}</p>
                         <p className="text-[10px] text-slate-400 mt-1">Professional session inclusive of all taxes.</p>
                       </td>
-                      <td className="px-6 py-5 text-center">RM {selectedInvoice.subtotal}</td>
+                      <td className="px-6 py-5 text-center">MYR {selectedInvoice.subtotal}</td>
                       <td className="px-6 py-5 text-center">1</td>
                       <td className="px-6 py-5 text-center">0%</td>
-                      <td className="px-6 py-5 text-center">RM {selectedInvoice.discount}</td>
-                      <td className="px-6 py-5 text-right font-bold text-slate-900">RM {selectedInvoice.amount}</td>
+                      <td className="px-6 py-5 text-center">MYR {selectedInvoice.discount}</td>
+                      <td className="px-6 py-5 text-right font-bold text-slate-900">MYR {selectedInvoice.amount}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -711,30 +710,30 @@ const BillingPage = () => {
                   </div>
                 </div>
                 <div className="w-72 space-y-3">
-                  <div className="flex justify-between font-medium">
-                    <span className="text-slate-500">Subtotal</span>
-                    <span>RM {selectedInvoice.subtotal.toFixed(2)}</span>
+                  <div className="flex justify-between font-medium text-slate-500">
+                    <span>Subtotal</span>
+                    <span className="text-slate-700">MYR {selectedInvoice.subtotal.toFixed(2)}</span>
                   </div>
                   {selectedInvoice.discount > 0 && (
                     <div className="flex justify-between font-medium text-amber-600">
                       <span>Discount</span>
-                      <span>- RM {selectedInvoice.discount.toFixed(2)}</span>
+                      <span>- MYR {selectedInvoice.discount.toFixed(2)}</span>
                     </div>
                   )}
                   {(selectedInvoice.coinsUsed > 0 || selectedInvoice.loyaltyPointsUsed > 0) && (
                     <div className="flex justify-between font-medium text-blue-600">
                       <span>Points ({selectedInvoice.coinsUsed + selectedInvoice.loyaltyPointsUsed})</span>
-                      <span>- RM {selectedInvoice.coinValue.toFixed(2)}</span>
+                      <span>- MYR {selectedInvoice.coinValue.toFixed(2)}</span>
                     </div>
                   )}
                   <div className="h-px bg-slate-100 my-2" />
                   <div className="flex justify-between text-lg font-black text-slate-900">
                     <span>Total Paid</span>
-                    <span>RM {selectedInvoice.amount.toFixed(2)}</span>
+                    <span className="text-slate-900">MYR {selectedInvoice.amount.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between font-medium text-emerald-600">
                     <span>Amount Settled</span>
-                    <span>- RM {selectedInvoice.status === 'paid' ? selectedInvoice.amount.toFixed(2) : '0.00'}</span>
+                    <span>- MYR {selectedInvoice.status === 'paid' ? selectedInvoice.amount.toFixed(2) : '0.00'}</span>
                   </div>
                 </div>
               </div>
