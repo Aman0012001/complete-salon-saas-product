@@ -13,7 +13,10 @@ import {
   ArrowRight,
   Sparkles,
   Globe,
-  Zap
+  Zap,
+  MapPin,
+  Phone,
+  Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -351,6 +354,60 @@ const AboutUs = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+
+          {/* Contact Details Block (Merged into Why Choose Us) */}
+          <div className="mt-24 max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Get in Touch</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Have questions or need support? We're here to help you grow your salon business.
+              </p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-8">
+              <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm text-center hover:shadow-xl transition-shadow">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <MapPin className="w-8 h-8 text-accent" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">Visit Us</h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    123 Beauty Avenue, Suite 400<br />
+                    Kuala Lumpur, 50200, Malaysia
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm text-center hover:shadow-xl transition-shadow">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Phone className="w-8 h-8 text-accent" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">Call Us</h3>
+                  <p className="text-muted-foreground mb-1">
+                    Sales: +60 3-1234 5678
+                  </p>
+                  <p className="text-muted-foreground">
+                    Support: +60 3-8765 4321
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-lg bg-white/80 backdrop-blur-sm text-center hover:shadow-xl transition-shadow">
+                <CardContent className="p-8">
+                  <div className="w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Mail className="w-8 h-8 text-accent" />
+                  </div>
+                  <h3 className="text-xl font-bold mb-3">Email Us</h3>
+                  <p className="text-muted-foreground mb-1">
+                    hello@noamskin.com
+                  </p>
+                  <p className="text-muted-foreground">
+                    support@noamskin.com
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
       </section>

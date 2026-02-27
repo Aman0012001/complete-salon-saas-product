@@ -17,6 +17,8 @@ import FacialMenuSection from "@/components/FacialMenuSection";
 import BestSellersSection from "@/components/BestSellersSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import BeforeAfterSection from "@/components/BeforeAfterSection";
+import InsideSpaceSection from "@/components/InsideSpaceSection";
+import BecomeMemberSection from "@/components/BecomeMemberSection";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 
@@ -45,7 +47,7 @@ const Index = () => {
       <Navbar />
       <HeroVideoCarousel />
 
-      {/* Removed: INSIDE OUR SPACE SALONS section */}
+      <InsideSpaceSection />
 
       <div id="glow">
         <GlowConfidenceSection />
@@ -86,6 +88,8 @@ const Index = () => {
       <div id="faq">
         <FAQSection />
       </div>
+
+      <BecomeMemberSection />
 
       <div id="newsletter">
         <NewsletterSection />

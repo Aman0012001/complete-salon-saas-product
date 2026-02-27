@@ -177,28 +177,124 @@ const MembershipDetailsPage = () => {
                                 onMouseMove={handleMouseMove}
                                 onMouseLeave={handleMouseLeave}
                                 style={{ rotateX, rotateY }}
-                                className="relative text-white w-full aspect-[1.6/1] rounded-[2.5rem] bg-[#0A0A0A] overflow-hidden border border-white/20 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] group"
+                                className="relative text-white w-full aspect-[1.5/1] rounded-[2.5rem] bg-[#0A0A0A] overflow-hidden border border-white/10 shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] group"
                             >
-                                {/* Subtle Dynamic Highlight */}
-                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/[0.05] to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                {/* Subtle Dynamic Highlight (Top Right Glow) */}
+                                <div className="absolute -top-32 -right-32 w-96 h-96 bg-white/[0.12] blur-[100px] rounded-full pointer-events-none" />
+                                <div className="absolute inset-0 bg-gradient-to-tr from-[#0a0a0a] via-transparent to-white/[0.05] pointer-events-none" />
 
-                                <div className="absolute inset-0 p-10 md:p-14 flex flex-col justify-between">
+                                <div className="absolute inset-0 p-10 md:p-12 flex flex-col justify-between">
+                                    {/* Top Row: Brand & Crown */}
                                     <div className="flex justify-between items-start">
-                                        <div className="flex flex-col text-white leading-none">
-                                            <span className="text-2xl text-white md:text-3xl font-serif italic tracking-tight">Noam</span>
-                                            <span className="text-2xl text-white md:text-3xl font-serif italic tracking-tight">Skin.</span>
+                                        <div className="text-2xl md:text-3xl font-medium tracking-wide italic font-['DM_Serif_Display']">
+                                            Noam Skin.
                                         </div>
-                                        <Crown className="w-8 h-8" color="white" />
+                                        <Crown className="w-8 h-8 text-white/90" strokeWidth={1.5} />
                                     </div>
 
-                                    <div className="flex justify-between items-end">
-                                        <h3 className="text-5xl md:text-7xl font-black text-white tracking-tight uppercase leading-none">
+                                    {/* Middle Row: MEMBER & Subtext */}
+                                    <div className="flex flex-col mt-auto mb-10">
+                                        <h3 className="text-[3.5rem] md:text-[5rem] font-black text-white tracking-tight leading-none mb-4">
                                             MEMBER
                                         </h3>
-                                        <Sparkles className="w-5 h-5" color="white" />
+                                        <div className="space-y-1.5">
+                                            <p className="text-xl md:text-2xl text-white/90 font-medium tracking-wide">
+                                                Exclusive Membership Access
+                                            </p>
+                                            <p className="text-base md:text-lg text-white/60 font-normal">
+                                                Premium skincare rewards & perks
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Bottom Row: Button & Sparkles */}
+                                    <div className="flex justify-between items-end">
+                                        <button className="bg-[#1A1A1A] hover:bg-[#2A2A2A] border border-white/10 text-white px-8 py-3.5 rounded-xl text-lg font-medium transition-colors shadow-lg">
+                                            Become a Member
+                                        </button>
+                                        <Sparkles className="w-7 h-7 text-white/90" strokeWidth={1.5} />
                                     </div>
                                 </div>
                             </motion.div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Billing & Minimum Commitment Details (Reference-Aligned) */}
+            <section className="py-24 bg-[#FAF8F6]">
+                <div className="container mx-auto px-6 space-y-32">
+
+                    {/* Billing Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center max-w-6xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="relative"
+                        >
+                            <img
+                                src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop"
+                                alt="Buccal Facial Massage Service"
+                                className="w-full aspect-[4/5] object-cover rounded-[2.5rem] shadow-2xl"
+                            />
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="space-y-8"
+                        >
+                            <h2 className="text-5xl font-black text-[#1A1A1A] uppercase tracking-tighter">Billing</h2>
+                            <div className="space-y-6 text-slate-500 font-medium leading-[1.8]">
+                                <p>
+                                    Your membership fee will be automatically billed to the card on file each month on the date of your enrollment. Appointments can be scheduled at your convenience, and your membership discount will be automatically applied at checkout. Please note that gratuities are not included in the membership.
+                                </p>
+                                <p>
+                                    If a payment is declined, we will reach out to update your payment details. Failure to respond within 30 days will result in membership cancellation, and any unused facials will be forfeited. Membership fees are non-refundable.
+                                </p>
+                                <p>
+                                    By agreeing to this membership, you authorize Daily Habits Wellness Club to charge your card for the monthly membership fee. Should there be a change in the membership fee, you will be notified via email at least 30 days before the new rate is implemented.
+                                </p>
+                            </div>
+                        </motion.div>
+                    </div>
+
+                    {/* Minimum Commitment Section */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-32 items-center max-w-6xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="order-2 lg:order-1 space-y-8 text-left"
+                        >
+                            <h2 className="text-5xl font-black text-[#1A1A1A] uppercase tracking-tighter">Minimum Commitment</h2>
+                            <div className="space-y-6 text-slate-500 font-medium leading-[1.8]">
+                                <p>
+                                    Membership begins with a minimum commitment of three months to fully experience the benefits of our services. Following this period, membership transitions to a month-to-month basis and can be canceled at any time without penalty.
+                                </p>
+                                <p>
+                                    Please note that cancellations cannot be processed verbally or over the phone. To cancel your membership, email us at info@dailyhabitsmia.com at least seven days prior to your next billing cycle. Upon cancellation, any unused services will be forfeited.
+                                </p>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8 }}
+                            className="order-1 lg:order-2 relative"
+                        >
+                            <img
+                                src="https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=800&q=80"
+                                alt="Minimum Commitment"
+                                className="w-full aspect-[4/3] object-cover rounded-[2.5rem] shadow-2xl"
+                            />
                         </motion.div>
                     </div>
                 </div>

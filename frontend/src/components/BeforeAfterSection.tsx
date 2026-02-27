@@ -39,7 +39,7 @@ const ComparisonSlider = ({ before, after }: { before: string, after: string }) 
     return (
         <div
             ref={containerRef}
-            className="relative w-full aspect-[4/5] overflow-hidden cursor-ew-resize select-none touch-none"
+            className="relative w-full h-[250px] overflow-hidden cursor-ew-resize select-none touch-none"
             onMouseMove={(e) => {
                 if (e.buttons === 1) handleMove(e.clientX, e);
             }}
@@ -194,7 +194,7 @@ const BeforeAfterSection = () => {
                                         initial={{ opacity: 0, y: 30 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true }}
-                                        className="flex flex-col bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] border border-slate-50 h-full"
+                                        className="flex flex-col bg-white rounded-[16px] overflow-hidden shadow-[0_32px_64px_-16px_rgba(0,0,0,0.06)] border border-black h-full"
                                     >
                                         <ComparisonSlider before={item.before_image} after={item.after_image} />
 
@@ -243,17 +243,17 @@ const BeforeAfterSection = () => {
                         */}
                         <div className="hidden lg:block">
                             <CarouselPrevious
-                                className="absolute -left-12 lg:-left-20 top-1/2 -translate-y-1/2 h-16 w-16 rounded-full border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] text-slate-300 hover:text-[#B07D62] hover:scale-110 transition-all duration-300 z-50 flex items-center justify-center"
+                                className="absolute -left-20 top-1/2 -translate-y-1/2 h-16 w-16 rounded-full border border-black bg-white shadow-[0_20px_40px_rgba(0,0,0,0.1)] text-black hover:bg-[#B07D62] hover:text-white hover:border-[#B07D62] transition-all duration-300 z-50 flex items-center justify-center translate-x-1/2"
                             />
                             <CarouselNext
-                                className="absolute -right-12 lg:-right-20 top-1/2 -translate-y-1/2 h-16 w-16 rounded-full border-none bg-white shadow-[0_20px_50px_rgba(0,0,0,0.1)] text-slate-300 hover:text-[#B07D62] hover:scale-110 transition-all duration-300 z-50 flex items-center justify-center"
+                                className="absolute -right-20 top-1/2 -translate-y-1/2 h-16 w-16 rounded-full border border-black bg-white shadow-[0_20px_40px_rgba(0,0,0,0.1)] text-black hover:bg-[#B07D62] hover:text-white hover:border-[#B07D62] transition-all duration-300 z-50 flex items-center justify-center -translate-x-1/2"
                             />
                         </div>
 
                         {/* Mobile Navigation - Accessible buttons at the bottom */}
                         <div className="flex justify-center gap-6 mt-12 lg:hidden">
-                            <CarouselPrevious className="static translate-y-0 h-14 w-14 rounded-full border-slate-100 bg-white shadow-md text-slate-400" />
-                            <CarouselNext className="static translate-y-0 h-14 w-14 rounded-full border-slate-100 bg-white shadow-md text-slate-400" />
+                            <CarouselPrevious className="static translate-y-0 h-14 w-14 rounded-full border border-black bg-white shadow-md text-black hover:bg-[#B07D62] hover:text-white" />
+                            <CarouselNext className="static translate-y-0 h-14 w-14 rounded-full border border-black bg-white shadow-md text-black hover:bg-[#B07D62] hover:text-white" />
                         </div>
                     </Carousel>
                 </div>

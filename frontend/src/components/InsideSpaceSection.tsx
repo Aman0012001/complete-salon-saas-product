@@ -1,35 +1,67 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Clock, CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
-import WaitlistDialog from "./WaitlistDialog";
-import { ApprovedBadge } from "./ApprovedBadge";
 import api from "@/services/api";
 import { getImageUrl } from "@/utils/imageUrl";
 
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/carousel";
 const InsideSpaceSection = () => {
     const navigate = useNavigate();
-    const [waitlistOpen, setWaitlistOpen] = useState(false);
-    const [selectedService, setSelectedService] = useState("");
     const [categories, setCategories] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // Fallback to static if none found in DB or for this specific design
-        setCategories([
-            { id: "facials", title: "Facials", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop" },
-            { id: "body-massages", title: "Body Massages", image: "https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop" },
-            { id: "acupuncture", title: "Acupuncture", image: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&auto=format&fit=crop" },
-            { id: "tea-bar", title: "Tea Bar", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc206e?w=800&auto=format&fit=crop" },
-        ]);
-        setLoading(false);
+        const fetchDynamicCategories = async () => {
+            try {
+                setLoading(true);
+                const services = await api.services.getAll();
+
+                let combinedCats: any[] = [];
+                const fallbackCats = [
+                    { id: "facials", title: "Facials", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop" },
+                    { id: "body-massages", title: "Body Massages", image: "https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop" },
+                    { id: "acupuncture", title: "Acupuncture", image: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&auto=format&fit=crop" },
+                    { id: "tea-bar", title: "Tea Bar", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc206e?w=800&auto=format&fit=crop" },
+                ];
+
+                if (services && services.length > 0) {
+                    const categoryMap = new Map();
+                    services.forEach((service: any) => {
+                        if (service.category && !categoryMap.has(service.category)) {
+                            categoryMap.set(service.category, {
+                                id: service.id,
+                                title: service.category,
+                                image: service.image_url || service.cover_image_url
+                            });
+                        }
+                    });
+                    combinedCats = Array.from(categoryMap.values()).slice(0, 4);
+                }
+
+                // Fill remaining slots with fallbacks if less than 4
+                if (combinedCats.length < 4) {
+                    const existingTitles = new Set(combinedCats.map(c => c.title));
+                    fallbackCats.forEach(f => {
+                        if (combinedCats.length < 4 && !existingTitles.has(f.title)) {
+                            combinedCats.push(f);
+                        }
+                    });
+                }
+
+                setCategories(combinedCats);
+            } catch (error) {
+                console.error("[InsideSpaceSection] Error fetching:", error);
+                setCategories([
+                    { id: "f1", title: "Facials", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop" },
+                    { id: "f2", title: "Body Massages", image: "https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop" },
+                    { id: "f3", title: "Acupuncture", image: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&auto=format&fit=crop" },
+                    { id: "f4", title: "Tea Bar", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc206e?w=800&auto=format&fit=crop" },
+                ]);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDynamicCategories();
     }, []);
 
     const handleCardClick = (cat: any) => {
@@ -39,7 +71,6 @@ const InsideSpaceSection = () => {
     return (
         <section className="py-24 px-4 bg-muted/30 overflow-hidden">
             <div className="container mx-auto">
-                {/* Header Block */}
                 <div className="max-w-4xl mx-auto text-center mb-16 px-4">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -48,47 +79,56 @@ const InsideSpaceSection = () => {
                         transition={{ duration: 0.8 }}
                         className="space-y-4"
                     >
-                        <h2 className="text-4xl md:text-5xl lg:text-[3rem] font-bold text-foreground tracking-tight font-['Playfair_Display']">
+                        <h2 className="text-4xl md:text-5xl lg:text-[3rem] font-bold text-foreground tracking-tight ">
                             Inside Our Space Salons
                         </h2>
                     </motion.div>
                 </div>
 
-                {/* Grid Area */}
                 <div className="max-w-[1400px] mx-auto px-4 lg:px-12">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
-                        {categories.map((cat, index) => (
-                            <motion.div
-                                key={cat.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: index * 0.1, duration: 0.6 }}
-                            >
-                                <div
-                                    onClick={() => handleCardClick(cat)}
-                                    className="group cursor-pointer flex flex-col items-center space-y-8"
-                                >
-                                    {/* Image Layer */}
-                                    <div className="relative w-full aspect-[4/5] rounded-[48px] overflow-hidden transition-all duration-700 shadow-sm group-hover:shadow-2xl active:scale-[0.98]">
-                                        <img
-                                            src={getImageUrl(cat.image, 'service', cat.id)}
-                                            alt={cat.title}
-                                            className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
-                                        />
-                                    </div>
-
-                                    {/* Content Area - CENTERED BELOW CARD */}
-                                    <div className="text-center relative">
-                                        <h3 className="font-bold text-2xl md:text-3xl text-foreground transition-colors">
-                                            {cat.title}
-                                        </h3>
-                                        {/* Underline transition */}
-                                        <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-foreground scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-                                    </div>
+                        {loading ? (
+                            Array(4).fill(0).map((_, i) => (
+                                <div key={i} className="animate-pulse space-y-8">
+                                    <div className="bg-slate-200 aspect-square rounded-[48px]" />
+                                    <div className="h-8 bg-slate-100 w-3/4 mx-auto rounded" />
                                 </div>
-                            </motion.div>
-                        ))}
+                            ))
+                        ) : (
+                            categories.map((cat, index) => (
+                                <motion.div
+                                    key={cat.id || index}
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                                >
+                                    <div
+                                        onClick={() => handleCardClick(cat)}
+                                        className="group cursor-pointer flex flex-col items-center space-y-8"
+                                    >
+                                        <div className="relative w-full aspect-square rounded-[48px] overflow-hidden transition-all duration-700 shadow-sm group-hover:shadow-2xl active:scale-[0.98]">
+                                            <img
+                                                src={getImageUrl(cat.image, 'service', cat.id)}
+                                                alt={cat.title}
+                                                className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    target.src = "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800";
+                                                }}
+                                            />
+                                        </div>
+
+                                        <div className="text-center relative">
+                                            <h3 className="font-bold text-2xl md:text-3xl text-foreground transition-colors">
+                                                {cat.title}
+                                            </h3>
+                                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-foreground origin-center" />
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
