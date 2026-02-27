@@ -82,22 +82,20 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "HOME", href: "/" },
-    { name: "SALONS", href: "/salons" },
+    { name: "SERVICES", href: "/services-simple" },
     { name: "MEMBERSHIP", href: "/membership" },
     // SHOP is handled separately for nested dropdown
     { name: "CONTACT US", href: "/contact" },
     { name: "ABOUT US", href: "/about" },
   ];
 
-  const shopGroups = [
-    { name: "Cleanse & Prep", key: "cleanser" },
-    { name: "Treat & Repair", key: "serum|treatment" },
-    { name: "Hydrate & Protect", key: "moisturizer|spf" }
-  ];
+  // Extract unique categories dynamically from products
+  const dynamicCategories = Array.from(
+    new Set(shopProducts.map(p => p.category?.trim()).filter(Boolean))
+  ).sort() as string[];
 
-  const getProductsByGroup = (categoryKeys: string) => {
-    const keys = categoryKeys.split('|');
-    return shopProducts.filter(p => keys.includes((p.category || "").toLowerCase())).slice(0, 4);
+  const getProductsByCategory = (category: string) => {
+    return shopProducts.filter(p => p.category?.trim() === category).slice(0, 4);
   };
 
   return (
@@ -117,7 +115,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-[16px] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group"
+                className="text-[16px] lg:text-[0.9rem] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group"
               >
                 {link.name}
                 <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
@@ -127,7 +125,7 @@ const Navbar = () => {
             {/* SHOP Nested Dropdown - 3rd Position */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="text-[16px] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group outline-none">
+                <button className="text-[16px] lg:text-[0.8rem] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group outline-none">
                   SHOP
                   <ChevronDown className="w-4 h-4 transition-transform group-data-[state=open]:rotate-180" />
                   <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />
@@ -135,30 +133,36 @@ const Navbar = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start" className="w-56 mt-4 p-2 bg-card rounded-2xl border border-border shadow-2xl backdrop-blur-xl animate-in zoom-in-95 duration-200">
 
-                {shopGroups.map((group) => {
-                  const items = getProductsByGroup(group.key);
-                  if (items.length === 0) return null;
+                {dynamicCategories.length > 0 ? (
+                  dynamicCategories.map((categoryName) => {
+                    const items = getProductsByCategory(categoryName);
+                    if (items.length === 0) return null;
 
-                  return (
-                    <DropdownMenuSub key={group.name}>
-                      <DropdownMenuSubTrigger className="rounded-xl h-12 px-4 focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 cursor-pointer">
-                        <span className="font-bold">{group.name}</span>
-                      </DropdownMenuSubTrigger>
-                      <DropdownMenuPortal>
-                        <DropdownMenuSubContent className="w-64 p-2 bg-card rounded-2xl border border-border shadow-2xl backdrop-blur-xl animate-in slide-in-from-left-2 duration-300">
-                          {items.map((product) => (
-                            <DropdownMenuItem key={product.id} asChild className="rounded-xl h-12 px-4 cursor-pointer focus:bg-accent focus:text-accent-foreground">
-                              <Link to={`/product/${product.id}`} className="flex flex-col items-start w-full">
-                                <span className="font-bold truncate w-full">{product.name}</span>
-                                <span className="text-[10px] text-muted-foreground font-medium truncate w-full">{product.brand || product.category}</span>
-                              </Link>
-                            </DropdownMenuItem>
-                          ))}
-                        </DropdownMenuSubContent>
-                      </DropdownMenuPortal>
-                    </DropdownMenuSub>
-                  );
-                })}
+                    return (
+                      <DropdownMenuSub key={categoryName}>
+                        <DropdownMenuSubTrigger className="rounded-xl h-12 px-4 focus:bg-accent focus:text-accent-foreground data-[state=open]:bg-accent/50 cursor-pointer">
+                          <span className="font-bold">{categoryName}</span>
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                          <DropdownMenuSubContent className="w-64 p-2 bg-card rounded-2xl border border-border shadow-2xl backdrop-blur-xl animate-in slide-in-from-left-2 duration-300">
+                            {items.map((product) => (
+                              <DropdownMenuItem key={product.id} asChild className="rounded-xl h-12 px-4 cursor-pointer focus:bg-accent focus:text-accent-foreground">
+                                <Link to={`/product/${product.id}`} className="flex flex-col items-start w-full">
+                                  <span className="font-bold truncate w-full">{product.name}</span>
+                                  <span className="text-[10px] text-muted-foreground font-medium truncate w-full">{product.brand || product.category}</span>
+                                </Link>
+                              </DropdownMenuItem>
+                            ))}
+                          </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                      </DropdownMenuSub>
+                    );
+                  })
+                ) : (
+                  <div className="px-4 py-3 text-sm text-muted-foreground font-medium text-center">
+                    No products available
+                  </div>
+                )}
 
                 <DropdownMenuSeparator className="my-2" />
 
@@ -175,7 +179,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 to={link.href}
-                className="text-[16px] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group"
+                className="text-[16px] lg:text-[0.8rem] font-['Outfit'] font-extrabold tracking-[0.1em] text-black transition-all flex items-center gap-1.5 relative py-1 group"
               >
                 {link.name}
                 <span className="absolute bottom-0 left-0 w-full h-[1.5px] bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-out origin-left" />

@@ -161,7 +161,7 @@ export default function AdminReports() {
                 <div>
                   <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest leading-none">{stat.label}</p>
                   <p className="text-xl font-black text-slate-900 mt-2">
-                    {stat.label.includes("Intake") || stat.label.includes("Sales") || stat.label.includes("Profit") ? `RM ${formatCompactNumber(stat.value)}` : formatCompactNumber(stat.value)}
+                    {stat.label.includes("Intake") || stat.label.includes("Sales") || stat.label.includes("Profit") ? `MYR ${formatCompactNumber(stat.value)}` : formatCompactNumber(stat.value)}
                   </p>
                 </div>
               </div>
@@ -208,7 +208,7 @@ export default function AdminReports() {
                     axisLine={false}
                     tickLine={false}
                     tick={{ fill: '#94a3b8', fontWeight: 600, fontSize: 12 }}
-                    tickFormatter={(value) => `RM ${formatCompactNumber(value)}`}
+                    tickFormatter={(value) => `MYR ${formatCompactNumber(value)}`}
                     dx={-10}
                   />
                   <Tooltip
@@ -222,7 +222,7 @@ export default function AdminReports() {
                     labelStyle={{ color: '#94a3b8', fontWeight: 600, marginBottom: '8px', fontSize: '12px' }}
                     itemStyle={{ color: '#fff', fontWeight: 700, fontSize: '14px' }}
                     formatter={(value: number, name: string) => [
-                      `RM ${formatCompactNumber(value)}`,
+                      `MYR ${formatCompactNumber(value)}`,
                       name === 'value' ? 'Gross Revenue' : 'Net Profit'
                     ]}
                   />

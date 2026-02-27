@@ -163,7 +163,7 @@ const BeforeAfterSection = () => {
             <div className="max-w-[1400px] mx-auto px-4 md:px-12">
                 {/* Header Section - Centered Luxury Heading */}
                 <div className="text-center mb-24">
-                    <h2 className="text-5xl md:text-7xl lg:text-6xl font-black text-[#1A2338] tracking-tight leading-tight uppercase mb-6">
+                    <h2 className="text-4xl md:text-[3rem] font-black text-[#1A2338] tracking-tight leading-tight uppercase mb-6">
                         REAL RESULTS. REAL PEOPLE. <span className="text-[#B07D62] lowercase tracking-normal"> <br />real glow.</span>
                     </h2>
 

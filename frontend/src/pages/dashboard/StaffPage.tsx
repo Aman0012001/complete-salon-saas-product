@@ -372,16 +372,6 @@ export default function StaffPage() {
               DETAILS
               {subTab === "DETAILS" && <div className="absolute bottom-0 left-0 right-0 h-1 bg-accent" />}
             </button>
-            <button
-              onClick={() => setSubTab("LOGS")}
-              className={cn(
-                "px-8 py-3 text-sm font-black tracking-widest transition-all relative ml-4",
-                subTab === "LOGS" ? "text-foreground" : "text-muted-foreground hover:text-foreground"
-              )}
-            >
-              LOGS
-              {subTab === "LOGS" && <div className="absolute bottom-0 left-0 right-0 h-1 bg-accent" />}
-            </button>
           </div>
 
           {/* Table Controls (Mini) */}
@@ -398,7 +388,7 @@ export default function StaffPage() {
               />
             </div>
             <div className="flex items-center gap-2">
-              {/* {(isOwner || isManager) && currentSalon && (
+              {(isOwner || isManager) && currentSalon && (
                 <div className="flex flex-col items-end gap-1">
                   {subscription && (
                     <span className="text-[10px] font-black uppercase text-muted-foreground/60">
@@ -424,7 +414,7 @@ export default function StaffPage() {
                     }
                   />
                 </div>
-              )} */}
+              )}
             </div>
           </div>
 

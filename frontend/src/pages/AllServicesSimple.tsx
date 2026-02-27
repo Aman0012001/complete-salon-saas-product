@@ -20,18 +20,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import HeroVideoCarousel from "../components/HeroVideoCarousel";
-import ServicesSection from "@/components/ServicesSection";
-import GlowConfidenceSection from "../components/GlowConfidenceSection";
-import FeaturedFacialSection from "../components/FeaturedFacialSection";
-import SkinConcernSection from "../components/SkinConcernSection";
-import SkinAdviceSection from "../components/SkinAdviceSection";
-import FacialMenuSection from "../components/FacialMenuSection";
-import BestSellersSection from "../components/BestSellersSection";
-import ReviewsSection from "../components/ReviewsSection";
-import BeforeAfterSection from "../components/BeforeAfterSection";
-import RecommendedProductsSection from "../components/RecommendedProductsSection";
-import FAQSection from "../components/FAQSection";
+
 
 
 import api from "@/services/api";
@@ -218,17 +207,23 @@ const AllServicesSimple = () => {
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <Navbar />
 
-      <HeroVideoCarousel />
-
-      <ServicesSection />
-      <GlowConfidenceSection />
-      <FeaturedFacialSection />
-      <SkinConcernSection />
-      <SkinAdviceSection />
-      <FacialMenuSection />
-      <BestSellersSection />
-      <ReviewsSection />
-      <BeforeAfterSection />
+      {/* Services Banner */}
+      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2074&auto=format&fit=crop"
+          alt="Services Banner"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="relative z-10 text-center space-y-4 px-4">
+          <h1 className="text-4xl md:text-6xl lg:text-[4rem] font-black text-white uppercase tracking-tight">
+            Our Services
+          </h1>
+          <p className="text-sm md:text-lg text-slate-200 font-medium max-w-2xl mx-auto">
+            Discover a wide range of premium salon rituals precisely curated for your beauty and well-being.
+          </p>
+        </div>
+      </section>
 
       {/* Global Search & Luxury Filter Section */}
       <section className="pt-24 pb-16 bg-background">
@@ -435,8 +430,7 @@ const AllServicesSimple = () => {
         </div>
       </section>
 
-      <RecommendedProductsSection />
-      <FAQSection />
+
 
 
       <Footer />

@@ -317,7 +317,7 @@ export default function UserProfile() {
                                     <div className="w-12 h-12 bg-white/10 rounded-2xl backdrop-blur-md flex items-center justify-center mb-6">
                                         <ShieldCheck className="w-6 h-6 text-accent" />
                                     </div>
-                                    <h3 className="text-xl font-black tracking-tight">Health Records</h3>
+                                    <h3 className="text-white text-xl font-black tracking-tight">Health Records</h3>
                                     <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-1 mb-6">Skin & Treatment History</p>
 
                                     <div className="space-y-4 mb-4">

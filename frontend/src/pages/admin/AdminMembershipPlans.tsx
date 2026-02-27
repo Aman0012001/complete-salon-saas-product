@@ -229,7 +229,7 @@ export default function AdminMembershipPlans() {
 
                                                 <div className="space-y-1">
                                                     <div className="flex items-baseline gap-1">
-                                                        <span className="text-4xl font-black text-[#1E293B]">RM {plan.monthly_price}</span>
+                                                        <span className="text-4xl font-black text-[#1E293B]">MYR {plan.monthly_price}</span>
                                                         <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">/ month</span>
                                                     </div>
                                                 </div>
@@ -309,7 +309,7 @@ export default function AdminMembershipPlans() {
 
                             <div className="grid grid-cols-2 gap-6">
                                 <div className="space-y-3">
-                                    <Label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Monthly (RM)</Label>
+                                    <Label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Monthly (MYR)</Label>
                                     <Input
                                         type="number"
                                         value={currentPlan.monthly_price}
@@ -318,7 +318,7 @@ export default function AdminMembershipPlans() {
                                     />
                                 </div>
                                 <div className="space-y-3">
-                                    <Label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Annual (RM)</Label>
+                                    <Label className="text-xs font-black text-slate-500 uppercase tracking-widest ml-1">Annual (MYR)</Label>
                                     <Input
                                         type="number"
                                         value={currentPlan.annual_price}

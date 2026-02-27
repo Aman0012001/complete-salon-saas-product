@@ -249,7 +249,7 @@ export default function AdminProducts() {
                                                     <span className="text-sm font-semibold text-[#1E293B]">{product.brand || "—"}</span>
                                                 </td>
                                                 <td className="px-6 py-4">
-                                                    <span className="text-sm font-bold text-[#1E293B]">RM {parseFloat(product.price.toString()).toLocaleString()}</span>
+                                                    <span className="text-sm font-bold text-[#1E293B]">MYR {parseFloat(product.price.toString()).toLocaleString()}</span>
                                                 </td>
                                                 <td className="px-6 py-4">
                                                     <Badge className={cn(

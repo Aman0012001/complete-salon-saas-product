@@ -55,7 +55,7 @@ const BestSellersSection = () => {
                         <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.4em]">
                             CURATED FOR YOUR GLOW
                         </span>
-                        <h2 className="text-3xl md:text-5xl lg:text-7xl font-black text-[#1A2338] tracking-tight uppercase">
+                        <h2 className="text-3xl md:text-5xl lg:text-[3rem] font-black text-[#1A2338] tracking-tight uppercase">
                             SHOP OUR BEST SELLERS
                         </h2>
                         <p className="text-sm md:text-base text-slate-400 font-medium max-w-2xl mx-auto">

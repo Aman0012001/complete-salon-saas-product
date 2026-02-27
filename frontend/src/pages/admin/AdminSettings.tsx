@@ -16,6 +16,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { AdminLayout } from "@/components/admin/AdminLayout";
 import api from "@/services/api";
 import { useToast } from "@/hooks/use-toast";
@@ -129,55 +136,55 @@ export default function AdminSettings() {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList className="bg-white p-1.5 rounded-[2rem] border border-slate-100 shadow-sm w-full grid grid-cols-5 h-16 mb-8">
-            <TabsTrigger value="general" className="rounded-[1.5rem] px-2 font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">General</TabsTrigger>
-            <TabsTrigger value="billing" className="rounded-[1.5rem] px-2 font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">Billing</TabsTrigger>
-            <TabsTrigger value="economy" className="rounded-[1.5rem] px-2 font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">Loyalty</TabsTrigger>
-            <TabsTrigger value="notifications" className="rounded-[1.5rem] px-2 font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">Alerts</TabsTrigger>
-            <TabsTrigger value="legal" className="rounded-[1.5rem] px-2 font-bold data-[state=active]:bg-slate-900 data-[state=active]:text-white">Legal</TabsTrigger>
+          <TabsList className="bg-muted/10 p-1 rounded-2xl border border-white/5 shadow-sm w-full grid grid-cols-5 h-16 mb-8">
+            <TabsTrigger value="general" className="rounded-xl px-2 font-bold data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400">General</TabsTrigger>
+            <TabsTrigger value="billing" className="rounded-xl px-2 font-bold data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400">Billing</TabsTrigger>
+            <TabsTrigger value="economy" className="rounded-xl px-2 font-bold data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400">Loyalty</TabsTrigger>
+            <TabsTrigger value="notifications" className="rounded-xl px-2 font-bold data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400">Alerts</TabsTrigger>
+            <TabsTrigger value="legal" className="rounded-xl px-2 font-bold data-[state=active]:bg-[#55402f] data-[state=active]:text-white data-[state=active]:shadow-lg text-slate-400">Legal</TabsTrigger>
           </TabsList>
 
           <TabsContent value="general" className="space-y-6 animate-in fade-in duration-500">
-            <Card className="border-none shadow-sm bg-white rounded-[2.5rem] overflow-hidden">
-              <CardHeader className="bg-slate-50 border-b border-slate-100 p-8">
-                <CardTitle className="text-xl font-black flex items-center gap-3">
+            <Card className="border-0 shadow-sm bg-card rounded-[2.5rem] overflow-hidden">
+              <CardHeader className="bg-white/5 border-b border-white/5 p-8">
+                <CardTitle className="text-xl font-bold flex items-center gap-3 text-white">
                   <Palette className="w-6 h-6 text-accent" />
                   Branding Policy
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Platform Alias</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Platform Alias</Label>
                   <Input
                     value={settings.platform_name}
                     onChange={(e) => setSettings({ ...settings, platform_name: e.target.value })}
-                    className="h-16 bg-slate-50 border-none rounded-2xl font-bold px-6 shadow-inner"
+                    className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-bold px-6 shadow-inner focus:ring-[#55402f]/20"
                   />
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Support Endpoint</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Support Endpoint</Label>
                   <Input
                     type="email"
                     value={settings.support_email}
                     onChange={(e) => setSettings({ ...settings, support_email: e.target.value })}
-                    className="h-16 bg-slate-50 border-none rounded-2xl font-bold px-6 shadow-inner"
+                    className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-bold px-6 shadow-inner focus:ring-[#55402f]/20"
                   />
                 </div>
               </CardContent>
             </Card>
 
-            <Card className="border-none shadow-sm bg-white rounded-[2.5rem] overflow-hidden">
-              <CardHeader className="bg-slate-50 border-b border-slate-100 p-8">
-                <CardTitle className="text-xl font-black flex items-center gap-3">
+            <Card className="border-0 shadow-sm bg-card rounded-[2.5rem] overflow-hidden">
+              <CardHeader className="bg-white/5 border-b border-white/5 p-8">
+                <CardTitle className="text-xl font-bold flex items-center gap-3 text-white">
                   <Shield className="w-6 h-6 text-blue-500" />
                   Governance Rules
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-8 space-y-8">
-                <div className="flex items-center justify-between p-6 rounded-[2rem] bg-slate-50/50 border-2 border-dashed border-slate-100">
+                <div className="flex items-center justify-between p-6 rounded-[2rem] bg-white/5 border border-white/10">
                   <div>
-                    <p className="font-black text-slate-900">Auto-Authorize Saloons</p>
-                    <p className="text-xs font-bold text-slate-400 mt-1 uppercase tracking-tighter">Skip manual review for new entries</p>
+                    <p className="font-bold text-white">Auto-Authorize Saloons</p>
+                    <p className="text-xs font-medium text-white/50 mt-1 uppercase tracking-tighter">Skip manual review for new entries</p>
                   </div>
                   <Switch
                     checked={settings.auto_approve_salons}
@@ -185,12 +192,12 @@ export default function AdminSettings() {
                   />
                 </div>
                 <div className="space-y-3">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Trial Validity (Cycles)</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Trial Validity (Cycles)</Label>
                   <Input
                     type="number"
                     value={settings.trial_days}
                     onChange={(e) => setSettings({ ...settings, trial_days: Number(e.target.value) })}
-                    className="h-16 w-full md:w-48 bg-slate-50 border-none rounded-2xl font-black px-8 text-xl"
+                    className="h-16 w-full md:w-48 bg-muted/10 border-white/10 text-white rounded-2xl font-black px-8 text-xl focus:ring-[#55402f]/20"
                   />
                 </div>
               </CardContent>
@@ -198,123 +205,129 @@ export default function AdminSettings() {
           </TabsContent>
 
           <TabsContent value="billing" className="space-y-6 animate-in fade-in duration-500">
-            <Card className="border-none shadow-sm bg-white rounded-[2.5rem] p-10">
+            <Card className="border-0 shadow-sm bg-card rounded-[2.5rem] p-10">
               <div className="flex items-center gap-4 mb-10">
-                <div className="w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center">
-                  <CreditCard className="w-6 h-6 text-emerald-600" />
+                <div className="w-12 h-12 bg-emerald-500/10 rounded-2xl flex items-center justify-center">
+                  <CreditCard className="w-6 h-6 text-emerald-400" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-900">Financial Protocol</h3>
+                <h3 className="text-2xl font-bold text-white">Financial Protocol</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Platform Tax (%)</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Platform Tax (%)</Label>
                   <Input
                     type="number"
                     value={settings.platform_commission}
                     onChange={(e) => setSettings({ ...settings, platform_commission: Number(e.target.value) })}
-                    className="h-16 bg-slate-50 border-none rounded-2xl font-black px-8 text-2xl"
+                    className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-black px-8 text-2xl focus:ring-[#55402f]/20"
                   />
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Active Currency</Label>
-                  <Input
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Active Currency</Label>
+                  <Select
                     value={settings.currency}
-                    onChange={(e) => setSettings({ ...settings, currency: e.target.value })}
-                    className="h-16 bg-slate-50 border-none rounded-2xl font-black px-8"
-                  />
+                    onValueChange={(val) => setSettings({ ...settings, currency: val })}
+                  >
+                    <SelectTrigger className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-black px-8 text-xl focus:ring-[#55402f]/20">
+                      <SelectValue placeholder="Select Currency" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-white/10 rounded-2xl shadow-2xl p-2 text-white">
+                      <SelectItem value="MYR" className="focus:bg-white/10">MYR (Malaysian Ringgit)</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </Card>
           </TabsContent>
 
           <TabsContent value="economy" className="space-y-6 animate-in fade-in duration-500">
-            <Card className="border-none shadow-sm bg-white rounded-[2.5rem] p-10">
+            <Card className="border-0 shadow-sm bg-card rounded-[2.5rem] p-10">
               <div className="flex items-center gap-4 mb-10">
-                <div className="w-12 h-12 bg-amber-100 rounded-2xl flex items-center justify-center">
-                  <Coins className="w-6 h-6 text-amber-600" />
+                <div className="w-12 h-12 bg-amber-500/10 rounded-2xl flex items-center justify-center">
+                  <Coins className="w-6 h-6 text-amber-500" />
                 </div>
-                <h3 className="text-2xl font-black text-slate-900">Set Point Value</h3>
+                <h3 className="text-2xl font-bold text-white">Set Point Value</h3>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Point Valuation ({settings.currency})</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Point Valuation ({settings.currency})</Label>
                   <div className="relative">
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-slate-400">1 Point =</div>
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-white/40">1 Point =</div>
                     <Input
                       type="number"
                       step="0.01"
                       value={settings.coin_price}
                       onChange={(e) => setSettings({ ...settings, coin_price: Number(e.target.value) })}
-                      className="h-16 bg-slate-50 border-none rounded-2xl font-black pl-24 pr-8 text-2xl"
+                      className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-black pl-24 pr-8 text-2xl focus:ring-[#55402f]/20"
                     />
                   </div>
-                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase">Value of one platform point in {settings.currency}.</p>
+                  <p className="text-xs font-bold text-white/40 mt-2 uppercase">Value of one platform point in {settings.currency}.</p>
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Earning Rule</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Earning Rule</Label>
                   <div className="relative">
-                    <div className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-slate-400">1 Point per</div>
+                    <div className="absolute left-6 top-1/2 -translate-y-1/2 font-bold text-white/40">1 Point per</div>
                     <Input
                       type="number"
                       value={settings.coin_earning_rate}
                       onChange={(e) => setSettings({ ...settings, coin_earning_rate: Number(e.target.value) })}
-                      className="h-16 bg-slate-50 border-none rounded-2xl font-black pl-32 pr-12 text-2xl"
+                      className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-black pl-32 pr-12 text-2xl focus:ring-[#55402f]/20"
                     />
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 font-bold text-slate-400">{settings.currency}</div>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 font-bold text-white/40">{settings.currency}</div>
                   </div>
-                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase">Amount of spending required to earn 1 point.</p>
+                  <p className="text-xs font-bold text-white/40 mt-2 uppercase">Amount of spending required to earn 1 point.</p>
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Minimum Redemption</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Minimum Redemption</Label>
                   <Input
                     type="number"
                     value={settings.coin_min_redemption}
                     onChange={(e) => setSettings({ ...settings, coin_min_redemption: Number(e.target.value) })}
-                    className="h-16 bg-slate-50 border-none rounded-2xl font-black px-8 text-2xl"
+                    className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-black px-8 text-2xl focus:ring-[#55402f]/20"
                   />
-                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase">Minimum points required in balance to use for a booking.</p>
+                  <p className="text-xs font-bold text-white/40 mt-2 uppercase">Minimum points required in balance to use for a booking.</p>
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">Maximum Discount (%)</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">Maximum Discount (%)</Label>
                   <div className="relative">
                     <Input
                       type="number"
                       max="100"
                       value={settings.coin_max_discount_percent}
                       onChange={(e) => setSettings({ ...settings, coin_max_discount_percent: Number(e.target.value) })}
-                      className="h-16 bg-slate-50 border-none rounded-2xl font-black px-8 text-2xl"
+                      className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-black px-8 text-2xl focus:ring-[#55402f]/20"
                     />
-                    <div className="absolute right-6 top-1/2 -translate-y-1/2 font-bold text-slate-400">%</div>
+                    <div className="absolute right-6 top-1/2 -translate-y-1/2 font-bold text-white/40">%</div>
                   </div>
-                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase">Max percentage of total price that can be paid with points.</p>
+                  <p className="text-xs font-bold text-white/40 mt-2 uppercase">Max percentage of total price that can be paid with points.</p>
                 </div>
                 <div className="space-y-4">
-                  <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">New Account Bonus</Label>
+                  <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">New Account Bonus</Label>
                   <Input
                     type="number"
                     value={settings.coin_signup_bonus}
                     onChange={(e) => setSettings({ ...settings, coin_signup_bonus: Number(e.target.value) })}
-                    className="h-16 bg-slate-50 border-none rounded-2xl font-black px-8 text-2xl"
+                    className="h-16 bg-muted/10 border-white/10 text-white rounded-2xl font-black px-8 text-2xl focus:ring-[#55402f]/20"
                   />
-                  <p className="text-xs font-bold text-slate-400 mt-2 uppercase">Initial point balance for new users.</p>
+                  <p className="text-xs font-bold text-white/40 mt-2 uppercase">Initial point balance for new users.</p>
                 </div>
               </div>
             </Card>
           </TabsContent>
 
           <TabsContent value="notifications" className="space-y-6 animate-in fade-in duration-500">
-            <Card className="border-none shadow-sm bg-white rounded-[3rem] p-10">
-              <h3 className="text-2xl font-black text-slate-900 mb-8">Signal Infrastructure</h3>
+            <Card className="border-0 shadow-sm bg-card rounded-[3rem] p-10">
+              <h3 className="text-2xl font-bold text-white mb-8">Signal Infrastructure</h3>
               <div className="space-y-4">
                 {[
                   { label: "New Saloon Alerts", desc: "Notify upon unverified registry entry" },
                   { label: "Aggregate Summary", desc: "Daily local station health check" },
                   { label: "Transaction Logs", desc: "Real-time auditing and alerts" }
                 ].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between p-6 rounded-3xl bg-slate-50 border border-slate-100">
+                  <div key={i} className="flex items-center justify-between p-6 rounded-3xl bg-white/5 border border-white/10">
                     <div>
-                      <p className="font-black text-slate-900">{item.label}</p>
-                      <p className="text-xs font-bold text-slate-400 mt-1">{item.desc}</p>
+                      <p className="font-bold text-white">{item.label}</p>
+                      <p className="text-xs font-medium text-white/50 mt-1">{item.desc}</p>
                     </div>
                     <Switch defaultChecked={i !== 1} />
                   </div>
@@ -324,16 +337,16 @@ export default function AdminSettings() {
           </TabsContent>
 
           <TabsContent value="legal" className="animate-in fade-in duration-500">
-            <Card className="border-none shadow-sm bg-white rounded-[3rem] p-10">
+            <Card className="border-0 shadow-sm bg-card rounded-[3rem] p-10">
               <div className="flex items-center gap-4 mb-10">
-                <FileText className="w-8 h-8 text-slate-400" />
-                <h3 className="text-2xl font-black text-slate-900">Registry Mandates</h3>
+                <FileText className="w-8 h-8 text-white/50" />
+                <h3 className="text-2xl font-bold text-white">Registry Mandates</h3>
               </div>
               <div className="space-y-6">
                 {['Terms of Service Registry', 'Privacy Encryption Policy', 'Refund Liability Terms'].map((policy, i) => (
                   <div key={i} className="space-y-2">
-                    <Label className="text-[10px] font-black uppercase text-slate-400 tracking-widest ml-1">{policy}</Label>
-                    <Input placeholder="/policy-endpoint" className="h-14 bg-slate-50 border-none rounded-xl font-bold px-6" />
+                    <Label className="text-[10px] font-black uppercase text-white/50 tracking-widest ml-1">{policy}</Label>
+                    <Input placeholder="/policy-endpoint" className="h-14 bg-muted/10 border-white/10 text-white rounded-xl font-bold px-6 focus:ring-[#55402f]/20" />
                   </div>
                 ))}
               </div>

@@ -52,7 +52,7 @@ const FeaturedFacialSection = () => {
                                 BEST SELLER
                             </span>
 
-                            <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-[#1A2338] tracking-tight leading-[1.05] uppercase">
+                            <h2 className="text-4xl md:text-[3rem] font-black text-[#1A2338] tracking-tight leading-[1.05] uppercase">
                                 MIAMI'S #1  BUCCAL FACIAL <br /> MASSAGE
                             </h2>
                         </div>

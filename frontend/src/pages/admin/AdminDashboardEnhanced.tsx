@@ -334,10 +334,10 @@ export default function AdminDashboardEnhanced() {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {[
             { label: "Total Salons", value: formatCompactNumber(dashboardStats.totalSalons), active: `${dashboardStats.activeSalons} Active`, icon: Building2, color: "text-blue-500", bg: "bg-blue-50" },
-            { label: "Plan Sales", value: `RM ${formatCompactNumber(dashboardStats.planRevenue)}`, active: "Subscription", icon: Zap, color: "text-indigo-500", bg: "bg-indigo-50" },
-            { label: "Service Sales", value: `RM ${formatCompactNumber(dashboardStats.serviceRevenue)}`, active: "Bookings", icon: Activity, color: "text-emerald-500", bg: "bg-emerald-50" },
-            { label: "Product Sales", value: `RM ${formatCompactNumber(dashboardStats.productRevenue)}`, active: "Retail", icon: Banknote, color: "text-rose-500", bg: "bg-rose-50" },
-            { label: "Total Revenue", value: `RM ${formatCompactNumber(dashboardStats.monthlyRevenue)}`, active: "Gross Intake", icon: BarChart3, color: "text-purple-500", bg: "bg-purple-50" },
+            { label: "Plan Sales", value: `MYR ${formatCompactNumber(dashboardStats.planRevenue)}`, active: "Subscription", icon: Zap, color: "text-indigo-500", bg: "bg-indigo-50" },
+            { label: "Service Sales", value: `MYR ${formatCompactNumber(dashboardStats.serviceRevenue)}`, active: "Bookings", icon: Activity, color: "text-emerald-500", bg: "bg-emerald-50" },
+            { label: "Product Sales", value: `MYR ${formatCompactNumber(dashboardStats.productRevenue)}`, active: "Retail", icon: Banknote, color: "text-rose-500", bg: "bg-rose-50" },
+            { label: "Total Revenue", value: `MYR ${formatCompactNumber(dashboardStats.monthlyRevenue)}`, active: "Gross Intake", icon: BarChart3, color: "text-purple-500", bg: "bg-purple-50" },
           ].map((stat, i) => (
             <Card key={i} className={`border-none shadow-sm bg-white rounded-3xl group hover:shadow-xl transition-all ${stat.label === 'Total Revenue' ? 'lg:col-span-1' : ''}`}>
               <CardContent className="p-6">
@@ -391,7 +391,7 @@ export default function AdminDashboardEnhanced() {
                     axisLine={false}
                     tickLine={false}
                     tick={{ fill: '#ffffff', fontWeight: 600, fontSize: 12 }}
-                    tickFormatter={(value) => `RM ${formatCompactNumber(value)}`}
+                    tickFormatter={(value) => `MYR ${formatCompactNumber(value)}`}
                     dx={-10}
                   />
                   <Tooltip
@@ -405,7 +405,7 @@ export default function AdminDashboardEnhanced() {
                     labelStyle={{ color: '#94a3b8', fontWeight: 600, marginBottom: '8px', fontSize: '12px' }}
                     itemStyle={{ color: '#fff', fontWeight: 700, fontSize: '14px' }}
                     cursor={{ stroke: '#22d3ee', strokeWidth: 2, strokeDasharray: '5 5' }}
-                    formatter={(value: number) => [`RM ${formatCompactNumber(value)}`, 'Revenue']}
+                    formatter={(value: number) => [`MYR ${formatCompactNumber(value)}`, 'Revenue']}
                   />
 
                   <Area

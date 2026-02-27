@@ -273,7 +273,7 @@ export default function AdminAddProduct() {
                                                 <SelectTrigger className="h-12 bg-white border-[#CBD5E1] rounded-lg focus:ring-1 focus:ring-blue-500 text-slate-600 font-medium">
                                                     <SelectValue placeholder="Select Category" />
                                                 </SelectTrigger>
-                                                <SelectContent className="bg-white border-[#E2E8F0]">
+                                                <SelectContent className="bg-white border-[#E2E8F0] text-[#1E293B]">
                                                     {['General', 'Hair Care', 'Skin Care', 'Nails', 'Equipment', 'Professional Supplies', 'Other'].map(cat => (
                                                         <SelectItem key={cat} value={cat}>{cat}</SelectItem>
                                                     ))}
@@ -300,7 +300,7 @@ export default function AdminAddProduct() {
                                                 <SelectTrigger className="h-12 bg-white border-[#CBD5E1] rounded-lg focus:ring-1 focus:ring-blue-500 text-slate-600 font-medium">
                                                     <SelectValue placeholder="Select Brand" />
                                                 </SelectTrigger>
-                                                <SelectContent className="bg-white border-[#E2E8F0]">
+                                                <SelectContent className="bg-white border-[#E2E8F0] text-[#1E293B]">
                                                     {['L\'Oréal', 'Dyson', 'Olaplex', 'Moroccanoil', 'SkinCeuticals', 'Other'].map(brand => (
                                                         <SelectItem key={brand} value={brand}>{brand}</SelectItem>
                                                     ))}
@@ -323,7 +323,7 @@ export default function AdminAddProduct() {
                                     <h3 className="text-xl font-bold text-[#1E293B] tracking-tight">Pricing & Stock</h3>
 
                                     <div className="space-y-3">
-                                        <Label className="text-base font-semibold text-[#1E293B]">Price (RM)</Label>
+                                        <Label className="text-base font-semibold text-[#1E293B]">Price (MYR)</Label>
                                         <Input
                                             type="number"
                                             value={formData.price}
@@ -361,7 +361,7 @@ export default function AdminAddProduct() {
                                             <SelectTrigger className="h-12 bg-white border-[#CBD5E1] rounded-lg focus:ring-1 focus:ring-blue-500 text-slate-600 font-medium">
                                                 <SelectValue placeholder="Select Status" />
                                             </SelectTrigger>
-                                            <SelectContent className="bg-white border-[#E2E8F0]">
+                                            <SelectContent className="bg-white border-[#E2E8F0] text-[#1E293B]">
                                                 <SelectItem value="Active">Active</SelectItem>
                                                 <SelectItem value="Inactive">Inactive</SelectItem>
                                             </SelectContent>

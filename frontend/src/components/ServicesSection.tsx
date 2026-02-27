@@ -77,7 +77,7 @@ const ServicesSection = () => {
             transition={{ duration: 0.8 }}
             className="space-y-4"
           >
-            <h2 className="text-4xl md:text-5xl lg:text-7xl font-black text-[#1A2B3C] tracking-tighter uppercase font-sans">
+            <h2 className="text-4xl md:text-5xl lg:text-[3rem] font-black text-[#1A2B3C] tracking-tighter uppercase font-sans">
               INSIDE OUR SPACE SALONS
             </h2>
             <p className="text-base md:text-xl text-slate-500 font-medium leading-relaxed max-w-2xl mx-auto">

@@ -48,7 +48,7 @@ const InsideSpaceSection = () => {
                         transition={{ duration: 0.8 }}
                         className="space-y-4"
                     >
-                        <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold text-foreground tracking-tight font-['Playfair_Display']">
+                        <h2 className="text-4xl md:text-5xl lg:text-[3rem] font-bold text-foreground tracking-tight font-['Playfair_Display']">
                             Inside Our Space Salons
                         </h2>
                     </motion.div>

@@ -44,7 +44,7 @@ const FacialMenuSection = () => {
 
                     {/* Left Column: Menu */}
                     <div className="space-y-12">
-                        <h2 className="text-3xl md:text-5xl lg:text-6xl font-black text-[#1A2338] tracking-tight uppercase mb-16">
+                        <h2 className="text-3xl md:text-5xl lg:text-[3rem] font-black text-[#1A2338] tracking-tight uppercase mb-16">
                             Our Facial Menu
                         </h2>
 

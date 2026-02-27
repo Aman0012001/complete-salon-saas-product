@@ -61,7 +61,7 @@ const NewsletterSection = () => {
           {/* Subtle Inner Glow */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
 
-          <h2 className="text-4xl md:text-6xl font-extrabold mb-6 tracking-tight leading-[1.1] text-white relative z-10">
+          <h2 className="text-4xl md:text-[3rem] font-extrabold mb-6 tracking-tight leading-[1.1] text-white relative z-10">
             Stay Updated with the Latest <br className="hidden md:block" />
             Salon Trends
           </h2>

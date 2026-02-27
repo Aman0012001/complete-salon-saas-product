@@ -89,7 +89,7 @@ export default function AdminPaymentsEnhanced() {
       toast({ title: "No Phone Number", description: "Salon does not have a phone number saved.", variant: "destructive" });
       return;
     }
-    const message = `Hello, your platform invoice for ${selectedPayment.salon_name} is ready. ID: ${selectedPayment.id}, Amount: RM ${selectedPayment.amount}.`;
+    const message = `Hello, your platform invoice for ${selectedPayment.salon_name} is ready. ID: ${selectedPayment.id}, Amount: MYR ${selectedPayment.amount}.`;
     const encodedMsg = encodeURIComponent(message);
     const url = type === 'whatsapp' ? `https://wa.me/${cleanPhone}?text=${encodedMsg}` : `sms:${cleanPhone}?body=${encodedMsg}`;
     window.open(url, '_blank');
@@ -153,7 +153,7 @@ export default function AdminPaymentsEnhanced() {
               </div>
             </div>
             <div className="text-right">
-              <p className="text-4xl font-black text-white">RM {totalRevenue}</p>
+              <p className="text-4xl font-black text-white">MYR {totalRevenue}</p>
               <p className="text-xs font-black text-slate-500 uppercase tracking-widest">Total Settled Revenue</p>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default function AdminPaymentsEnhanced() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-slate-400 tracking-widest">Net Platform Revenue</p>
-              <p className="text-2xl font-black text-slate-900">RM {formatCompactNumber(totalRevenue)}</p>
+              <p className="text-2xl font-black text-slate-900">MYR {formatCompactNumber(totalRevenue)}</p>
             </div>
           </Card>
           <Card className="border-none shadow-sm bg-white rounded-3xl p-6 flex items-center gap-6">
@@ -184,7 +184,7 @@ export default function AdminPaymentsEnhanced() {
             </div>
             <div>
               <p className="text-[10px] font-black uppercase text-white tracking-widest">In-Progress Volume</p>
-              <p className="text-2xl font-black text-slate-900">RM {formatCompactNumber(payments.filter(p => p.status === 'pending').reduce((s, p) => s + p.amount, 0))}</p>
+              <p className="text-2xl font-black text-slate-900">MYR {formatCompactNumber(payments.filter(p => p.status === 'pending').reduce((s, p) => s + p.amount, 0))}</p>
             </div>
           </Card>
         </div>
@@ -245,13 +245,13 @@ export default function AdminPaymentsEnhanced() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <p className="font-black text-slate-900 text-lg">RM {p.amount}</p>
+                      <p className="font-black text-slate-900 text-lg">MYR {p.amount}</p>
                     </TableCell>
                     <TableCell className="font-bold text-slate-600">
                       {p.salon_name}
                     </TableCell>
                     <TableCell className="font-black text-amber-600 text-sm">
-                      - RM {p.platform_fee}
+                      - MYR {p.platform_fee}
                     </TableCell>
                     <TableCell>
                       {p.status === 'completed' ? (
@@ -318,7 +318,7 @@ export default function AdminPaymentsEnhanced() {
                       <tbody>
                         <tr className="font-medium">
                           <td className="px-6 py-5">Subscription / Processing Fee for {selectedPayment.id}</td>
-                          <td className="px-6 py-5 text-right font-bold text-slate-900">RM {selectedPayment.amount}</td>
+                          <td className="px-6 py-5 text-right font-bold text-slate-900">MYR {selectedPayment.amount}</td>
                         </tr>
                       </tbody>
                     </table>

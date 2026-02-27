@@ -35,7 +35,7 @@ const GlowConfidenceSection = () => {
                             GLOW WITH CONFIDENCE
                         </span>
 
-                        <h2 className="text-4xl md:text-5xl lg:text-8xl font-black text-[#1A2338] tracking-tight leading-[1.1] uppercase">
+                        <h2 className="text-4xl md:text-[3rem] font-black text-[#1A2338] tracking-tight leading-[1.1] uppercase">
                             GLOW WITH  CONFIDENCE<br className="hidden md:block" />
                         </h2>
                     </motion.div>
