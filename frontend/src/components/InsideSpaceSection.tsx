@@ -6,51 +6,45 @@ import { getImageUrl } from "@/utils/imageUrl";
 
 const InsideSpaceSection = () => {
     const navigate = useNavigate();
-    const [categories, setCategories] = useState<any[]>([]);
+    const [services, setServices] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchDynamicCategories = async () => {
+        const fetchDynamicServices = async () => {
             try {
                 setLoading(true);
-                const services = await api.services.getAll();
+                const data = await api.services.getAll();
 
-                let combinedCats: any[] = [];
-                const fallbackCats = [
+                let items: any[] = [];
+                const fallbacks = [
                     { id: "facials", title: "Facials", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop" },
                     { id: "body-massages", title: "Body Massages", image: "https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop" },
                     { id: "acupuncture", title: "Acupuncture", image: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&auto=format&fit=crop" },
                     { id: "tea-bar", title: "Tea Bar", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc206e?w=800&auto=format&fit=crop" },
                 ];
 
-                if (services && services.length > 0) {
-                    const categoryMap = new Map();
-                    services.forEach((service: any) => {
-                        if (service.category && !categoryMap.has(service.category)) {
-                            categoryMap.set(service.category, {
-                                id: service.id,
-                                title: service.category,
-                                image: service.image_url || service.cover_image_url
-                            });
-                        }
-                    });
-                    combinedCats = Array.from(categoryMap.values()).slice(0, 4);
+                if (data && data.length > 0) {
+                    items = data.slice(0, 4).map((service: any) => ({
+                        id: service.id,
+                        title: service.name,
+                        image: service.image_url || service.cover_image_url
+                    }));
                 }
 
                 // Fill remaining slots with fallbacks if less than 4
-                if (combinedCats.length < 4) {
-                    const existingTitles = new Set(combinedCats.map(c => c.title));
-                    fallbackCats.forEach(f => {
-                        if (combinedCats.length < 4 && !existingTitles.has(f.title)) {
-                            combinedCats.push(f);
+                if (items.length < 4) {
+                    const existingTitles = new Set(items.map(s => s.title));
+                    fallbacks.forEach(f => {
+                        if (items.length < 4 && !existingTitles.has(f.title)) {
+                            items.push(f);
                         }
                     });
                 }
 
-                setCategories(combinedCats);
+                setServices(items);
             } catch (error) {
                 console.error("[InsideSpaceSection] Error fetching:", error);
-                setCategories([
+                setServices([
                     { id: "f1", title: "Facials", image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=800&auto=format&fit=crop" },
                     { id: "f2", title: "Body Massages", image: "https://images.unsplash.com/photo-1544161515-4af6b1d46af0?w=800&auto=format&fit=crop" },
                     { id: "f3", title: "Acupuncture", image: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?w=800&auto=format&fit=crop" },
@@ -61,11 +55,16 @@ const InsideSpaceSection = () => {
             }
         };
 
-        fetchDynamicCategories();
+        fetchDynamicServices();
     }, []);
 
-    const handleCardClick = (cat: any) => {
-        navigate(`/salons?category=${encodeURIComponent(cat.title)}`);
+    const handleServiceClick = (service: any) => {
+        // If it's a fallback ID, maybe navigate to category search or skip
+        if (service.id.startsWith('f') || service.id.length < 5) {
+            navigate(`/salons?category=${encodeURIComponent(service.title)}`);
+        } else {
+            navigate(`/services/${service.id}`);
+        }
     };
 
     return (
@@ -95,22 +94,22 @@ const InsideSpaceSection = () => {
                                 </div>
                             ))
                         ) : (
-                            categories.map((cat, index) => (
+                            services.map((service, index) => (
                                 <motion.div
-                                    key={cat.id || index}
+                                    key={service.id || index}
                                     initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
                                     viewport={{ once: true }}
                                     transition={{ delay: index * 0.1, duration: 0.6 }}
                                 >
                                     <div
-                                        onClick={() => handleCardClick(cat)}
+                                        onClick={() => handleServiceClick(service)}
                                         className="group cursor-pointer flex flex-col items-center space-y-8"
                                     >
                                         <div className="relative w-full aspect-square rounded-[48px] overflow-hidden transition-all duration-700 shadow-sm group-hover:shadow-2xl active:scale-[0.98]">
                                             <img
-                                                src={getImageUrl(cat.image, 'service', cat.id)}
-                                                alt={cat.title}
+                                                src={getImageUrl(service.image, 'service', service.id)}
+                                                alt={service.title}
                                                 className="w-full h-full object-cover transition-all duration-1000 group-hover:scale-105"
                                                 onError={(e) => {
                                                     const target = e.target as HTMLImageElement;
@@ -121,7 +120,7 @@ const InsideSpaceSection = () => {
 
                                         <div className="text-center relative">
                                             <h3 className="font-bold text-2xl md:text-3xl text-foreground transition-colors">
-                                                {cat.title}
+                                                {service.title}
                                             </h3>
                                             <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-foreground origin-center" />
                                         </div>
