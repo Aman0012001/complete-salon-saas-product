@@ -40,6 +40,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import StripePaymentForm from "@/components/StripePaymentForm";
 
 interface Service {
   id: string;
@@ -105,6 +106,9 @@ const BookAppointment = () => {
   const [couponError, setCouponError] = useState("");
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
+  const [showPayment, setShowPayment] = useState(false);
+  const [pendingBookingIds, setPendingBookingIds] = useState<string[]>([]);
+
   const [step, setStep] = useState(1); // 1 to 8
 
   // New States for 8-Step Flow
@@ -284,6 +288,20 @@ const BookAppointment = () => {
       return;
     }
 
+    const finalPrice = calculateTotal();
+
+    // If payment is required, we just show the payment form here. 
+    // We defer booking creation until after payment succeeds!
+    if (finalPrice > 0) {
+      setShowPayment(true);
+      return;
+    }
+
+    // If entirely free, complete immediately.
+    await completeBookingProcess();
+  };
+
+  const completeBookingProcess = async (paymentIntentId?: string) => {
     setBooking(true);
     try {
       const subtotal = calculateSubtotal();
@@ -305,12 +323,15 @@ const BookAppointment = () => {
         coupon_code: appliedCoupon?.code
       };
 
+      let newBookingIds: string[] = [];
+
       if (bookingType === 'decide_later' || (selectedServices.length === 0 && selectedAddOns.length === 0)) {
-        await api.bookings.create({
+        const res: any = await api.bookings.create({
           ...bookingPayload,
           service_id: selectedServices[0]?.id || null, // Default to first service if available, else null
           price_paid: finalPrice || 100 // Default price for decide_later if not specified
         });
+        if (res?.id) newBookingIds.push(res.id);
       } else {
         // Distribute discount proportionally if multiple services (simplified: apply to first)
         const totalItems = [...selectedServices, ...selectedAddOns];
@@ -318,25 +339,47 @@ const BookAppointment = () => {
           const service = totalItems[i];
           const serviceDiscount = i === 0 ? couponDiscount : 0;
           const serviceCoinDiscount = i === 0 ? coinDiscount : 0;
-          await api.bookings.create({
+          const res: any = await api.bookings.create({
             ...bookingPayload,
             service_id: service.id,
             price_paid: Math.max(0, Number(service.price) - serviceDiscount - serviceCoinDiscount),
             discount_amount: serviceDiscount
           });
+          if (res?.id) newBookingIds.push(res.id);
         }
       }
 
+      setPendingBookingIds(newBookingIds);
+
+      // If we are arriving here post-payment, sync the new booking IDs with Stripe
+      if (paymentIntentId && newBookingIds.length > 0) {
+        await api.stripe.confirmPayment({
+          payment_intent_id: paymentIntentId,
+          type: 'booking',
+          reference_id: newBookingIds.join(',')
+        });
+      }
+
       toast({
-        title: "Booking Ritual Initiated!",
-        description: "Your session is being prepared by our stylists."
+        title: paymentIntentId ? "Payment Successful!" : "Booking Ritual Initiated!",
+        description: paymentIntentId ? "Your session is confirmed." : "Your session is being prepared by our stylists."
       });
       setStep(7);
+
     } catch (error: any) {
       toast({ title: "Ritual Interrupted", description: error.message, variant: "destructive" });
     } finally {
       setBooking(false);
     }
+  };
+
+  const handlePaymentSuccess = async (paymentIntentId: string) => {
+    // Once payment clears, we actually issue the bookings 
+    await completeBookingProcess(paymentIntentId);
+  };
+
+  const handlePaymentError = (msg: string) => {
+    console.warn("Payment error", msg);
   };
 
   const applyCoupon = async () => {
@@ -789,44 +832,44 @@ const BookAppointment = () => {
             {/* STEP 6: POLICY REVIEW (was Step 5) */}
             {step === 6 && (
               <motion.div key="step6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
-                <Card className="border-none shadow-sm bg-slate-900 text-white rounded-[3rem] p-12 space-y-12">
+                <Card className="border-2 border-slate-900 shadow-sm bg-white text-slate-900 rounded-[1.5rem] p-12 space-y-12">
                   <div className="space-y-6">
-                    <h3 className="text-xl md:text-2xl font-black uppercase tracking-tighter border-b border-white/10 pb-6">Cancellation & House Policy</h3>
-                    <div className="space-y-8 text-slate-400 font-medium italic leading-relaxed text-xs md:text-sm">
+                    <h3 className=" border-2 text-xl md:text-2xl font-black uppercase tracking-tighter border-b border-slate-100 pb-6">Cancellation & House Policy</h3>
+                    <div className="space-y-8 text-slate-500 font-medium italic leading-relaxed text-xs md:text-sm">
                       <p>We value everyone’s time and kindly request that any changes or cancellations be made at least 24 hours in advance.</p>
                       <div className="space-y-4">
-                        <p className="text-white font-black uppercase tracking-widest text-[10px] opacity-60">To maintain a comfortable environment:</p>
+                        <p className="text-slate-900 font-black uppercase tracking-widest text-[10px] opacity-60">To maintain a comfortable environment:</p>
                         <ul className="space-y-4">
                           <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white font-black text-[10px] shrink-0">1</span>
+                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">1</span>
                             <span>No pets are allowed in the studio.</span>
                           </li>
                           <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white font-black text-[10px] shrink-0">2</span>
+                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">2</span>
                             <span>Children under 12 years old are not permitted.</span>
                           </li>
                           <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white font-black text-[10px] shrink-0">3</span>
+                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">3</span>
                             <span>Only one accompanying person allowed.</span>
                           </li>
                           <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-white/5 flex items-center justify-center border border-white/10 text-white font-black text-[10px] shrink-0">4</span>
+                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">4</span>
                             <span>Same-day cancellations, no-shows, or late arrivals (15+ min) will be charged 100% of the service fee.</span>
                           </li>
                         </ul>
                       </div>
-                      <p className="pt-4 border-t border-white/10">By booking with us, you agree to these terms. For assistance, contact: 011-2319 8819.</p>
+                      <p className="pt-4 border-t border-slate-100">By booking with us, you agree to these terms. For assistance, contact: 011-2319 8819.</p>
                     </div>
                   </div>
 
-                  <div className="flex items-start gap-4 p-8 rounded-[2rem] bg-white/5 border border-white/10">
+                  <div className="flex items-start gap-4 p-8 rounded-[2rem] bg-slate-50 border border-slate-100">
                     <Checkbox
                       id="policy"
                       checked={policyAccepted}
                       onCheckedChange={(val) => setPolicyAccepted(val as boolean)}
-                      className="mt-1 border-white/20 data-[state=checked]:bg-accent data-[state=checked]:text-white"
+                      className="mt-1 border-slate-200 data-[state=checked]:bg-accent data-[state=checked]:text-white"
                     />
-                    <Label htmlFor="policy" className="text-xs md:text-sm font-bold text-slate-300 cursor-pointer select-none leading-relaxed">
+                    <Label htmlFor="policy" className="text-xs md:text-sm font-bold text-slate-700 cursor-pointer select-none leading-relaxed">
                       I have read and agree to the Cancellation & House Policy.
                     </Label>
                   </div>
@@ -840,12 +883,12 @@ const BookAppointment = () => {
                           value={couponCode}
                           onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
                           placeholder="PROMO CODE"
-                          className="h-14 md:h-16 rounded-2xl bg-white/5 border-2 border-white/10 focus:border-accent px-4 md:px-6 font-bold text-white placeholder:text-slate-500 text-sm"
+                          className="h-14 md:h-16 rounded-2xl bg-white border-2 border-slate-100 focus:border-accent px-4 md:px-6 font-bold text-slate-900 placeholder:text-slate-400 text-sm"
                         />
                         <Button
                           onClick={applyCoupon}
                           disabled={!couponCode || !!appliedCoupon}
-                          className="h-14 md:h-16 px-6 md:px-8 rounded-2xl bg-accent hover:bg-accent/80 text-black font-black uppercase tracking-widest text-xs md:text-sm"
+                          className="h-14 md:h-16 px-6 md:px-8 rounded-2xl bg-[#1A1A1A] hover:bg-black text-white font-black uppercase tracking-widest text-xs md:text-sm"
                         >
                           {appliedCoupon ? "OK" : "Apply"}
                         </Button>
@@ -873,12 +916,12 @@ const BookAppointment = () => {
                           "w-full h-14 md:h-16 rounded-2xl border-2 transition-all flex items-center justify-between px-4 md:px-6",
                           useCoins
                             ? "bg-accent/10 border-accent text-accent"
-                            : "bg-white/5 border-white/10 text-white hover:border-white/20",
+                            : "bg-white border-slate-100 text-slate-900 hover:border-slate-200",
                           userCoins < coinSettings.min_redemption && "opacity-50 cursor-not-allowed"
                         )}
                       >
                         <div className="flex items-center gap-3">
-                          <Coins className={cn("w-5 h-5", useCoins ? "text-accent" : "text-white/40")} />
+                          <Coins className={cn("w-5 h-5", useCoins ? "text-accent" : "text-slate-400")} />
                           <span className="font-black uppercase text-xs tracking-widest">
                             {useCoins ? "Redeeming Balance" : "Redeem Points"}
                           </span>
@@ -891,7 +934,7 @@ const BookAppointment = () => {
                       </button>
 
                       {userCoins < coinSettings.min_redemption ? (
-                        <p className="text-[10px] font-bold text-red-400 uppercase tracking-tight italic ml-1">
+                        <p className="text-[10px] font-bold text-red-500 uppercase tracking-tight italic ml-1">
                           Min. {coinSettings.min_redemption} points required to redeem
                         </p>
                       ) : useCoins && (
@@ -904,8 +947,8 @@ const BookAppointment = () => {
                   </div>
 
                   {/* Price Breakdown */}
-                  <div className="space-y-4 pt-8 border-t border-white/10">
-                    <div className="flex justify-between items-center text-xs md:text-sm font-medium text-slate-400">
+                  <div className="space-y-4 pt-8 border-t border-slate-100">
+                    <div className="flex justify-between items-center text-xs md:text-sm font-medium text-slate-500">
                       <span>Subtotal</span>
                       <span>RM {calculateSubtotal().toFixed(2)}</span>
                     </div>
@@ -923,18 +966,44 @@ const BookAppointment = () => {
                     )}
                   </div>
 
-                  <div className="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-8">
+                  <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="text-center md:text-left w-full md:w-auto flex justify-between md:block items-center">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-500 mb-0 md:mb-2">Total Reservation Value</p>
-                      <p className="text-3xl md:text-5xl font-black text-accent tracking-tighter">RM {calculateTotal().toFixed(2)}</p>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0 md:mb-2">Total Reservation Value</p>
+                      <p className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">RM {calculateTotal().toFixed(2)}</p>
                     </div>
-                    <Button
-                      onClick={handleBooking}
-                      disabled={!policyAccepted || booking}
-                      className="w-full md:w-auto h-16 md:h-20 px-8 md:px-16 bg-accent hover:bg-white hover:text-black text-black rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-xs md:text-sm shadow-2xl transition-all"
-                    >
-                      {booking ? "Finalizing Registry..." : "Confirm & Book Now"}
-                    </Button>
+
+                    <div className="w-full md:w-auto">
+                      {!showPayment ? (
+                        <Button
+                          onClick={handleBooking}
+                          disabled={!policyAccepted || booking}
+                          className="w-full md:w-auto h-16 md:h-20 px-8 md:px-16 bg-[#1A1A1A] hover:bg-black text-white rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-xs md:text-sm shadow-xl transition-all"
+                        >
+                          {booking ? "Finalizing Registry..." : "Confirm & Book Now"}
+                        </Button>
+                      ) : booking ? (
+                        <div className="w-full md:min-w-[400px] animate-in fade-in zoom-in-95 bg-slate-50 border border-slate-100 p-8 rounded-[2rem] flex flex-col items-center justify-center space-y-4">
+                          <Loader2 className="w-8 h-8 animate-spin text-accent" />
+                          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 animate-pulse text-center">Securing your reservation...</p>
+                        </div>
+                      ) : (
+                        <div className="w-full md:min-w-[400px] animate-in fade-in zoom-in-95 bg-slate-50 border border-slate-100 p-6 rounded-[2rem]">
+                          <StripePaymentForm
+                            amount={calculateTotal()}
+                            type="booking"
+                            referenceId={pendingBookingIds.join(',')}
+                            onSuccess={handlePaymentSuccess}
+                            onError={handlePaymentError}
+                          />
+                          <button
+                            onClick={() => setShowPayment(false)}
+                            className="w-full text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors mt-4 underline underline-offset-4"
+                          >
+                            ← Back to details
+                          </button>
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </Card>
               </motion.div>

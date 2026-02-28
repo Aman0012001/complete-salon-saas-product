@@ -954,7 +954,19 @@ export const api = {
             const url = `/coupons/validate/${code}${salonId ? `?salon_id=${salonId}` : ''}`;
             return fetchWithAuth(url);
         },
-    }
+    },
+    stripe: {
+        createPaymentIntent: (data: { amount: number; currency?: string; metadata?: Record<string, string> }) =>
+            fetchWithAuth('/stripe/create-payment-intent', {
+                method: 'POST',
+                body: JSON.stringify(data),
+            }),
+        confirmPayment: (data: { payment_intent_id: string; type: string; reference_id?: string }) =>
+            fetchWithAuth('/stripe/confirm-payment', {
+                method: 'POST',
+                body: JSON.stringify(data),
+            }),
+    },
 };
 
 export default api;
