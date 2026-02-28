@@ -58,7 +58,7 @@ interface Invoice {
   service: string;
   amount: number;
   date: string;
-  status: 'paid' | 'pending' | 'overdue';
+  status: 'paid' | 'pending' | 'cash';
   paymentMethod: string;
   time: string;
   customerEmail?: string;
@@ -182,7 +182,7 @@ const BillingPage = () => {
       const invoicesData: Invoice[] = bookingsArray.map((booking: any, index: number) => {
         const invoiceNumber = `L-INV-${String(index + 1).padStart(4, '0')}`;
         const isPaid = booking.status === 'completed';
-        const isOverdue = !isPaid && new Date(booking.booking_date) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+        const iscash = !isPaid && new Date(booking.booking_date) < new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         const customerName = booking.full_name || booking.notes || 'Guest Customer';
 
         return {
@@ -193,7 +193,7 @@ const BillingPage = () => {
           service: booking.service_name || 'Service',
           amount: Number(booking.price || 0),
           date: booking.booking_date,
-          status: isOverdue ? 'overdue' : isPaid ? 'paid' : 'pending',
+          status: iscash ? 'cash' : isPaid ? 'paid' : 'pending',
           paymentMethod: ['Cash', 'UPI', 'Card', 'QR'][Math.floor(Math.random() * 4)],
           time: booking.booking_time || '00:00',
           customerEmail: booking.email || 'customer@example.com',
@@ -277,8 +277,8 @@ const BillingPage = () => {
         return <Badge className="bg-emerald-100 text-emerald-700 border-0 font-bold px-3 uppercase text-[9px] tracking-wider">Paid</Badge>;
       case "pending":
         return <Badge className="bg-amber-100 text-amber-700 border-0 font-bold px-3 uppercase text-[9px] tracking-wider">Pending</Badge>;
-      case "overdue":
-        return <Badge className="bg-red-100 text-red-700 border-0 font-bold px-3 uppercase text-[9px] tracking-wider">Overdue</Badge>;
+      case "cash":
+        return <Badge className="bg-red-100 text-red-700 border-0 font-bold px-3 uppercase text-[9px] tracking-wider">cash</Badge>;
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
