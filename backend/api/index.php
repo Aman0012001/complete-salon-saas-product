@@ -403,12 +403,20 @@ try {
             ]);
             break;
         default:
+            $firstPart = $uriParts[0] ?? '';
+            $chars = [];
+            for ($i = 0; $i < strlen($firstPart); $i++) {
+                $chars[] = ord($firstPart[$i]);
+            }
             sendResponse([
                 'error' => 'Route not found',
                 'uri' => $uri,
                 'path' => $path,
                 'uriParts' => $uriParts,
-                'server_time' => date('Y-m-d H:i:s')
+                'firstPart' => $firstPart,
+                'firstPartChars' => $chars,
+                'server_time' => date('Y-m-d H:i:s'),
+                'debug_id' => 'V4_CHAR_DEBUG'
             ], 404);
             break;
     }
