@@ -1,6 +1,10 @@
 <?php
 // Stripe Payment Routes
-// Requires: stripe/stripe-php installed via composer
+use Stripe\Stripe;
+use Stripe\PaymentIntent;
+use Stripe\Webhook;
+use Stripe\Event;
+
 // (Autoloaded in api/index.php)
 
 $stripeSecretKey = $_ENV['STRIPE_SECRET_KEY'] ?? getenv('STRIPE_SECRET_KEY') ?? '';
@@ -12,7 +16,7 @@ if (empty($stripeSecretKey)) {
     ], 503);
 }
 
-\Stripe\Stripe::setApiKey($stripeSecretKey);
+Stripe::setApiKey($stripeSecretKey);
 
 // POST /api/stripe/create-payment-intent
 // Body: { amount (in MYR), currency, metadata: { type, reference_id } }
@@ -34,7 +38,7 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-pay
     }
 
     try {
-        $paymentIntent = \Stripe\PaymentIntent::create([
+        $paymentIntent = PaymentIntent::create([
             'amount' => $amount,
             'currency' => $currency,
             'automatic_payment_methods' => ['enabled' => true],
@@ -65,7 +69,7 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'confirm-pa
     $referenceId = $data['reference_id'] ?? null;
 
     try {
-        $pi = \Stripe\PaymentIntent::retrieve($paymentIntentId);
+        $pi = PaymentIntent::retrieve($paymentIntentId);
 
         if ($pi->status !== 'succeeded') {
             sendResponse([

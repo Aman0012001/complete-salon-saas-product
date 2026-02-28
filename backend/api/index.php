@@ -1,12 +1,9 @@
 ﻿<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
 /**
  * 🚀 SALON BOOKING API - MAIN ENTRY POINT
  */
-
-// 🚀 GLOBAL AUTOLOAD (Composer)
-if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
-    require_once __DIR__ . '/../vendor/autoload.php';
-}
 
 // 0. ==========================================
 // 🛡️ CRITIAL: SUPPRESS ERRORS IMMEDIATELY
