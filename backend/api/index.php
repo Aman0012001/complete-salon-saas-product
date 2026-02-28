@@ -3,6 +3,11 @@
  * 🚀 SALON BOOKING API - MAIN ENTRY POINT
  */
 
+// 🚀 GLOBAL AUTOLOAD (Composer)
+if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
+    require_once __DIR__ . '/../vendor/autoload.php';
+}
+
 // 0. ==========================================
 // 🛡️ CRITIAL: SUPPRESS ERRORS IMMEDIATELY
 // ==========================================
@@ -383,6 +388,17 @@ try {
             break;
         case 'stripe':
             require_once __DIR__ . '/routes/stripe.php';
+            break;
+        case 'debug-vendor':
+            // 🛡️ Admin/Internal debug only (or just remove after use)
+            $vendorPath = __DIR__ . '/../vendor';
+            $exists = file_exists($vendorPath);
+            $contents = $exists ? scandir($vendorPath) : [];
+            sendResponse([
+                'vendor_exists' => $exists,
+                'path' => $vendorPath,
+                'contents' => $contents
+            ]);
             break;
         default:
             sendResponse([

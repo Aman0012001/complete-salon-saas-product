@@ -1,8 +1,7 @@
 <?php
 // Stripe Payment Routes
 // Requires: stripe/stripe-php installed via composer
-
-require_once __DIR__ . '/../../vendor/autoload.php';
+// (Autoloaded in api/index.php)
 
 $stripeSecretKey = $_ENV['STRIPE_SECRET_KEY'] ?? getenv('STRIPE_SECRET_KEY') ?? '';
 

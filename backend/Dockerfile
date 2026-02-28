@@ -1,21 +1,26 @@
 # Start from a PHP 8.1 Apache base image
 FROM php:8.1-apache-bullseye
 
-# Install necessary PHP extensions
-RUN docker-php-ext-install mysqli pdo pdo_mysql
-
-# Enable Apache modules
-RUN a2enmod rewrite headers
-
-# Configure AllowOverride All for .htaccess
-# We append to apache2.conf to override previous settings for /var/www/html
-# 0. Install Composer & System Dependencies
+# Install necessary system dependencies and PHP extensions
 RUN apt-get update && apt-get install -y \
+    libcurl4-openssl-dev \
+    libssl-dev \
+    libonig-dev \
+    libxml2-dev \
+    libzip-dev \
     zip \
     unzip \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+RUN docker-php-ext-install \
+    mysqli \
+    pdo \
+    pdo_mysql \
+    curl \
+    mbstring \
+    xml \
+    zip
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # 1. Copy application source code
