@@ -394,7 +394,10 @@ try {
             sendResponse([
                 'vendor_exists' => $exists,
                 'path' => $vendorPath,
-                'contents' => $contents
+                'contents' => $contents,
+                'stripe_class_exists' => class_exists('Stripe\Stripe'),
+                'php_version' => PHP_VERSION,
+                'extensions' => get_loaded_extensions()
             ]);
             break;
         default:
