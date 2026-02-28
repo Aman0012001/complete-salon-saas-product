@@ -397,7 +397,9 @@ try {
                 'contents' => $contents,
                 'stripe_class_exists' => class_exists('Stripe\Stripe'),
                 'php_version' => PHP_VERSION,
-                'extensions' => get_loaded_extensions()
+                'extensions' => get_loaded_extensions(),
+                'server_time' => date('Y-m-d H:i:s'),
+                'debug_id' => 'V3_CLEAN'
             ]);
             break;
         default:
@@ -405,7 +407,8 @@ try {
                 'error' => 'Route not found',
                 'uri' => $uri,
                 'path' => $path,
-                'uriParts' => $uriParts
+                'uriParts' => $uriParts,
+                'server_time' => date('Y-m-d H:i:s')
             ], 404);
             break;
     }
