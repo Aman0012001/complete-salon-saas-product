@@ -82,7 +82,8 @@ function StripeCardForm({
             });
 
             if (!intentData?.client_secret) {
-                throw new Error('Failed to initialise payment. Please try again.');
+                const backendError = intentData?.message || intentData?.error || 'Failed to initialise payment. Please try again.';
+                throw new Error(backendError);
             }
 
             // 2. Confirm card payment with Stripe.js

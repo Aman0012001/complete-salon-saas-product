@@ -7,7 +7,10 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 $stripeSecretKey = $_ENV['STRIPE_SECRET_KEY'] ?? getenv('STRIPE_SECRET_KEY') ?? '';
 
 if (empty($stripeSecretKey)) {
-    sendResponse(['error' => 'Stripe is not configured on this server.'], 503);
+    sendResponse([
+        'error' => 'Stripe is not configured.',
+        'message' => 'The STRIPE_SECRET_KEY environment variable is missing on this server. Please add it to your Railway project variables.'
+    ], 503);
 }
 
 \Stripe\Stripe::setApiKey($stripeSecretKey);

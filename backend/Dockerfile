@@ -9,16 +9,23 @@ RUN a2enmod rewrite headers
 
 # Configure AllowOverride All for .htaccess
 # We append to apache2.conf to override previous settings for /var/www/html
-RUN echo '<Directory /var/www/html>' >> /etc/apache2/apache2.conf && \
-    echo '    Options Indexes FollowSymLinks' >> /etc/apache2/apache2.conf && \
-    echo '    AllowOverride All' >> /etc/apache2/apache2.conf && \
-    echo '    Require all granted' >> /etc/apache2/apache2.conf && \
-    echo '</Directory>' >> /etc/apache2/apache2.conf
+# 0. Install Composer & System Dependencies
+RUN apt-get update && apt-get install -y \
+    zip \
+    unzip \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
 # 1. Copy application source code
 COPY . /var/www/html/
 
-# 2. Copy and set up the robust entrypoint script
+# 2. Install dependencies
+WORKDIR /var/www/html
+RUN composer install --no-interaction --optimize-autoloader --no-dev
+
+# 3. Copy and set up the robust entrypoint script
 COPY docker-entrypoint.sh /usr/local/bin/
 # Fix potential Windows CRLF issues and make executable
 RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && \

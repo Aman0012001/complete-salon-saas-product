@@ -41,10 +41,14 @@ function handleFatalError()
     if ($error && ($error['type'] === E_ERROR || $error['type'] === E_PARSE || $error['type'] === E_CORE_ERROR || $error['type'] === E_COMPILE_ERROR)) {
         if (ob_get_level() > 0)
             ob_end_clean();
+
+        // Force 500 status
         http_response_code(500);
+        header('HTTP/1.1 500 Internal Server Error', true, 500);
         header('Content-Type: application/json');
+
         echo json_encode([
-            'error' => 'Fatal Error in Local Backend',
+            'error' => 'Fatal Backend Error',
             'message' => $error['message'],
             'file' => $error['file'],
             'line' => $error['line']
