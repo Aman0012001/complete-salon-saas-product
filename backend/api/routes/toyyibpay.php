@@ -64,16 +64,23 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
         'billDescription' => 'Booking for ' . (count($bookingIds) > 1 ? count($bookingIds) . ' services' : $firstBooking['service_name']) . ' at ' . $firstBooking['booking_date'] . ' ' . $firstBooking['booking_time'],
         'billPriceSetting' => 1,
         'billPayorInfo' => 1,
-        'billAmount' => $totalAmount * 100, // Convert to cents/sen
+        'billAmount' => (int) ($totalAmount * 100), // Convert to cents/sen (integer)
         'billReturnUrl' => TOYYIBPAY_RETURN_URL . '?booking_id=' . $bookingIdsString,
         'billCallbackUrl' => TOYYIBPAY_CALLBACK_URL,
-        'billExternalReferenceNo' => $bookingIdsString,
+        'billExternalReferenceNo' => (string) $bookingIdsString,
         'billTo' => $firstBooking['full_name'],
         'billEmail' => $firstBooking['email'],
         'billPhone' => $firstBooking['phone'] ?: '0000000000',
+        'billPaymentChannel' => '0', // 0 for all channels
     ];
 
+    // Log the request for debugging
+    error_log('[ToyyibPay] Creating Bill Request: ' . json_encode($toyyibData));
+
     $response = sendToyyibPayRequest(TOYYIBPAY_BASE_URL . '/index.php/api/createBill', $toyyibData);
+
+    // Log the full response
+    error_log('[ToyyibPay] API Response: ' . json_encode($response));
 
     if (isset($response[0]['BillCode'])) {
         $billCode = $response[0]['BillCode'];
@@ -82,18 +89,16 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
         $stmt = $db->prepare("INSERT INTO payment_transactions (booking_id, gateway, bill_code, amount, status) VALUES (?, 'toyyibpay', ?, ?, 'pending')");
         $stmt->execute([$bookingIds[0], $billCode, $totalAmount]);
 
-        $paymentUrl = (strpos(TOYYIBPAY_BASE_URL, 'dev') !== false ? 'https://dev.toyyibpay.com/' : 'https://toyyibpay.com/') . $billCode;
+        $paymentUrl = rtrim(TOYYIBPAY_BASE_URL, '/') . '/' . $billCode;
 
         sendResponse([
-            'payment_url' => $paymentUrl,
-            'bill_code' => $billCode
+            'payment_url' => $paymentUrl
         ]);
     } else {
-        error_log('[ToyyibPay] Create Bill Error: ' . json_encode($response));
         sendResponse([
-            'error' => 'Failed to create ToyyibPay bill.',
-            'details' => $response,
-            'debug_payload' => $toyyibData // Helpful for catching missing keys
+            'error' => 'ToyyibPay bill creation failed',
+            'response' => $response,
+            'debug_payload' => $toyyibData // Keep for developer debugging
         ], 500);
     }
 }
