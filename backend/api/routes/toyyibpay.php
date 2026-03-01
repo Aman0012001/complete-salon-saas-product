@@ -103,14 +103,13 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
         ]);
     } else {
         file_put_contents(
-            dirname(__DIR__, 2) . '/logs/toyyibpay_debug.log',
-            "Payload: " . json_encode($toyyibData, JSON_PRETTY_PRINT) . "\nResponse: " . json_encode($response, JSON_PRETTY_PRINT) . "\n\n",
+            dirname(__DIR__, 2) . '/logs/toyyibpay.log',
+            json_encode($response, JSON_PRETTY_PRINT) . "\n==========\n",
             FILE_APPEND
         );
         sendResponse([
-            'error' => 'ToyyibPay bill creation failed',
-            'response' => $response,
-            'debug_payload' => $toyyibData // Keep for developer debugging
+            'error' => 'Failed to generate payment URL',
+            'toyyibpay_response' => $response
         ], 500);
     }
 }
