@@ -57,28 +57,39 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
     }
 
     if (!$firstBooking) {
-        sendResponse(['error' => 'No valid bookings found.'], 404);
+        sendResponse(['error' => 'Booking does not exist.'], 404);
     }
 
+    // Validation: Booking is not already paid
+    if ($firstBooking['payment_status'] === 'paid' || $firstBooking['status'] === 'confirmed') {
+        sendResponse(['error' => 'Booking is already paid.'], 400);
+    }
+
+    // Validation: Customer email and phone exist
+    if (empty($firstBooking['email']) || empty($firstBooking['phone'])) {
+        sendResponse(['error' => 'Customer email and phone are required.'], 400);
+    }
+
+    // Validation: Booking amount is valid
     if ($totalAmount <= 0) {
         sendResponse(['error' => 'Invalid total booking amount.'], 400);
     }
 
     $toyyibData = [
-        'userSecretKey' => TOYYIBPAY_SECRET_KEY,
-        'categoryCode' => TOYYIBPAY_CATEGORY_CODE,
-        'billName' => 'Salon Booking - ' . $firstBooking['salon_name'],
-        'billDescription' => 'Booking for ' . (count($bookingIds) > 1 ? count($bookingIds) . ' services' : $firstBooking['service_name']) . ' at ' . $firstBooking['booking_date'] . ' ' . $firstBooking['booking_time'],
+        'userSecretKey' => getenv('TOYYIBPAY_SECRET_KEY') ?: 'gy5xfe0i-89wc-riyw-ggg3-nxfksodv7fw3',
+        'categoryCode' => getenv('TOYYIBPAY_CATEGORY_CODE') ?: 'p1cd10dd',
+        'billName' => 'Salon Booking Payment',
+        'billDescription' => 'Payment for salon booking',
         'billPriceSetting' => 1,
         'billPayorInfo' => 1,
-        'billAmount' => (int) ($totalAmount * 100), // Convert to cents/sen (integer)
-        'billReturnUrl' => TOYYIBPAY_RETURN_URL . '?booking_id=' . $bookingIdsString,
-        'billCallbackUrl' => TOYYIBPAY_CALLBACK_URL,
+        'billAmount' => (int) ($totalAmount * 100),
+        'billReturnUrl' => getenv('TOYYIBPAY_RETURN_URL') ?: 'https://complete-salon-saas-product-production.up.railway.app/payment-success',
+        'billCallbackUrl' => getenv('TOYYIBPAY_CALLBACK_URL') ?: 'https://complete-salon-saas-product-production.up.railway.app/api/toyyibpay/callback',
         'billExternalReferenceNo' => (string) $bookingIdsString,
         'billTo' => $firstBooking['full_name'],
         'billEmail' => $firstBooking['email'],
         'billPhone' => $firstBooking['phone'] ?: '0000000000',
-        'billPaymentChannel' => '0', // 0 for all channels
+        'billPaymentChannel' => 0
     ];
 
     // Log the request for debugging
@@ -87,26 +98,31 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
     $response = sendToyyibPayRequest(TOYYIBPAY_BASE_URL . '/index.php/api/createBill', $toyyibData);
 
     // Log the full response
-    error_log('[ToyyibPay] API Response: ' . json_encode($response));
+    $logDir = dirname(__DIR__, 2) . '/logs';
+    if (!is_dir($logDir)) {
+        mkdir($logDir, 0755, true);
+    }
 
-    if (isset($response[0]['BillCode'])) {
+    file_put_contents(
+        $logDir . '/toyyibpay.log',
+        date('Y-m-d H:i:s') . " RESPONSE: " . json_encode($response) . PHP_EOL,
+        FILE_APPEND
+    );
+
+    if (!empty($response[0]['BillCode'])) {
         $billCode = $response[0]['BillCode'];
 
         // Use the first ID for the transaction record, but full string is in external_ref
         $stmt = $db->prepare("INSERT INTO payment_transactions (booking_id, gateway, bill_code, amount, status) VALUES (?, 'toyyibpay', ?, ?, 'pending')");
         $stmt->execute([$bookingIds[0], $billCode, $totalAmount]);
 
-        $paymentUrl = rtrim(TOYYIBPAY_BASE_URL, '/') . '/' . $billCode;
+        $baseUrl = getenv('TOYYIBPAY_BASE_URL') ?: 'https://dev.toyyibpay.com';
+        $paymentUrl = rtrim($baseUrl, '/') . '/' . $billCode;
 
         sendResponse([
             'payment_url' => $paymentUrl
         ]);
     } else {
-        file_put_contents(
-            dirname(__DIR__, 2) . '/logs/toyyibpay.log',
-            json_encode($response, JSON_PRETTY_PRINT) . "\n==========\n",
-            FILE_APPEND
-        );
         sendResponse([
             'error' => 'Failed to generate payment URL',
             'toyyibpay_response' => $response
