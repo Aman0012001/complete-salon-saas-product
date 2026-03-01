@@ -40,7 +40,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import StripePaymentForm from "@/components/StripePaymentForm";
+// import StripePaymentForm from "@/components/StripePaymentForm";
 
 interface Service {
   id: string;
@@ -288,94 +288,94 @@ const BookAppointment = () => {
       return;
     }
 
-    const finalPrice = calculateTotal();
-
-    // If payment is required, we just show the payment form here. 
-    // We defer booking creation until after payment succeeds!
-    if (finalPrice > 0) {
-      setShowPayment(true);
-      return;
-    }
-
-    // If entirely free, complete immediately.
-    await completeBookingProcess();
-  };
-
-  const completeBookingProcess = async (paymentIntentId?: string) => {
     setBooking(true);
     try {
-      const subtotal = calculateSubtotal();
-      const couponDiscount = appliedCoupon ? appliedCoupon.discount : 0;
-      const coinDiscount = calculateCoinDiscount();
-      const finalPrice = Math.max(0, subtotal - couponDiscount - coinDiscount);
+      // 1. Create the booking(s) first with 'pending' status
+      const bookingIds = await completeBookingRecordsCreation();
 
-      const bookingPayload = {
-        user_id: user?.id,
-        salon_id: salonId,
-        staff_id: selectedStaffId,
-        booking_date: format(selectedDate, "yyyy-MM-dd"),
-        booking_time: selectedTime,
-        notes: `[GUEST: ${memberDetails.fullName} | ${memberDetails.phone}] ${notes}`.trim(),
-        status: "pending",
-        use_coins: useCoins,
-        price_paid: finalPrice,
-        discount_amount: couponDiscount,
-        coupon_code: appliedCoupon?.code
-      };
+      if (!bookingIds || bookingIds.length === 0) {
+        throw new Error("Failed to create booking records.");
+      }
 
-      let newBookingIds: string[] = [];
+      const finalPrice = calculateTotal();
 
-      if (bookingType === 'decide_later' || (selectedServices.length === 0 && selectedAddOns.length === 0)) {
-        const res: any = await api.bookings.create({
-          ...bookingPayload,
-          service_id: selectedServices[0]?.id || null, // Default to first service if available, else null
-          price_paid: finalPrice || 100 // Default price for decide_later if not specified
-        });
-        if (res?.id) newBookingIds.push(res.id);
-      } else {
-        // Distribute discount proportionally if multiple services (simplified: apply to first)
-        const totalItems = [...selectedServices, ...selectedAddOns];
-        for (let i = 0; i < totalItems.length; i++) {
-          const service = totalItems[i];
-          const serviceDiscount = i === 0 ? couponDiscount : 0;
-          const serviceCoinDiscount = i === 0 ? coinDiscount : 0;
-          const res: any = await api.bookings.create({
-            ...bookingPayload,
-            service_id: service.id,
-            price_paid: Math.max(0, Number(service.price) - serviceDiscount - serviceCoinDiscount),
-            discount_amount: serviceDiscount
-          });
-          if (res?.id) newBookingIds.push(res.id);
+      // 2. If payment is required, redirect to ToyyibPay
+      if (finalPrice > 0) {
+        toast({ title: "Redirecting...", description: "Taking you to ToyyibPay for secure payment." });
+
+        // We use the first booking ID as reference, or join them
+        const referenceId = bookingIds.join(',');
+        const response = await api.toyyibpay.createBill({ booking_id: referenceId });
+
+        if (response?.payment_url) {
+          window.location.href = response.payment_url;
+        } else {
+          throw new Error("Failed to generate payment URL.");
         }
+        return;
       }
 
-      setPendingBookingIds(newBookingIds);
-
-      // If we are arriving here post-payment, sync the new booking IDs with Stripe
-      if (paymentIntentId && newBookingIds.length > 0) {
-        await api.stripe.confirmPayment({
-          payment_intent_id: paymentIntentId,
-          type: 'booking',
-          reference_id: newBookingIds.join(',')
-        });
-      }
-
+      // 3. If entirely free, show success step
       toast({
-        title: paymentIntentId ? "Payment Successful!" : "Booking Ritual Initiated!",
-        description: paymentIntentId ? "Your session is confirmed." : "Your session is being prepared by our stylists."
+        title: "Booking Ritual Initiated!",
+        description: "Your session is being prepared by our stylists."
       });
       setStep(7);
 
     } catch (error: any) {
-      toast({ title: "Ritual Interrupted", description: error.message, variant: "destructive" });
+      console.error("[handleBooking] Error:", error);
+      toast({ title: "Ritual Interrupted", description: error.message || "An error occurred.", variant: "destructive" });
     } finally {
-      setBooking(false);
+      if (calculateTotal() === 0) setBooking(false); // Only reset if not redirecting
     }
   };
 
-  const handlePaymentSuccess = async (paymentIntentId: string) => {
-    // Once payment clears, we actually issue the bookings 
-    await completeBookingProcess(paymentIntentId);
+  const completeBookingRecordsCreation = async (): Promise<string[]> => {
+    const subtotal = calculateSubtotal();
+    const couponDiscount = appliedCoupon ? appliedCoupon.discount : 0;
+    const coinDiscount = calculateCoinDiscount();
+    const finalPriceTotal = Math.max(0, subtotal - couponDiscount - coinDiscount);
+
+    const bookingPayload = {
+      user_id: user?.id,
+      salon_id: salonId,
+      staff_id: selectedStaffId,
+      booking_date: format(selectedDate!, "yyyy-MM-dd"),
+      booking_time: selectedTime,
+      notes: `[GUEST: ${memberDetails.fullName} | ${memberDetails.phone}] ${notes}`.trim(),
+      status: "pending",
+      use_coins: useCoins,
+      price_paid: finalPriceTotal,
+      discount_amount: couponDiscount,
+      coupon_code: appliedCoupon?.code
+    };
+
+    let newBookingIds: string[] = [];
+
+    if (bookingType === 'decide_later' || (selectedServices.length === 0 && selectedAddOns.length === 0)) {
+      const res: any = await api.bookings.create({
+        ...bookingPayload,
+        service_id: selectedServices[0]?.id || null,
+        price_paid: finalPriceTotal || 100
+      });
+      if (res?.id) newBookingIds.push(res.id);
+    } else {
+      const totalItems = [...selectedServices, ...selectedAddOns];
+      for (let i = 0; i < totalItems.length; i++) {
+        const service = totalItems[i];
+        const serviceDiscount = i === 0 ? couponDiscount : 0;
+        const serviceCoinDiscount = i === 0 ? coinDiscount : 0;
+        const res: any = await api.bookings.create({
+          ...bookingPayload,
+          service_id: service.id,
+          price_paid: Math.max(0, Number(service.price) - serviceDiscount - serviceCoinDiscount),
+          discount_amount: serviceDiscount
+        });
+        if (res?.id) newBookingIds.push(res.id);
+      }
+    }
+    setPendingBookingIds(newBookingIds);
+    return newBookingIds;
   };
 
   const handlePaymentError = (msg: string) => {
@@ -973,36 +973,20 @@ const BookAppointment = () => {
                     </div>
 
                     <div className="w-full md:w-auto">
-                      {!showPayment ? (
-                        <Button
-                          onClick={handleBooking}
-                          disabled={!policyAccepted || booking}
-                          className="w-full md:w-auto h-16 md:h-20 px-8 md:px-16 bg-[#1A1A1A] hover:bg-black text-white rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-xs md:text-sm shadow-xl transition-all"
-                        >
-                          {booking ? "Finalizing Registry..." : "Confirm & Book Now"}
-                        </Button>
-                      ) : booking ? (
-                        <div className="w-full md:min-w-[400px] animate-in fade-in zoom-in-95 bg-slate-50 border border-slate-100 p-8 rounded-[2rem] flex flex-col items-center justify-center space-y-4">
-                          <Loader2 className="w-8 h-8 animate-spin text-accent" />
-                          <p className="text-xs font-bold uppercase tracking-widest text-slate-500 animate-pulse text-center">Securing your reservation...</p>
-                        </div>
-                      ) : (
-                        <div className="w-full md:min-w-[400px] animate-in fade-in zoom-in-95 bg-slate-50 border border-slate-100 p-6 rounded-[2rem]">
-                          <StripePaymentForm
-                            amount={calculateTotal()}
-                            type="booking"
-                            referenceId={pendingBookingIds.join(',')}
-                            onSuccess={handlePaymentSuccess}
-                            onError={handlePaymentError}
-                          />
-                          <button
-                            onClick={() => setShowPayment(false)}
-                            className="w-full text-xs font-bold text-slate-500 hover:text-slate-700 transition-colors mt-4 underline underline-offset-4"
-                          >
-                            ← Back to details
-                          </button>
-                        </div>
-                      )}
+                      <Button
+                        onClick={handleBooking}
+                        disabled={!policyAccepted || booking}
+                        className="w-full md:w-auto h-16 md:h-20 px-8 md:px-16 bg-[#1A1A1A] hover:bg-black text-white rounded-[2.5rem] font-black uppercase tracking-[0.3em] text-xs md:text-sm shadow-xl transition-all"
+                      >
+                        {booking ? (
+                          <div className="flex items-center gap-3">
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            <span>{calculateTotal() > 0 ? "Redirecting to ToyyibPay..." : "Finalizing..."}</span>
+                          </div>
+                        ) : (
+                          calculateTotal() > 0 ? "Pay Now with ToyyibPay" : "Confirm & Book Now"
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </Card>

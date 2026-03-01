@@ -46,6 +46,7 @@ import SalonServices from "./pages/SalonServices";
 import AdminSetup from "./pages/AdminSetup";
 import AllServicesSimple from "./pages/AllServicesSimple";
 import ServiceDetail from "./pages/ServiceDetail";
+import PaymentSuccess from "./pages/PaymentSuccess";
 
 import ContactUs from "./pages/ContactUs";
 // Super Admin Pages
@@ -160,6 +161,7 @@ const App = () => {
                         <Route path="/book/:id" element={<BookAppointment />} />
                         <Route path="/contact" element={<ContactUs />} />
                         <Route path="/test-email" element={<TestEmail />} />
+                        <Route path="/payment-success" element={<PaymentSuccess />} />
 
                         {/* USER (Customer) Routes */}
                         <Route path="/user/dashboard" element={

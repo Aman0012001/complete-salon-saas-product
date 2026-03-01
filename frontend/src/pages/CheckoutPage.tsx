@@ -10,7 +10,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
-import StripePaymentForm from "@/components/StripePaymentForm";
+// import StripePaymentForm from "@/components/StripePaymentForm";
 
 const CheckoutPage = () => {
     const { cart, cartTotal, cartCount, clearCart } = useCart();
@@ -81,7 +81,7 @@ const CheckoutPage = () => {
 
         setLoading(true);
         try {
-            // Create the order record first (unpaid)
+            // 1. Create the order record first (unpaid/pending)
             const orderData = {
                 items: cart,
                 total_amount: finalTotal,
@@ -105,10 +105,27 @@ const CheckoutPage = () => {
 
             if (!newOrderId) throw new Error('Failed to create order.');
 
-            setPendingOrderId(newOrderId);
-            setShowPayment(true);
+            // 2. Redirect to ToyyibPay if price > 0
+            if (finalTotal > 0) {
+                toast({ title: "Redirecting...", description: "Taking you to ToyyibPay for secure payment." });
+                const toyyibResponse = await api.toyyibpay.createBill({ booking_id: newOrderId }); // Reusing booking_id param as generic reference
+
+                if (toyyibResponse?.payment_url) {
+                    window.location.href = toyyibResponse.payment_url;
+                } else {
+                    throw new Error("Failed to generate payment URL.");
+                }
+                return;
+            }
+
+            // 3. If zero amount (somehow), complete immediately
+            setOrderId(newOrderId);
+            setOrderComplete(true);
+            clearCart();
+            window.scrollTo(0, 0);
+
         } catch (err: any) {
-            toast({ title: 'Order Error', description: err.message || 'Could not create order.', variant: 'destructive' });
+            toast({ title: 'Order Error', description: err.message || 'Could not process order.', variant: 'destructive' });
         } finally {
             setLoading(false);
         }
@@ -303,7 +320,6 @@ const CheckoutPage = () => {
                                 </div>
                             </section>
 
-                            {/* Payment section */}
                             {!showPayment ? (
                                 <Button
                                     onClick={handleProceedToPayment}
@@ -313,36 +329,13 @@ const CheckoutPage = () => {
                                     {loading ? (
                                         <>
                                             <span className="inline-block w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2" />
-                                            Preparing order...
+                                            Redirecting to ToyyibPay...
                                         </>
                                     ) : (
-                                        'Continue to Payment'
+                                        finalTotal > 0 ? 'Pay Now with ToyyibPay' : 'Complete Order'
                                     )}
                                 </Button>
-                            ) : (
-                                <div className="mt-12 space-y-4">
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <div className="h-px flex-1 bg-slate-200" />
-                                        <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">Secure Payment</span>
-                                        <div className="h-px flex-1 bg-slate-200" />
-                                    </div>
-                                    <StripePaymentForm
-                                        amount={finalTotal}
-                                        currency="myr"
-                                        type="order"
-                                        referenceId={pendingOrderId ?? undefined}
-                                        buttonLabel={deliveryMethod === 'ship' ? 'Pay now' : 'Complete Order'}
-                                        onSuccess={handlePaymentSuccess}
-                                        onError={handlePaymentError}
-                                    />
-                                    <button
-                                        onClick={() => setShowPayment(false)}
-                                        className="w-full text-xs text-slate-400 hover:text-slate-600 transition-colors mt-2 underline underline-offset-4"
-                                    >
-                                        ← Back to order details
-                                    </button>
-                                </div>
-                            )}
+                            ) : null}
 
                             <footer className="mt-20 py-8 border-t border-slate-200 flex flex-wrap gap-6">
                                 {['Refund policy', 'Shipping policy', 'Privacy policy', 'Terms of service'].map(item => (

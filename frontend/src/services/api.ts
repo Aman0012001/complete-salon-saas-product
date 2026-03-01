@@ -1,7 +1,7 @@
 // API Service for PHP/MySQL Backend
 // This replaces Supabase client calls
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || `https://complete-salon-saas-product-production.up.railway.app/backend/api`;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || `https://complete-salon-saas-product-production.up.railway.app/api`;
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
     return localStorage.getItem('auth_token');
@@ -23,7 +23,7 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
     // Create an AbortController for a 30-second timeout (accommodate Railway latency)
     const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), 30000);
+    const id = setTimeout(() => controller.abort(), 120000); // Increased to 120s for slow Railway connection
 
     try {
         const response = await fetch(`${API_BASE_URL}${url}`, {
@@ -60,8 +60,8 @@ const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     } catch (err: any) {
         clearTimeout(id);
         if (err.name === 'AbortError') {
-            console.error(`[API Timeout Error] Request to ${url} timed out after 30s`);
-            throw new Error('Server request timed out. This often happens due to network latency with the database. Please try again.');
+            console.error(`[API Timeout Error] Request to ${url} timed out after 120s`);
+            throw new Error('Server request timed out. This often happens due to heavy network latency with the database. Please wait a moment and try again.');
         }
 
         if (err.message === 'Failed to fetch') {
@@ -239,17 +239,19 @@ export const servicesAPI = {
     },
 
     async create(serviceData: any) {
-        return await fetchWithAuth('/services', {
+        const data = await fetchWithAuth('/services', {
             method: 'POST',
             body: JSON.stringify(serviceData),
         });
+        return data?.service || data;
     },
 
     async update(id: string, serviceData: any) {
-        return await fetchWithAuth(`/services/${id}`, {
+        const data = await fetchWithAuth(`/services/${id}`, {
             method: 'PUT',
             body: JSON.stringify(serviceData),
         });
+        return data?.service || data;
     },
 
     async delete(id: string) {
@@ -271,10 +273,11 @@ export const bookingsAPI = {
     },
 
     async create(bookingData: any) {
-        return await fetchWithAuth('/bookings', {
+        const data = await fetchWithAuth('/bookings', {
             method: 'POST',
             body: JSON.stringify(bookingData),
         });
+        return data?.booking || data;
     },
 
     async updateStatus(id: string, status: string, staffId: string | null = null) {
@@ -355,10 +358,11 @@ export const adminAPI = {
     },
 
     async createSalon(data: any) {
-        return await fetchWithAuth('/admin/salons', {
+        const res = await fetchWithAuth('/admin/salons', {
             method: 'POST',
             body: JSON.stringify(data),
         });
+        return res?.salon || res;
     },
 
     async getAllBookings() {
@@ -575,17 +579,19 @@ export const staffProfilesAPI = {
     },
 
     async create(staffData: any) {
-        return await fetchWithAuth('/staff', {
+        const data = await fetchWithAuth('/staff', {
             method: 'POST',
             body: JSON.stringify(staffData),
         });
+        return data?.staff || data;
     },
 
     async update(id: string, staffData: any) {
-        return await fetchWithAuth(`/staff/${id}`, {
+        const data = await fetchWithAuth(`/staff/${id}`, {
             method: 'PUT',
             body: JSON.stringify(staffData),
         });
+        return data?.staff || data;
     },
 
     async getProfileStats(id: string, month?: number, year?: number) {
@@ -955,14 +961,9 @@ export const api = {
             return fetchWithAuth(url);
         },
     },
-    stripe: {
-        createPaymentIntent: (data: { amount: number; currency?: string; metadata?: Record<string, string> }) =>
-            fetchWithAuth('/stripe/create-payment-intent', {
-                method: 'POST',
-                body: JSON.stringify(data),
-            }),
-        confirmPayment: (data: { payment_intent_id: string; type: string; reference_id?: string }) =>
-            fetchWithAuth('/stripe/confirm-payment', {
+    toyyibpay: {
+        createBill: (data: { booking_id: string }) =>
+            fetchWithAuth('/toyyibpay/create-bill', {
                 method: 'POST',
                 body: JSON.stringify(data),
             }),

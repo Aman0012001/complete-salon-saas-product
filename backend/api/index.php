@@ -11,21 +11,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
-// EMERGENCY DEBUG INTERCEPTOR
-if (strpos($_SERVER['REQUEST_URI'], 'debug-env') !== false) {
-    echo json_encode([
-        'debug_id' => 'EMERGENCY_ENV_CHECK',
-        'uri' => $_SERVER['REQUEST_URI'],
-        'cwd' => getcwd(),
-        'parent_dir' => scandir('..'),
-        'vendor_dir' => file_exists('../vendor') ? scandir('../vendor') : 'NOT_FOUND',
-        'composer_json' => file_exists('../composer.json'),
-        'stripe_installed' => file_exists('../vendor/stripe/stripe-php'),
-        'php_version' => PHP_VERSION,
-        'extensions' => get_loaded_extensions()
-    ]);
-    exit();
-}
 
 // 1. ==========================================
 // 🚀 CORS (ROBUST SETUP)
@@ -399,8 +384,8 @@ try {
         case 'coupons':
             require_once __DIR__ . '/routes/coupons.php';
             break;
-        case 'stripe':
-            require_once __DIR__ . '/routes/stripe.php';
+        case 'toyyibpay':
+            require_once __DIR__ . '/routes/toyyibpay.php';
             break;
         case 'debug-vendor':
             // 🛡️ Admin/Internal debug only (or just remove after use)
@@ -427,12 +412,7 @@ try {
             sendResponse([
                 'error' => 'Route not found',
                 'uri' => $uri,
-                'path' => $path,
-                'uriParts' => $uriParts,
-                'firstPart' => $firstPart,
-                'firstPartChars' => $chars,
-                'server_time' => date('Y-m-d H:i:s'),
-                'debug_id' => 'V4_CHAR_DEBUG'
+                'path' => $path
             ], 404);
             break;
     }
