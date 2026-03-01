@@ -10,7 +10,6 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
-// import StripePaymentForm from "@/components/StripePaymentForm";
 
 const CheckoutPage = () => {
     const { cart, cartTotal, cartCount, clearCart } = useCart();

@@ -40,7 +40,6 @@ import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-// import StripePaymentForm from "@/components/StripePaymentForm";
 
 interface Service {
   id: string;

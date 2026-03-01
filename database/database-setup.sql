@@ -55,3 +55,16 @@ CREATE POLICY "Users can insert own profile" ON profiles
 -- 8. Grant necessary permissions
 GRANT ALL ON profiles TO authenticated;
 GRANT ALL ON profiles TO service_role;
+
+-- 9. Create payment_transactions table for ToyyibPay
+CREATE TABLE IF NOT EXISTS payment_transactions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    booking_id VARCHAR(255) NOT NULL,
+    gateway VARCHAR(50) NOT NULL,
+    bill_code VARCHAR(255) NOT NULL,
+    transaction_id VARCHAR(255) DEFAULT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    status VARCHAR(50) DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);

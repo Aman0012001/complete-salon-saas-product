@@ -169,4 +169,25 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'callback')
     exit();
 }
 
+// GET /api/toyyibpay/status/{booking_id}
+if ($method === 'GET' && count($uriParts) === 3 && $uriParts[1] === 'status') {
+    $bookingId = $uriParts[2];
+
+    $stmt = $db->prepare("SELECT * FROM payment_transactions WHERE booking_id = ? ORDER BY created_at DESC LIMIT 1");
+    $stmt->execute([$bookingId]);
+    $transaction = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$transaction) {
+        sendResponse(['error' => 'No payment transaction found for this booking'], 404);
+    }
+
+    sendResponse([
+        'status' => $transaction['status'],
+        'booking_id' => $transaction['booking_id'],
+        'bill_code' => $transaction['bill_code'],
+        'gateway' => $transaction['gateway'],
+        'amount' => $transaction['amount']
+    ]);
+}
+
 sendResponse(['error' => 'ToyyibPay route not found'], 404);
