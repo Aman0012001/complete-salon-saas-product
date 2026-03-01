@@ -10,7 +10,14 @@ function sendToyyibPayRequest($url, $data)
     curl_setopt($ch, CURLOPT_POST, 1);
     curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
     $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        error_log('[ToyyibPay] cURL Error: ' . curl_error($ch));
+    }
+
     curl_close($ch);
     return json_decode($response, true);
 }
@@ -95,6 +102,11 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
             'payment_url' => $paymentUrl
         ]);
     } else {
+        file_put_contents(
+            dirname(__DIR__, 2) . '/logs/toyyibpay_debug.log',
+            "Payload: " . json_encode($toyyibData, JSON_PRETTY_PRINT) . "\nResponse: " . json_encode($response, JSON_PRETTY_PRINT) . "\n\n",
+            FILE_APPEND
+        );
         sendResponse([
             'error' => 'ToyyibPay bill creation failed',
             'response' => $response,

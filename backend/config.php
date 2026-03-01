@@ -70,11 +70,11 @@ define('CLOUDINARY_API_KEY', getenv('CLOUDINARY_API_KEY'));
 define('CLOUDINARY_API_SECRET', getenv('CLOUDINARY_API_SECRET'));
 
 // ToyyibPay Configuration
-define('TOYYIBPAY_SECRET_KEY', getenv('TOYYIBPAY_SECRET_KEY'));
-define('TOYYIBPAY_CATEGORY_CODE', getenv('TOYYIBPAY_CATEGORY_CODE'));
+define('TOYYIBPAY_SECRET_KEY', getenv('TOYYIBPAY_SECRET_KEY') ?: 'gy5xfe0i-89wc-riyw-ggg3-nxfksodv7fw3');
+define('TOYYIBPAY_CATEGORY_CODE', getenv('TOYYIBPAY_CATEGORY_CODE') ?: 'p1cd10dd');
 define('TOYYIBPAY_BASE_URL', getenv('TOYYIBPAY_BASE_URL') ?: 'https://dev.toyyibpay.com');
-define('TOYYIBPAY_CALLBACK_URL', getenv('TOYYIBPAY_CALLBACK_URL'));
-define('TOYYIBPAY_RETURN_URL', getenv('TOYYIBPAY_RETURN_URL'));
+define('TOYYIBPAY_CALLBACK_URL', getenv('TOYYIBPAY_CALLBACK_URL') ?: 'https://complete-salon-saas-product-production.up.railway.app/api/toyyibpay/callback');
+define('TOYYIBPAY_RETURN_URL', getenv('TOYYIBPAY_RETURN_URL') ?: 'https://complete-salon-saas-product-production.up.railway.app/payment-success');
 
 // SMTP Configuration
 define('SMTP_HOST', getenv('SMTP_HOST') ?: 'smtp.gmail.com');
