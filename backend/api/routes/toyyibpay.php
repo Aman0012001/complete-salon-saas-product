@@ -96,7 +96,6 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
     error_log('[ToyyibPay] Creating Bill Request: ' . json_encode($toyyibData));
 
     $response = sendToyyibPayRequest(TOYYIBPAY_BASE_URL . '/index.php/api/createBill', $toyyibData);
-
     // Log the full response
     $logDir = dirname(__DIR__, 2) . '/logs';
     if (!is_dir($logDir)) {
