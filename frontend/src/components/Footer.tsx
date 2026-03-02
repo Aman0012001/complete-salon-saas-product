@@ -83,33 +83,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter / Hours */}
-          {/* <div className="space-y-6">
-            <h3 className="text-foreground font-semibold text-lg">Opening Hours</h3>
-            <div className="p-5 rounded-2xl bg-white dark:bg-gray-800/50 border border-border/50 shadow-sm backdrop-blur-sm">
-              <div className="space-y-3 text-sm">
-                <div className="flex justify-between items-center text-muted-foreground">
-                  <span>Mon - Fri</span>
-                  <span className="font-medium text-foreground">10:00 AM - 8:00 PM</span>
-                </div>
-                <div className="flex justify-between items-center text-muted-foreground">
-                  <span>Saturday</span>
-                  <span className="font-medium text-foreground">10:00 AM - 6:00 PM</span>
-                </div>
-                <div className="flex justify-between items-center text-muted-foreground">
-                  <span>Sunday</span>
-                  <span className="font-medium text-foreground">Closed</span>
-                </div>
-              </div>
-              <Link
-                to="/book"
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-accent px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent/90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
-              >
-                Book Now
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div> */}
+
         </div>
 
         {/* Bottom Bar */}
