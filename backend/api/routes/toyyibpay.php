@@ -23,7 +23,7 @@ function sendToyyibPayRequest($url, $data)
 }
 
 // POST /api/toyyibpay/create-bill
-if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bill') {
+if ($method === 'POST' && isset($uriParts[1]) && $uriParts[1] === 'create-bill') {
     $data = getRequestBody();
     $bookingIdsString = $data['booking_id'] ?? null;
 
