@@ -95,8 +95,12 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
     // Log the request for debugging
     error_log('[ToyyibPay] Creating Bill Request: ' . json_encode($toyyibData));
 
-    $response = sendToyyibPayRequest(TOYYIBPAY_BASE_URL . '/index.php/api/createBill', $toyyibData);
+    $baseUrl = getenv('TOYYIBPAY_BASE_URL') ?: 'https://dev.toyyibpay.com';
 
+    $response = sendToyyibPayRequest(
+        rtrim($baseUrl, '/') . '/index.php/api/createBill',
+        $toyyibData
+    );
     // Log the full response
     $logDir = dirname(__DIR__, 2) . '/logs';
     if (!is_dir($logDir)) {
@@ -105,11 +109,11 @@ if ($method === 'POST' && count($uriParts) === 2 && $uriParts[1] === 'create-bil
 
     file_put_contents(
         $logDir . '/toyyibpay.log',
-        date('Y-m-d H:i:s') . " RESPONSE: " . json_encode($response) . PHP_EOL,
+        date('Y-m-d H:i:s') . " RESPONSE: " . json_encode($response, JSON_PRETTY_PRINT) . PHP_EOL,
         FILE_APPEND
     );
 
-    if (!empty($response[0]['BillCode'])) {
+    if (isset($response[0]['BillCode']) && $response[0]['BillCode'] !== '') {
         $billCode = $response[0]['BillCode'];
 
         // Use the first ID for the transaction record, but full string is in external_ref
