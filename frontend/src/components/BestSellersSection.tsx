@@ -65,7 +65,7 @@ const BestSellersSection = () => {
                 </div>
 
                 {/* Products Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-16" >
                     {products.map((product, index) => (
                         <motion.div
                             key={product.id}
@@ -73,10 +73,10 @@ const BestSellersSection = () => {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="flex flex-col h-full group"
+                            className="flex flex-col h-full group border border-dark" style={{borderRadius: "20px"}}
                         >
                             {/* Image Container with Full-Bleed Look */}
-                            <div className="relative aspect-square overflow-hidden rounded-[2.5rem] mb-6 bg-[#F9F9F9]">
+                            <div className="relative aspect-square overflow-hidden  mb-6" style={{borderTopRightRadius: "20px", borderTopLeftRadius: "20px"}}>
                                 {/* Category Tag - Added glassmorphism to stay visible over cover image */}
                                 <div className="absolute top-6 left-6 z-30">
                                     <span className="text-[10px] font-bold text-[#1A2338] uppercase tracking-[0.2em] bg-white/90 backdrop-blur-md px-4 py-2 rounded-full shadow-sm">
@@ -97,7 +97,7 @@ const BestSellersSection = () => {
                             </div>
 
                             {/* Text Meta Section */}
-                            <div className="space-y-4 flex-grow px-1">
+                            <div className="space-y-4 flex-grow px-1 me-3 ms-4">
                                 <div className="space-y-1">
                                     <h3 className="text-xl font-bold text-[#1A2338] tracking-tight truncate uppercase leading-tight">
                                         {product.name}
@@ -118,10 +118,10 @@ const BestSellersSection = () => {
                             </div>
 
                             {/* Action Buttons - Pill style from reference */}
-                            <div className="grid grid-cols-2 gap-3 mt-8">
+                            <div className="grid grid-cols-2 gap-3  p-4">
                                 <button
                                     onClick={() => navigate(`/product/${product.id}`)}
-                                    className="py-3 px-4 border border-[#B07D62]/40 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] text-[#B07D62] hover:bg-[#B07D62] hover:text-white transition-all text-center"
+                                    className="btn border btn-sm border-[#B07D62]/40 rounded-full text-[11px] font-bold uppercase tracking-[0.15em] text-[#B07D62] hover:bg-[#B07D62] hover:text-white transition-all text-center"
                                 >
                                     VIEW
                                 </button>

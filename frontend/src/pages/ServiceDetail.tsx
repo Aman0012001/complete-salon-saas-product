@@ -236,15 +236,7 @@ export default function ServiceDetail() {
  </div>
  </div>
 
- <div className="flex items-center gap-4">
- <div className="w-12 h-12 rounded-2xl bg-slate-50 flex items-center justify-center text-amber-500">
- <Star className="w-5 h-5" />
- </div>
- <div>
- <p className="text-[10px] font-bold uppercase text-slate-400 tracking-widest leading-none">Elite Level</p>
- <p className="text-lg font-bold text-slate-900 mt-1">Master Craft</p>
- </div>
- </div>
+
  </div>
  </div>
 

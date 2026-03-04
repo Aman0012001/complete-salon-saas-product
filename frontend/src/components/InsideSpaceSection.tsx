@@ -106,7 +106,7 @@ const InsideSpaceSection = () => {
                                         onClick={() => handleServiceClick(service)}
                                         className="group cursor-pointer flex flex-col items-center space-y-8"
                                     >
-                                        <div className="relative w-full aspect-square rounded-[48px] overflow-hidden transition-all duration-700 shadow-sm group-hover:shadow-2xl active:scale-[0.98]">
+                                        <div className="relative w-full aspect-square rounded-[30px] overflow-hidden transition-all duration-700 shadow-sm group-hover:shadow-2xl active:scale-[0.98]">
                                             <img
                                                 src={getImageUrl(service.image, 'service', service.id)}
                                                 alt={service.title}
@@ -119,10 +119,10 @@ const InsideSpaceSection = () => {
                                         </div>
 
                                         <div className="text-center relative">
-                                            <h3 className="font-bold text-2xl md:text-3xl text-foreground transition-colors">
+                                            <h3 className="font-bold text-2xl  text-foreground transition-colors" style={{fontSize: "20px"}}>
                                                 {service.title}
                                             </h3>
-                                            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-foreground origin-center" />
+                                            {/* <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] bg-foreground origin-center" /> */}
                                         </div>
                                     </div>
                                 </motion.div>

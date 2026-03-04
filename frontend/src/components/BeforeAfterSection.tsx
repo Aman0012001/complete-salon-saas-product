@@ -159,12 +159,12 @@ const BeforeAfterSection = () => {
     if (loading) return null;
 
     return (
-        <section className="py-24 bg-white overflow-hidden">
-            <div className="max-w-[1400px] mx-auto px-4 md:px-12">
+        <section className="py-18 bg-white overflow-hidden">
+            <div className="max-w-[1400px] ">
                 {/* Header Section - Centered Luxury Heading */}
                 <div className="text-center mb-24">
                     <h2 className="text-4xl md:text-[3rem] font-black text-[#1A2338] tracking-tight leading-tight uppercase mb-6">
-                        REAL RESULTS. REAL PEOPLE. <span className="text-[#B07D62] lowercase tracking-normal"> <br />real glow.</span>
+                        REAL RESULTS. REAL PEOPLE. 
                     </h2>
 
                     <p className="text-slate-400 font-medium tracking-tight whitespace-pre-line">
@@ -180,11 +180,7 @@ const BeforeAfterSection = () => {
                             loop: true,
                             watchDrag: false,
                         }}
-                        plugins={[
-                            Autoplay({
-                                delay: 5000,
-                            }),
-                        ]}
+                      
                         className="w-full relative group"
                     >
                         <CarouselContent className="-ml-8">
@@ -198,7 +194,7 @@ const BeforeAfterSection = () => {
                                     >
                                         <ComparisonSlider before={item.before_image} after={item.after_image} />
 
-                                        <div className="p-6 md:p-10 flex flex-col space-y-6 flex-grow">
+                                        <div className="p-6 flex flex-col space-y-6 flex-grow">
                                             {/* Name and Rating Block - Horizontal Alignment */}
                                             <div className="text-center items-center justify-between gap-4">
                                                 <h3 className="text-3xl font-black text-[#1A2338] uppercase tracking-tight">{item.customer_name}</h3>
@@ -259,7 +255,7 @@ const BeforeAfterSection = () => {
                 </div>
 
                 {/* Trust Metrics */}
-                <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 mb-16">
+                {/* <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 mb-16">
                     {[
                         { icon: CheckCircle2, text: "1000+ HAPPY CUSTOMERS" },
                         { icon: Camera, text: "NO FILTERS USED" },
@@ -276,13 +272,13 @@ const BeforeAfterSection = () => {
                             {i < 3 && <div className="hidden lg:block w-[1px] h-4 bg-slate-200 ml-12" />}
                         </div>
                     ))}
-                </div>
+                </div> */}
 
                 {/* Booking Action */}
-                <div className="flex justify-center">
+                <div className="flex justify-center mb-24">
                     <Button
                         onClick={() => navigate('/contact')}
-                        className="h-16 px-16 bg-[#B07D62] hover:bg-[#96644B] text-white font-black uppercase tracking-[0.2em] rounded-2xl shadow-[0_20px_40px_-10px_rgba(176,125,98,0.4)] transition-all hover:scale-105 active:scale-95"
+                        className="h-16 px-16 bg-[#B07D62] hover:bg-[#96644B] text-white font-black uppercase tracking-[0.2em] rounded-2xl  transition-all hover:scale-105 active:scale-95"
                     >
                         BOOK YOUR APPOINTMENT
                     </Button>
