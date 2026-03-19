@@ -4,24 +4,24 @@ import { Sparkles, ArrowRight } from "lucide-react";
 
 const concerns = [
     {
-        title: "Oily / Breakouts",
-        recommendation: "Amber Carboxy Facial",
+        title: "Acne / Breakouts",
+        recommendation: "Advanced Custom Skin Therapy",
     },
     {
-        title: "Redness / Sensitive",
-        recommendation: "Absolute Regeneration",
+        title: "Sensitive / Damaged Barrier",
+        recommendation: "Skin Barrier Repair Therapy",
     },
     {
-        title: "Dry / Tired Skin",
-        recommendation: "The Smart Hydra Programme",
+        title: "Pigmentation / Uneven Tone",
+        recommendation: "Pigment Corrective Therapy",
     },
     {
-        title: "Uneven Tone / Acne Scars",
-        recommendation: "Amber Cellular Facial",
+        title: "Dull / Dehydrated Skin",
+        recommendation: "Essential Custom Facial",
     },
     {
-        title: "Loss of Firmness",
-        recommendation: "Orkid Stem Cell Facial",
+        title: "Fine Lines & Signs of Aging",
+        recommendation: "Regeneration Facial",
     },
 ];
 
@@ -29,68 +29,74 @@ const SkinConcernSection = () => {
     const navigate = useNavigate();
 
     return (
-        <section className="py-24 bg-white relative">
-            <div className="max-w-[1400px] mx-auto px-4 md:px-12">
-                {/* Header Block */}
-                <div className="text-center mb-20 space-y-6">
-                    <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="space-y-4"
-                    >
-                        <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.4em]">
-                            SKIN CONCERNS & SIGNATURE SOLUTIONS
-                        </span>
-                        <h2 className="text-3xl md:text-5xl lg:text-[3rem] font-black text-[#1A2338] tracking-tight uppercase">
-                            WHAT'S YOUR MAIN SKIN CONCERN?
-                        </h2>
-                        <p className="text-sm md:text-base text-slate-400 font-medium max-w-2xl mx-auto">
-                            Select your concern to view the recommended treatment and book your session.
-                        </p>
-                    </motion.div>
+        <section className="w-full py-20 bg-white">
+            <div className="mx-auto px-4 md:px-20">
+
+                {/* Header */}
+                <div className="text-center mb-16 space-y-4">
+                    <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400">
+                        Skin Concerns & Solutions
+                    </span>
+
+                    <h2 className="text-3xl md:text-5xl font-medium text-[#1A2338]">
+                        What's Your Main Skin Concern?
+                    </h2>
+
+                    <p className="text-sm text-slate-400 max-w-xl mx-auto">
+                        Select your concern to view the recommended treatment.
+                    </p>
                 </div>
 
-                {/* Concerns Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
                     {concerns.map((concern, index) => (
                         <motion.div
                             key={concern.title}
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
-                            transition={{ duration: 0.5, delay: index * 0.1 }}
-                            className="bg-[#F5F2ED] rounded-[1rem] p-12 hover:shadow-[0_40px_80px_-20px_rgba(0,0,0,0.08)] transition-all duration-500 group cursor-pointer border border-transparent hover:border-slate-100"
+                            transition={{ duration: 0.4, delay: index * 0.1 }}
                             onClick={() => navigate(`/salons?search=${encodeURIComponent(concern.recommendation)}`)}
+
+                            className="bg-[#F5F2ED] rounded-[1rem] p-6 h-full flex flex-col justify-between border border-transparent hover:border-[#e5e2dc] transition-all cursor-pointer"
                         >
-                            <div className="space-y-6">
-                                {/* Icon Box */}
-                                <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center shadow-sm group-hover:bg-[#B07D62] transition-colors duration-500">
-                                    <Sparkles className="w-6 h-6 text-slate-400 group-hover:text-white transition-colors duration-500" />
+                            {/* Top Content */}
+                            <div className="space-y-5">
+
+                                {/* Icon */}
+                                <div className="w-12 h-12 bg-[#B07D62] rounded-xl flex items-center justify-center">
+                                    <Sparkles className="w-5 h-5 text-white" />
                                 </div>
 
-                                <div className="space-y-8">
-                                    <h3 className="text-3xl font-black text-[#1A2338] tracking-tight">
-                                        {concern.title}
-                                    </h3>
+                                {/* Title */}
+                                <h3 className="text-xl md:text-2xl font-medium text-[#1A2338] leading-snug">
+                                    {concern.title}
+                                </h3>
 
-                                    <div className="space-y-2">
-                                        <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                            RECOMMENDED TREATMENT:
-                                        </span>
-                                        <p className="text-[#4A5568] text-lg font-medium">
-                                            {concern.recommendation}
-                                        </p>
-                                    </div>
+                                {/* Recommendation */}
+                                <div className="space-y-1">
+                                    <span className="text-[10px] tracking-[0.25em] uppercase text-slate-400">
+                                        Recommended Treatment
+                                    </span>
+
+                                    <p className="text-sm text-[#4A5568]">
+                                        {concern.recommendation}
+                                    </p>
                                 </div>
+                            </div>
 
-                                <button className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-[#1A2338] group-hover:text-[#B07D62] transition-colors duration-500">
-                                    VIEW & BOOK <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                            {/* Bottom Button (FIXED POSITION) */}
+                            <div className="pt-6">
+                                <button className="flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] text-[#1A2338]">
+                                    Book This Treatment
+                                    <ArrowRight className="w-3.5 h-3.5" />
                                 </button>
                             </div>
+
                         </motion.div>
                     ))}
+
                 </div>
             </div>
         </section>

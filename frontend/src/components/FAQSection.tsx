@@ -128,7 +128,7 @@ const FAQSection = () => {
                         <p className="text-slate-400 font-medium">Still have questions?</p>
                         <Button
                             onClick={() => navigate("/contact")}
-                            className="h-16 px-12 bg-[#1A2338] hover:bg-[#55402f] text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-300 shadow-[0_20px_40px_-10px_rgba(26,35,56,0.3)] hover:-translate-y-1"
+                            className="h-16 px-12 bg-[#1A2338] hover:bg-[#55402f] text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition-all duration-300  hover:-translate-y-1"
                         >
                             Book a Consultation
                         </Button>

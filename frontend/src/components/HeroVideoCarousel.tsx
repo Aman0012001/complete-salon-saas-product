@@ -37,7 +37,7 @@ const HeroVideoCarousel = () => {
     }, []);
 
     return (
-        <section className="relative w-full h-[700px] md:h-[800px] lg:h-[1056px] overflow-hidden bg-[#FAF9F6]">
+        <section className="relative w-full h-[700px] md:h-[600px] lg:h-[690px] overflow-hidden bg-[#FAF9F6]">
             {/* Background Layer */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 overflow-hidden">
@@ -73,7 +73,7 @@ const HeroVideoCarousel = () => {
                         {/* Typography Block */}
                         <div className="space-y-4">
                             <motion.h1
-                                className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter uppercase font-sans"
+                                className="text-5xl md:text-7xl lg:text-8xl font-black text-white leading-[0.85] tracking-tighter  "
                                 initial={{ opacity: 0, y: 30 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.2, duration: 0.8 }}

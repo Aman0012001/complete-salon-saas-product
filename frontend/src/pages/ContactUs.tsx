@@ -1,31 +1,8 @@
 import { useState } from "react";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Clock,
-  Send,
-  MessageCircle,
-  Headphones,
-  CheckCircle,
-  ArrowRight,
-  Instagram,
-  Facebook,
-  Twitter
-} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { useToast } from "@/hooks/use-toast";
@@ -43,45 +20,6 @@ const ContactUs = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const contactMethods = [
-    {
-      icon: Phone,
-      title: "Phone Support",
-      description: "Speak with our support team",
-      contact: "011 23198819",
-      availability: "Mon-Sat, 10 AM - 8 PM",
-      action: "Call Now",
-      href: "tel:01123198819"
-    },
-    {
-      icon: Mail,
-      title: "Email Support",
-      description: "Send us your questions",
-      contact: "skinnoam@gmail.com",
-      availability: "We respond within 24 hours",
-      action: "Send Email",
-      href: "mailto:skinnoam@gmail.com"
-    },
-    {
-      icon: MessageCircle,
-      title: "WhatsApp",
-      description: "Chat with us instantly",
-      contact: "011 23198819",
-      availability: "Mon-Sat, 10 AM - 8 PM",
-      action: "Start Chat",
-      href: "https://wa.me/601123198819"
-    },
-    {
-      icon: Headphones,
-      title: "Visit Us",
-      description: "Come experience luxury",
-      contact: "Bangsar, KL",
-      availability: "Walk-ins Welcome",
-      action: "Get Directions",
-      href: "https://maps.google.com/?q=46+Jalan+Limau+Nipis+59000+Bangsar+Kuala+Lumpur"
-    }
-  ];
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -93,9 +31,6 @@ const ContactUs = () => {
         phone: formData.phone,
         subject: formData.subject,
         message: formData.message,
-        // inquiryType is also available if the backend supports it, 
-        // but the current migration used 'subject' for the main topic.
-        // We'll combine them or just send subject.
       });
 
       toast({
@@ -128,268 +63,204 @@ const ContactUs = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background pb-0">
       <Navbar />
 
-      {/* Header */}
-      <section className="pt-24 pb-16 px-4 bg-gradient-to-br from-accent/5 to-accent/10 relative overflow-hidden">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-accent/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-
-        <div className="container mx-auto text-center relative z-10">
-          {/* <Badge className="mt-8 mb-6 bg-accent/10 text-accent border-accent/20 px-4 py-1.5 text-sm">
-            Get In Touch
-          </Badge> */}
-          <h1 className="text-4xl mt-8 md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-300">
-            Contact
-            <br />
-            <span className="text-accent">Noamskin</span>
-          </h1>
-          <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8 leading-relaxed">
-            Have questions about our services? Ready to book your transformation?
-            Our friendly team is here to help you achieve your beauty goals.
-          </p>
-        </div>
+      {/* Hero Section */}
+      <section className="pt-32 pb-16 px-4 text-center mt-8">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif mb-6 text-foreground">
+          Get in Touch
+        </h1>
+        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto font-light leading-relaxed">
+          We respect your privacy and look forward to hearing from you. Whether you have a question about our services or want to book an appointment, our team is ready to help.
+        </p>
       </section>
 
-      {/* Contact Methods */}
-      <section className="py-16 px-4">
-        <div className="container mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto -mt-24 relative z-20">
-            {contactMethods.map((method, index) => {
-              const IconComponent = method.icon;
-
-              return (
-                <Card key={method.title} className="text-center hover:shadow-xl transition-all duration-300 group border-0 shadow-lg bg-white/80 backdrop-blur-sm">
-                  <CardContent className="p-6">
-                    <div className="w-16 h-16 bg-accent/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-accent/20 transition-all duration-300 group-hover:scale-110">
-                      <IconComponent className="w-8 h-8 text-accent transition-colors duration-300" />
-                    </div>
-                    <h3 className="font-bold mb-2 text-lg">{method.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">{method.description}</p>
-                    <p className="font-medium text-accent mb-2">{method.contact}</p>
-                    <p className="text-xs text-muted-foreground mb-4">{method.availability}</p>
-                    <a href={method.href} target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="sm" className="w-full group-hover:bg-accent group-hover:text-white group-hover:border-accent transition-all duration-300">
-                        {method.action}
-                      </Button>
-                    </a>
-                  </CardContent>
-                </Card>
-              );
-            })}
+      {/* Screenshot Style Contact Cards */}
+      <section className="py-24 bg-[#8B5A33] text-white">
+        <div className="container mx-auto max-w-6xl">
+          <div className="text-center mb-16">
+            <span className="text-xs tracking-[0.2em] uppercase font-light opacity-80">Let's Connect</span>
           </div>
-        </div>
-      </section>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-y-12 md:gap-y-0">
+            {/* Phone */}
+            <div className="flex flex-col items-center text-center px-6 relative md:border-r border-white/20">
+              <h3 className="text-3xl font-serif mb-6">Phone</h3>
+              <p className="text-[10px] tracking-[0.2em] uppercase mb-4 opacity-80">CALL US</p>
+              <div className="w-12 h-px bg-white/40 mb-8" />
+              <a href="tel:01123198819" className="text-sm font-light hover:opacity-70 transition-opacity">011 23198819</a>
+            </div>
 
-      {/* Contact Form & Info */}
-      <section className="py-16 px-4 bg-secondary/30">
-        <div className="container mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 max-w-6xl mx-auto">
-            {/* Contact Form */}
-            <Card className="border-0 shadow-xl overflow-hidden">
-              <div className="h-2 w-full bg-gradient-to-r from-accent to-[#433225]" />
-              <CardHeader>
-                <CardTitle className="text-2xl">Send Us a Message</CardTitle>
-                <p className="text-muted-foreground">
-                  Fill out the form below and we'll get back to you as soon as possible.
-                </p>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name">Full Name *</Label>
-                      <Input
-                        id="name"
-                        value={formData.name}
-                        onChange={(e) => handleInputChange("name", e.target.value)}
-                        placeholder="Your full name"
-                        className="bg-secondary/20"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email">Email Address *</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => handleInputChange("email", e.target.value)}
-                        placeholder="your@email.com"
-                        className="bg-secondary/20"
-                        required
-                      />
-                    </div>
-                  </div>
+            {/* Email */}
+            <div className="flex flex-col items-center text-center px-6 relative md:border-r border-white/20">
+              <h3 className="text-3xl font-serif mb-6">Email</h3>
+              <p className="text-[10px] tracking-[0.2em] uppercase mb-4 opacity-80">WRITE TO US</p>
+              <div className="w-12 h-px bg-white/40 mb-8" />
+              <a href="mailto:skinnoam@gmail.com" className="text-sm font-light hover:opacity-70 transition-opacity">skinnoam@gmail.com</a>
+            </div>
 
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="phone">Phone Number</Label>
-                      <Input
-                        id="phone"
-                        value={formData.phone}
-                        onChange={(e) => handleInputChange("phone", e.target.value)}
-                        placeholder="011 23198819"
-                        className="bg-secondary/20"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="inquiryType">Inquiry Type</Label>
-                      <Select value={formData.inquiryType} onValueChange={(value) => handleInputChange("inquiryType", value)}>
-                        <SelectTrigger className="bg-secondary/20">
-                          <SelectValue placeholder="Select inquiry type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="appointment">Book Appointment</SelectItem>
-                          <SelectItem value="service">Service Question</SelectItem>
-                          <SelectItem value="feedback">Feedback</SelectItem>
-                          <SelectItem value="other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
+            {/* WhatsApp */}
+            <div className="flex flex-col items-center text-center px-6 relative md:border-r border-white/20">
+              <h3 className="text-3xl font-serif mb-6">WhatsApp</h3>
+              <p className="text-[10px] tracking-[0.2em] uppercase mb-4 opacity-80">CHAT WITH US</p>
+              <div className="w-12 h-px bg-white/40 mb-8" />
+              <a href="https://wa.me/601123198819" target="_blank" rel="noopener noreferrer" className="text-sm font-light hover:opacity-70 transition-opacity">011 23198819</a>
+            </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="subject">Subject *</Label>
-                    <Input
-                      id="subject"
-                      value={formData.subject}
-                      onChange={(e) => handleInputChange("subject", e.target.value)}
-                      placeholder="Brief description of your message"
-                      className="bg-secondary/20"
-                      required
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="message">Message *</Label>
-                    <Textarea
-                      id="message"
-                      value={formData.message}
-                      onChange={(e) => handleInputChange("message", e.target.value)}
-                      placeholder="Tell us more about how we can help you..."
-                      rows={5}
-                      className="bg-secondary/20"
-                      required
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-accent to-accent/90 hover:from-accent/90 hover:to-accent text-white shadow-lg shadow-accent/20"
-                    size="lg"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-5 h-5 mr-2" />
-                        Send Message
-                      </>
-                    )}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-
-            {/* Contact Info */}
-            <div className="space-y-8">
-              {/* Main Location */}
-              <Card className="border-0 shadow-xl overflow-hidden group">
-                <div className="h-2 w-full bg-gradient-to-r from-[#433225] to-accent" />
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <MapPin className="w-5 h-5 text-accent" />
-                    Our Location
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="pb-4">
-                    <h3 className="font-bold text-lg mb-2">Noamskin Salon</h3>
-                    <div className="space-y-3 text-sm text-muted-foreground">
-                      <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                          <MapPin className="w-4 h-4 text-accent" />
-                        </div>
-                        <span className="leading-relaxed mt-1">46 Jalan Limau Nipis,<br />59000 Bangsar,<br />Kuala Lumpur</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                          <Phone className="w-4 h-4 text-accent" />
-                        </div>
-                        <span>011 23198819</span>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center flex-shrink-0">
-                          <Mail className="w-4 h-4 text-accent" />
-                        </div>
-                        <span>skinnoam@gmail.com</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Social Links */}
-                  <div className="pt-4 border-t">
-                    <h4 className="font-semibold mb-3">Follow Us</h4>
-                    <div className="flex gap-4">
-                      <SocialButton icon={Instagram} href="#" />
-                      <SocialButton icon={Facebook} href="#" />
-                      <SocialButton icon={Twitter} href="#" />
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Business Hours */}
-              {/* <Card className="border-0 shadow-xl overflow-hidden">
-                <div className="h-2 w-full bg-gradient-to-r from-accent to-[#433225]" />
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Clock className="w-5 h-5 text-accent" />
-                    Opening Hours
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-                    <span>Monday - Friday</span>
-                    <span className="font-medium bg-secondary px-3 py-1 rounded-full text-sm">10:00 AM - 8:00 PM</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-                    <span>Saturday</span>
-                    <span className="font-medium bg-secondary px-3 py-1 rounded-full text-sm">10:00 AM - 6:00 PM</span>
-                  </div>
-                  <div className="flex justify-between items-center p-2 rounded-lg hover:bg-secondary/50 transition-colors">
-                    <span>Sunday</span>
-                    <span className="text-muted-foreground bg-secondary/50 px-3 py-1 rounded-full text-sm">Closed</span>
-                  </div>
-                </CardContent>
-              </Card> */}
-
-              {/* CTA */}
-
+            {/* Visit Us */}
+            <div className="flex flex-col items-center text-center px-6 relative">
+              <h3 className="text-3xl font-serif mb-6">Visit Us</h3>
+              <p className="text-[10px] tracking-[0.2em] uppercase mb-4 opacity-80">DROP BY</p>
+              <div className="w-12 h-px bg-white/40 mb-8" />
+              <a href="#map" className="text-sm font-light hover:opacity-70 transition-opacity">Bangsar, KL</a>
             </div>
           </div>
         </div>
+      </section>
+
+      {/* Two Column Form & Location */}
+      <section className="py-24 px-4 bg-background">
+        <div className="container mx-auto max-w-5xl">
+          <div className="grid lg:grid-cols-2 gap-20 items-start">
+            
+            {/* Form Left */}
+            <div>
+              <h2 className="text-3xl md:text-4xl font-serif mb-12 text-foreground">Send a Message</h2>
+              <form onSubmit={handleSubmit} className="space-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-medium">Full Name *</label>
+                    <Input
+                      required
+                      value={formData.name}
+                      onChange={(e) => handleInputChange("name", e.target.value)}
+                      className="border-0 border-b border-border hover:border-foreground rounded-none px-0 bg-transparent focus-visible:ring-0 focus-visible:border-foreground transition-colors shadow-none text-base font-light"
+                      placeholder="Your name"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-medium">Email Address *</label>
+                    <Input
+                      required
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange("email", e.target.value)}
+                      className="border-0 border-b border-border hover:border-foreground rounded-none px-0 bg-transparent focus-visible:ring-0 focus-visible:border-foreground transition-colors shadow-none text-base font-light"
+                      placeholder="your@email.com"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  <div className="space-y-3">
+                    <label className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-medium">Phone Number</label>
+                    <Input
+                      value={formData.phone}
+                      onChange={(e) => handleInputChange("phone", e.target.value)}
+                      className="border-0 border-b border-border hover:border-foreground rounded-none px-0 bg-transparent focus-visible:ring-0 focus-visible:border-foreground transition-colors shadow-none text-base font-light"
+                      placeholder="011 23198819"
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    <label className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-medium">Inquiry Type</label>
+                    <Select value={formData.inquiryType} onValueChange={(value) => handleInputChange("inquiryType", value)}>
+                      <SelectTrigger className="border-0 border-b border-border hover:border-foreground rounded-none px-0 bg-transparent focus:ring-0 focus:border-foreground transition-colors shadow-none h-10 text-base font-light">
+                        <SelectValue placeholder="Select type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="appointment">Book Appointment</SelectItem>
+                        <SelectItem value="service">Service Question</SelectItem>
+                        <SelectItem value="feedback">Feedback</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-medium">Subject *</label>
+                  <Input
+                    required
+                    value={formData.subject}
+                    onChange={(e) => handleInputChange("subject", e.target.value)}
+                    className="border-0 border-b border-border hover:border-foreground rounded-none px-0 bg-transparent focus-visible:ring-0 focus-visible:border-foreground transition-colors shadow-none text-base font-light"
+                    placeholder="Brief description"
+                  />
+                </div>
+
+                <div className="space-y-3">
+                  <label className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground font-medium">Message *</label>
+                  <Textarea
+                    required
+                    value={formData.message}
+                    onChange={(e) => handleInputChange("message", e.target.value)}
+                    className="border-0 border-b border-border hover:border-foreground rounded-none px-0 bg-transparent focus-visible:ring-0 focus-visible:border-foreground transition-colors shadow-none resize-none min-h-[120px] text-base font-light"
+                    placeholder="How can we help you?"
+                  />
+                </div>
+
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full sm:w-auto bg-[#8B5A33] hover:bg-[#684c39] text-white px-12 py-7 mt-4 text-xs uppercase tracking-[0.2em] rounded-none transition-all"
+                >
+                  {loading ? "Sending..." : "Submit Inquiry"}
+                </Button>
+              </form>
+            </div>
+
+            {/* Location Right */}
+            <div className="lg:pl-16 lg:border-l border-border mt-16 lg:mt-0 pb-16">
+              <h2 className="text-3xl md:text-4xl font-serif mb-12 text-foreground">Our Studio</h2>
+              <div className="space-y-12">
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 text-muted-foreground">Address</h4>
+                  <p className="font-light leading-loose text-[15px]">
+                    <strong className="font-medium">Noamskin Salon</strong><br />
+                    46 Jalan Limau Nipis,<br />
+                    59000 Bangsar,<br />
+                    Kuala Lumpur
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 text-muted-foreground">Operating Hours</h4>
+                  <p className="font-light leading-loose text-[15px]">
+                    Monday - Saturday: 10:00 AM - 8:00 PM<br />
+                    Sunday: Closed
+                  </p>
+                </div>
+                <div>
+                  <h4 className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 text-muted-foreground">Socials</h4>
+                  <div className="flex gap-6">
+                    <a href="#" className="font-light hover:text-[#8B5A33] transition-colors text-[15px] underline underline-offset-4">Instagram</a>
+                    <a href="#" className="font-light hover:text-[#8B5A33] transition-colors text-[15px] underline underline-offset-4">Facebook</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* Map Segment */}
+      <section id="map" className="w-full h-[550px] grayscale hover:grayscale-0 transition-all duration-700 opacity-90 hover:opacity-100">
+        <iframe
+          src="https://maps.google.com/maps?q=46%20Jalan%20Limau%20Nipis,%2059000%20Bangsar,%20Kuala%20Lumpur&t=&z=16&ie=UTF8&iwloc=&output=embed"
+          width="100%"
+          height="100%"
+          style={{ border: 0 }}
+          allowFullScreen
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          title="Noamskin Salon Location Map"
+        />
       </section>
 
       <Footer />
     </div>
   );
 };
-
-const SocialButton = ({ icon: Icon, href }: { icon: any, href: string }) => (
-  <a
-    href={href}
-    className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center text-muted-foreground hover:bg-[#6B4F3B] hover:text-white transition-all duration-300 hover:scale-110"
-  >
-    <Icon className="w-5 h-5 transition-colors duration-300" />
-  </a>
-);
 
 export default ContactUs;

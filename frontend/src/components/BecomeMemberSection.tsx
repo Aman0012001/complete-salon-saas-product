@@ -43,12 +43,23 @@ const BecomeMemberSection = () => {
                 </div>
 
                 {/* Full Bleed Image - Right Side */}
-                <div className="relative min-h-[500px] lg:min-h-full h-full order-1 lg:order-2">
-                    <img
-                        src="https://images.unsplash.com/photo-1616394584738-fc6e612e71b9?w=1200&q=80"
-                        alt="Become a Member Experience"
-                        className="absolute inset-0 w-full h-full object-cover"
-                    />
+                <div className="flex justify-center lg:justify-end pr-6 md:pr-16 lg:pr-24 order-1 lg:order-2">
+                    <div className="w-full max-w-[650px]">
+
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.95 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.6 }}
+                            className="relative rounded-[2.5rem] overflow-hidden "
+                        >
+                            <img
+                                src="https://i.ibb.co/YFmynKJX/fcce72cd-a4a6-463f-ad06-8e919dc5c3a8.jpg"
+                                alt="Become a Member Experience"
+                                className="w-full h-[500px] md:h-[650px] object-cover"
+                            />
+                        </motion.div>
+
+                    </div>
                 </div>
 
             </div>

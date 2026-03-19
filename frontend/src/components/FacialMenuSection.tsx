@@ -9,7 +9,7 @@ const facials = [
         description: "A deep-cleansing facial designed to purify the skin while keeping it calm and balanced. This treatment focuses on clearing congestion, reducing inflammation, and supporting healthy skin function — without stripping or over-drying.",
         for: "Acne-prone, oily, congested skin.",
         result: "Skin feels clean, clear, & refreshed, less congested, & visibly healthier.",
-        image: "https://images.unsplash.com/photo-1515377905703-c4788e51af15?q=80&w=2070&auto=format&fit=crop",
+        image: "https://i.ibb.co/6cq8nwXw/491575c8-285c-411b-b187-930434e6f7e1.jpg",
         imageLabel: "Luxury Facial Treatment"
     },
     {
@@ -18,7 +18,7 @@ const facials = [
         description: "A powerful age-defying treatment that stimulates cellular renewal and provides intense hydration. Ideal for restoring a youthful radiance and firming the skin's texture.",
         for: "Mature, dry, or tired skin.",
         result: "Visibly firmer, smoother, and more radiant complexion.",
-        image: "https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?q=80&w=2070&auto=format&fit=crop",
+        image: "https://i.ibb.co/7tmhgNHW/9b02eb3d-955e-4664-8cc1-732dae646112.jpg",
         imageLabel: "Advanced Skin Recovery"
     },
     {
@@ -27,7 +27,7 @@ const facials = [
         description: "A comprehensive hydration boost using advanced moisture-binding technologies. Designed to quench the deepest layers of the skin, leaving it plump and revitalized.",
         for: "Dehydrated, dull, or stressed skin.",
         result: "Deeply hydrated, glowing, and supple skin.",
-        image: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=2070&auto=format&fit=crop",
+        image: "https://i.ibb.co/YFmynKJX/fcce72cd-a4a6-463f-ad06-8e919dc5c3a8.jpg",
         imageLabel: "Moisture Lock Technology"
     }
 ];
@@ -106,7 +106,7 @@ const FacialMenuSection = () => {
                                     animate={{ opacity: 1, scale: 1 }}
                                     exit={{ opacity: 0, scale: 0.95 }}
                                     transition={{ duration: 0.5 }}
-                                    className="relative aspect-square md:aspect-[4/4] rounded-[2.5rem] overflow-hidden shadow-2xl"
+                                    className="relative aspect-square md:aspect-[4/4] rounded-[2.5rem] overflow-hidden "
                                 >
                                     <div className="absolute top-6 left-6 z-10">
                                         <span className="text-[10px] font-black text-slate-900 uppercase tracking-[0.3em] bg-white/80 backdrop-blur-md px-4 py-2 rounded-full">
