@@ -33,6 +33,7 @@ define('JWT_EXPIRY', 86400); // 24 hours
 
 // CORS Settings - Added 127.0.0.1 and common ports for safety
 define('ALLOWED_ORIGINS', [
+    'https://scintillating-speculoos-e24933.netlify.app',
     'http://localhost:8081',
     'http://localhost:5173',
     'http://localhost:5174',
@@ -45,6 +46,7 @@ define('ALLOWED_ORIGINS', [
     'http://127.0.0.1:3000',
     'http://127.0.0.1:3001'
 ]);
+
 
 // File Upload Settings (Disabled - Moving to Cloudinary)
 // define('UPLOAD_DIR', dirname(__DIR__) . '/uploads/');
