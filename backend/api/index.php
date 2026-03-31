@@ -21,14 +21,16 @@ error_reporting(E_ALL);
 // ==========================================
 require_once __DIR__ . '/../config.php';
 
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
-if (in_array($origin, ALLOWED_ORIGINS)) {
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+// To prevent CORS errors with credentials, we must echo the exact origin instead of '*'
+if ($origin) {
     header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
 } else {
-    header("Access-Control-Allow-Origin: *"); // Fallback
+    header("Access-Control-Allow-Origin: *");
 }
 
-header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
 
