@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
 /**
@@ -17,13 +17,25 @@ error_reporting(E_ALL);
 // ==========================================
 
 // 1. ==========================================
-// 🚀 CORS HEADERS HANDLED BY APACHE (.htaccess)
+// 🚀 CORS HEADERS HANDLED BY PHP
 // ==========================================
+require_once __DIR__ . '/../config.php';
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+// To prevent CORS errors with credentials, we must echo the exact origin instead of '*'
+if ($origin) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+} else {
+    header("Access-Control-Allow-Origin: *");
+}
+
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS, PATCH");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With, Accept, Origin");
 
 // Handle preflight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    // Apache adds the CORS headers automatically
-    // We just need to respond with 200 OK and exit
     header('Access-Control-Max-Age: 86400');
     header('Content-Length: 0');
     header('Content-Type: text/plain');
