@@ -65,9 +65,9 @@ const Index = () => {
         <SkinConcernSection />
       </div>
 
-      <div id="best-sellers">
+      {/* <div id="best-sellers">
         <BestSellersSection />
-      </div>
+      </div> */}
 
       <div id="skin-advice">
         <SkinAdviceSection />
@@ -77,17 +77,17 @@ const Index = () => {
         <ReviewsSection />
       </div>
 
-      <div id="before-after">
+      {/* <div id="before-after">
         <BeforeAfterSection />
-      </div>
+      </div> */}
 
       <div id="stats">
         <StatsSection />
       </div>
 
-      <div id="faq">
+      {/* <div id="faq">
         <FAQSection />
-      </div>
+      </div> */}
 
       <BecomeMemberSection />
 

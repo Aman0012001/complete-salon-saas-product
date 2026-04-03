@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import api from "@/services/api";
 import { toast } from "sonner";
-import { Instagram } from "lucide-react";
+import { Gift, Instagram, MessageCircle } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -81,15 +81,15 @@ const NewsletterPopup = () => {
                                 className="space-y-6"
                             >
                                 <div className="space-y-2 md:space-y-4">
-                                    <h2 className="text-2xl sm:text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
-                                        Get RM 50 OFF Your First Visit
+                                    <h2 className="text-2xl sm:text-3xl md:text-3xl font-bold text-gray-900 leading-tight">
+                                        Enjoy RM50 OFF Your First Visit
                                     </h2>
                                     <p className="text-gray-600 text-sm md:text-lg leading-relaxed">
-                                        Subscribe to our newsletter for exclusive offers, wellness tips, and a premium salon experience.
+                                        Join our membership and receive exclusive reward and special member offers.
                                     </p>
                                 </div>
 
-                                <form onSubmit={handleSubscribe} className="space-y-4">
+                                {/* <form onSubmit={handleSubscribe} className="space-y-4">
                                     <div className="space-y-2">
                                         <Input
                                             type="email"
@@ -107,7 +107,31 @@ const NewsletterPopup = () => {
                                     >
                                         {isLoading ? "Subscribing..." : "GET MY DISCOUNT"}
                                     </Button>
-                                </form>
+                                </form> */}
+
+
+                                <div className="space-y-3">
+
+                                    {/* WhatsApp Button */}
+                                    <a
+                                        href="https://wa.me/601123198819"
+                                        target="_blank"
+                                        className="flex items-center justify-center gap-2 w-full h-12 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-full uppercase transition-all"
+                                    >
+                                        <MessageCircle className="w-4 h-4" />
+                                        WhatsApp
+                                    </a>
+
+                                    {/* Claim Button */}
+                                    <a
+                                        href="/membership"
+                                        className="flex items-center justify-center gap-2 w-full h-12 bg-black hover:bg-black/90 text-white font-semibold rounded-full uppercase transition-all"
+                                    >
+                                        <Gift className="w-4 h-4" />
+                                        Claim My RM50
+                                    </a>
+
+                                </div>
 
                                 {/* <div className="pt-4 flex justify-center">
                                     <Instagram className="w-6 h-6 text-gray-400 hover:text-black cursor-pointer transition-colors" />

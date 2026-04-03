@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { Button } from "./ui/button";
+import { ArrowRight } from "lucide-react";
 
 const BecomeMemberSection = () => {
     return (
-        <section className="bg-white">
+        <section className="bg-white pt-20">
             <div className="grid grid-cols-1 lg:grid-cols-2">
 
                 {/* Text Content - Left Side */}
@@ -27,16 +29,17 @@ const BecomeMemberSection = () => {
 
                         {/* Subheading */}
                         <p className="text-base text-slate-500 font-medium leading-[1.8] max-w-md">
-                            Elevate your self-care ritual. Our memberships are designed for consistent, visible results that fit your lifestyle.
+                            Earn points with every treatment and product purchase.
+                            Redeem rewards for your next visit.
                         </p>
 
                         {/* Minimal Text CTA matching "BOOK NOW" */}
                         <div className="pt-6">
                             <Link
-                                to="/signup"
+                                to="/membership"
                                 className="text-[10px] md:text-xs font-black text-[#1A1A1A] tracking-[0.3em] uppercase hover:underline underline-offset-8 transition-all"
                             >
-                                JOIN A MEMBER
+                                EXPLORE MEMBERSHIP →
                             </Link>
                         </div>
                     </motion.div>
@@ -62,7 +65,25 @@ const BecomeMemberSection = () => {
                     </div>
                 </div>
 
+
             </div>
+
+            <section className="py-16 px-4 mb-8">
+                <div className="container mx-auto text-center max-w-3xl bg-accent/5 rounded-3xl p-12 border border-accent/10 shadow-lg">
+                    <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to Join Us?</h2>
+                    <p className="text-lg text-muted-foreground mb-8">
+                        Sign up today to start earning rewards for your everyday skincare.
+                    </p>
+                    <div className="flex justify-center">
+                        <Link to="/book">
+                            <Button size="lg" className="bg-accent hover:bg-accent/90 text-white px-10 py-6 text-lg rounded-xl shadow-xl shadow-accent/20 transition-all hover:-translate-y-1">
+                                Become a Member
+                                <ArrowRight className="w-5 h-5 ml-2" />
+                            </Button>
+                        </Link>
+                    </div>
+                </div>
+            </section>
         </section>
     );
 };

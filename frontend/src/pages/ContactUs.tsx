@@ -82,7 +82,7 @@ const ContactUs = () => {
           <div className="text-center mb-16">
             <span className="text-xs tracking-[0.2em] uppercase font-light opacity-80">Let's Connect</span>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-4 gap-y-12 md:gap-y-0">
             {/* Phone */}
             <div className="flex flex-col items-center text-center px-6 relative md:border-r border-white/20">
@@ -123,7 +123,7 @@ const ContactUs = () => {
       <section className="py-24 px-4 bg-background">
         <div className="container mx-auto max-w-5xl">
           <div className="grid lg:grid-cols-2 gap-20 items-start">
-            
+
             {/* Form Left */}
             <div>
               <h2 className="text-3xl md:text-4xl font-serif mb-12 text-foreground">Send a Message</h2>
@@ -217,7 +217,7 @@ const ContactUs = () => {
                 <div>
                   <h4 className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 text-muted-foreground">Address</h4>
                   <p className="font-light leading-loose text-[15px]">
-                    <strong className="font-medium">Noamskin Salon</strong><br />
+                    <strong className="font-medium">Noamskin</strong><br />
                     46 Jalan Limau Nipis,<br />
                     59000 Bangsar,<br />
                     Kuala Lumpur
@@ -226,8 +226,13 @@ const ContactUs = () => {
                 <div>
                   <h4 className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 text-muted-foreground">Operating Hours</h4>
                   <p className="font-light leading-loose text-[15px]">
-                    Monday - Saturday: 10:00 AM - 8:00 PM<br />
-                    Sunday: Closed
+                    Monday: Closed<br />
+                    Tuesday: 2 PM - 12 AM<br />
+                    Wednesday: 11 AM - 7 PM<br />
+                    Thursday: Closed<br />
+                    Friday: 2 PM - 12 AM<br />
+                    Saturday: 2 PM - 12 AM<br />
+                    Sunday: 11 AM - 7 PM
                   </p>
                 </div>
                 <div>

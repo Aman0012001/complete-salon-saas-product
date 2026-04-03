@@ -383,7 +383,7 @@ const AllServicesSimple = () => {
                             <p className="text-sm text-muted-foreground line-clamp-1">{service.salon_name || "Premium Salon"}</p>
 
                             {/* Rating Placeholder */}
-                            <div className="flex items-center gap-1">
+                            {/* <div className="flex items-center gap-1">
                               {Array.from({ length: 5 }).map((_, i) => (
                                 <Star
                                   key={i}
@@ -394,7 +394,7 @@ const AllServicesSimple = () => {
                               {service.review_count !== undefined && (
                                 <span className="text-[10px] text-slate-400 ml-1">· {service.review_count} reviews</span>
                               )}
-                            </div>
+                            </div> */}
 
                             {/* Stats */}
                             <div className="flex items-center gap-4 text-sm text-muted-foreground">

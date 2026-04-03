@@ -109,7 +109,7 @@ const CustomerSignup = () => {
                         <div className="flex justify-center mb-6">
                             <img src={logo} alt="Salon Logo" className="h-14 w-auto" />
                         </div>
-                        <CardTitle className="text-4xl font-black text-slate-900 tracking-tight">Join the Network</CardTitle>
+                        <CardTitle className="text-4xl font-black text-slate-900 tracking-tight">Join our club</CardTitle>
                         <CardDescription className="font-bold text-slate-400 uppercase tracking-widest text-[10px] mt-2">Create your premium customer profile</CardDescription>
                     </CardHeader>
                     <form onSubmit={handleSignup}>

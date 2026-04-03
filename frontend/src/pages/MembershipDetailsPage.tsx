@@ -147,6 +147,7 @@ const MembershipDetailsPage = () => {
                 </div>
             </section>
 
+
             <Footer />
         </div>
     );

@@ -473,8 +473,8 @@ const BookAppointment = () => {
     switch (s) {
       case 1: return "Welcome to Noam Skin";
       case 2: return "Select Your Treatments";
-      case 3: return "Select Your Stylist";
-      case 4: return "Registry Calendar";
+      case 3: return "Select Your Therapist";
+      case 4: return "Calendar";
       case 5: return "Member Details";
       case 6: return "Policy Review";
       case 7: return "Session Reserved";
@@ -729,6 +729,12 @@ const BookAppointment = () => {
                           return compareDate < today || date.getDay() === 0;
                         }}
                         className="mx-auto border border-slate-100 rounded-xl md:border-none p-2 md:p-0"
+
+                        classNames={{
+                          day_selected: " text-white font-bold rounded-lg",
+                          day_today: "border border-[#4A3728] p-2",
+                          day: " p-2 rounded-lg transition",
+                        }}
                       />
                     </div>
                   </Card>
@@ -833,26 +839,28 @@ const BookAppointment = () => {
               <motion.div key="step6" initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="space-y-12">
                 <Card className="border-2 border-slate-900 shadow-sm bg-white text-slate-900 rounded-[1.5rem] p-12 space-y-12">
                   <div className="space-y-6">
-                    <h3 className=" border-2 text-xl md:text-2xl font-black uppercase tracking-tighter border-b border-slate-100 pb-6">Cancellation & House Policy</h3>
-                    <div className="space-y-8 text-slate-500 font-medium italic leading-relaxed text-xs md:text-sm">
+                    <h3 className="text-xl md:text-2xl font-semibold tracking-tight border-b border-slate-200 pb-4">
+                      Cancellation & House Policy
+                    </h3>
+                    <div className="space-y-8 text-slate-600 font-normal leading-relaxed text-sm md:text-base">
                       <p>We value everyone’s time and kindly request that any changes or cancellations be made at least 24 hours in advance.</p>
                       <div className="space-y-4">
                         <p className="text-slate-900 font-black uppercase tracking-widest text-[10px] opacity-60">To maintain a comfortable environment:</p>
-                        <ul className="space-y-4">
-                          <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">1</span>
+                        <ul className="space-y-3">
+                          <li className="flex gap-3">
+                            <span className="font-semibold">1.</span>
                             <span>No pets are allowed in the studio.</span>
                           </li>
-                          <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">2</span>
+                          <li className="flex gap-3">
+                            <span className="font-semibold">2.</span>
                             <span>Children under 12 years old are not permitted.</span>
                           </li>
-                          <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">3</span>
+                          <li className="flex gap-3">
+                            <span className="font-semibold">3.</span>
                             <span>Only one accompanying person allowed.</span>
                           </li>
-                          <li className="flex gap-4">
-                            <span className="w-6 h-6 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 text-slate-900 font-black text-[10px] shrink-0">4</span>
+                          <li className="flex gap-3">
+                            <span className="font-semibold">4.</span>
                             <span>Same-day cancellations, no-shows, or late arrivals (15+ min) will be charged 100% of the service fee.</span>
                           </li>
                         </ul>
