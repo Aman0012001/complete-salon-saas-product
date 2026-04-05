@@ -1,1 +1,0 @@
-ALTER TABLE staff_profiles ADD COLUMN IF NOT EXISTS blood_group VARCHAR(10) NULL;
