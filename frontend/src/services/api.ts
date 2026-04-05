@@ -294,6 +294,13 @@ export const bookingsAPI = {
         });
     },
 
+    async addPayment(id: string, amount: number) {
+        return await fetchWithAuth(`/bookings/${id}/payment`, {
+            method: 'POST',
+            body: JSON.stringify({ amount }),
+        });
+    },
+
     async getReview(bookingId: string) {
         return await fetchWithAuth(`/bookings/${bookingId}/review`);
     },

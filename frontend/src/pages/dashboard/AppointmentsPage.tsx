@@ -18,6 +18,7 @@ import {
   Users,
   Scissors,
   FileText,
+  DollarSign,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -89,6 +90,7 @@ interface Booking {
   isReturning?: boolean;
   user_type?: string;
   price_paid?: number;
+  amount_paid?: number;
   discount_amount?: number;
   coupon_code?: string;
 }
@@ -176,6 +178,30 @@ export default function AppointmentsPage() {
   const [followupTime, setFollowupTime] = useState("09:00");
   const [selectedBookingForFollowup, setSelectedBookingForFollowup] = useState<any>(null);
   const [selectedRecordBooking, setSelectedRecordBooking] = useState<any>(null);
+
+  // Payment Management State
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [selectedPaymentBooking, setSelectedPaymentBooking] = useState<Booking | null>(null);
+  const [paymentAmountStr, setPaymentAmountStr] = useState<string>('');
+  const [processingPayment, setProcessingPayment] = useState(false);
+
+  const handleProcessPayment = async () => {
+    if (!selectedPaymentBooking || !paymentAmountStr) return;
+    setProcessingPayment(true);
+    try {
+      await api.bookings.addPayment(selectedPaymentBooking.id, Number(paymentAmountStr));
+      toast({ title: "Payment Recorded", description: "Successfully added manual payment." });
+      setShowPaymentModal(false);
+      setSelectedPaymentBooking(null);
+      setPaymentAmountStr('');
+      fetchBookings();
+    } catch (e) {
+      console.error(e);
+      toast({ title: "Error", description: "Failed to record payment", variant: "destructive" });
+    } finally {
+      setProcessingPayment(false);
+    }
+  };
 
   const handleScheduleFollowup = (booking: any) => {
     setSelectedBookingForFollowup(booking);
@@ -903,9 +929,15 @@ export default function AppointmentsPage() {
                             )}
                             MYR {Number(booking.price || 0).toFixed(2)}
                           </p>
-                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                            {booking.coupon_code ? `Promo: ${booking.coupon_code}` : 'Paid Amount'}
-                          </p>
+                          {(Number(booking.price || 0) > Number(booking.amount_paid || 0)) ? (
+                             <p className="text-xs font-bold uppercase tracking-widest text-rose-500 mt-1 flex justify-end">
+                               Remaining: MYR {(Number(booking.price || 0) - Number(booking.amount_paid || 0)).toFixed(2)}
+                             </p>
+                          ) : (
+                             <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500/80 mt-1 flex justify-end">
+                               Fully Paid
+                             </p>
+                          )}
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -956,6 +988,17 @@ export default function AppointmentsPage() {
                                 <DropdownMenuItem onClick={() => setSelectedRecordBooking(booking)} className="rounded-xl py-3 font-bold text-blue-600 focus:bg-blue-50">
                                   <FileText className="w-4 h-4 mr-3" />
                                   Edit Treatment Record
+                                </DropdownMenuItem>
+                              )}
+
+                              {(isOwner || isManager) && (Number(booking.price || 0) > Number(booking.amount_paid || 0)) && (
+                                <DropdownMenuItem onClick={() => {
+                                  setSelectedPaymentBooking(booking);
+                                  setPaymentAmountStr((Number(booking.price || 0) - Number(booking.amount_paid || 0)).toFixed(2));
+                                  setShowPaymentModal(true);
+                                }} className="rounded-xl py-3 font-bold text-amber-600 focus:bg-amber-50">
+                                  <DollarSign className="w-4 h-4 mr-3" />
+                                  Collect Remaining Payment
                                 </DropdownMenuItem>
                               )}
 
@@ -1095,6 +1138,36 @@ export default function AppointmentsPage() {
               <Button variant="ghost" onClick={() => setShowFollowupDialog(false)}>Cancel</Button>
               <Button onClick={confirmFollowup} className="bg-indigo-600 hover:bg-indigo-700 text-white">
                 Set Reminder
+              </Button>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Payment Management Dialog */}
+        <Dialog open={showPaymentModal} onOpenChange={setShowPaymentModal}>
+          <DialogContent className="sm:max-w-md rounded-2xl">
+            <DialogHeader>
+              <DialogTitle>Collect Payment</DialogTitle>
+              <DialogDescription>
+                Record a manual payment collected at the salon.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <Label>Payment Amount (MYR)</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={paymentAmountStr}
+                  onChange={(e) => setPaymentAmountStr(e.target.value)}
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+            <div className="flex justify-end gap-3">
+              <Button variant="ghost" onClick={() => setShowPaymentModal(false)}>Cancel</Button>
+              <Button onClick={handleProcessPayment} disabled={processingPayment || !paymentAmountStr} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                {processingPayment ? "Recording..." : "Record Payment"}
               </Button>
             </div>
           </DialogContent>
