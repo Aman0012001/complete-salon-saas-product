@@ -116,6 +116,7 @@ const BookAppointment = () => {
   const [selectedConcern, setSelectedConcern] = useState<string | null>(null);
   const [bookingType, setBookingType] = useState<'service' | 'decide_later' | 'package' | 'membership'>('service');
   const [policyAccepted, setPolicyAccepted] = useState(false);
+  const [paymentOption, setPaymentOption] = useState<'full' | 'deposit'>('full');
 
   // Member Details States
   const [memberDetails, setMemberDetails] = useState({
@@ -304,7 +305,7 @@ const BookAppointment = () => {
 
         // We use the first booking ID as reference, or join them
         const referenceId = bookingIds.join(',');
-        const response = await api.toyyibpay.createBill({ booking_id: referenceId });
+        const response = await api.toyyibpay.createBill({ booking_id: referenceId, payment_type: paymentOption });
 
         if (response?.payment_url) {
           window.location.href = response.payment_url;
@@ -973,10 +974,38 @@ const BookAppointment = () => {
                     )}
                   </div>
 
+                  {calculateTotal() > 100 && (
+                    <div className="pt-8 border-t border-slate-100 space-y-4">
+                      <Label className="text-xs font-black uppercase tracking-widest text-slate-400">Payment Option</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div 
+                          onClick={() => setPaymentOption('deposit')} 
+                          className={cn("p-4 border-2 rounded-xl cursor-pointer transition-all", paymentOption === 'deposit' ? "border-accent bg-accent/5" : "border-slate-100 bg-white")}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-sm">Pay Deposit Only</span>
+                            {paymentOption === 'deposit' && <CheckCircle2 className="w-5 h-5 text-accent" />}
+                          </div>
+                          <p className="text-xs text-slate-500 mt-2">Pay RM 100 now to secure your booking. The remaining balance will be paid at the salon.</p>
+                        </div>
+                        <div 
+                          onClick={() => setPaymentOption('full')} 
+                          className={cn("p-4 border-2 rounded-xl cursor-pointer transition-all", paymentOption === 'full' ? "border-accent bg-accent/5" : "border-slate-100 bg-white")}
+                        >
+                          <div className="flex justify-between items-center">
+                            <span className="font-bold text-sm">Pay Full Amount</span>
+                            {paymentOption === 'full' && <CheckCircle2 className="w-5 h-5 text-accent" />}
+                          </div>
+                          <p className="text-xs text-slate-500 mt-2">Pay RM {calculateTotal().toFixed(2)} to complete your payment.</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="pt-12 border-t border-slate-100 flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="text-center md:text-left w-full md:w-auto flex justify-between md:block items-center">
-                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0 md:mb-2">Total Reservation Value</p>
-                      <p className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">RM {calculateTotal().toFixed(2)}</p>
+                      <p className="text-[10px] font-black uppercase tracking-widest text-slate-400 mb-0 md:mb-2">{paymentOption === 'deposit' && calculateTotal() > 100 ? 'Amount to Pay Now' : 'Total Reservation Value'}</p>
+                      <p className="text-3xl md:text-5xl font-black text-slate-900 tracking-tighter">RM {paymentOption === 'deposit' && calculateTotal() > 100 ? '100.00' : calculateTotal().toFixed(2)}</p>
                     </div>
 
                     <div className="w-full md:w-auto">

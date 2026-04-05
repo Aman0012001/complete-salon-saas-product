@@ -962,7 +962,7 @@ export const api = {
         },
     },
     toyyibpay: {
-        createBill: (data: { booking_id: string }) =>
+        createBill: (data: { booking_id: string; payment_type?: 'full' | 'deposit' }) =>
             fetchWithAuth('/toyyibpay/create-bill', {
                 method: 'POST',
                 body: JSON.stringify(data),
