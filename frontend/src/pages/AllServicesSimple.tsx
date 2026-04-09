@@ -28,6 +28,7 @@ import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { getImageUrl } from "@/utils/imageUrl";
 import { useAuth } from "@/hooks/useAuth";
+import { useLocation } from "react-router-dom";
 import {
   Pagination,
   PaginationContent,
@@ -89,6 +90,26 @@ const AllServicesSimple = () => {
   const itemsPerPage = 12;
   const [email, setEmail] = useState("");
 
+
+  const location = useLocation();
+  useEffect(() => {
+    if (location.state?.category) {
+      setActiveCategory(location.state.category);
+
+      setTimeout(() => {
+        const section = document.getElementById("services-list");
+        if (section) {
+          const yOffset = -120; // 👈 adjust karo (navbar + spacing)
+          const y =
+            section.getBoundingClientRect().top +
+            window.pageYOffset +
+            yOffset;
+
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }, 100);
+    }
+  }, [location.state]);
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
@@ -174,6 +195,7 @@ const AllServicesSimple = () => {
     return matchesSearch && matchesCategory;
   });
 
+
   const totalPages = Math.ceil(filteredServices.length / itemsPerPage);
   const paginatedServices = filteredServices.slice(
     (currentPage - 1) * itemsPerPage,
@@ -201,16 +223,24 @@ const AllServicesSimple = () => {
     }
     window.location.href = `/book?salonId=${service.salon_id}&serviceId=${service.id}`;
   };
+  useEffect(() => {
+    if (location.state?.category) {
+      setActiveCategory(location.state.category);
 
+      setTimeout(() => {
+        window.scrollTo({ top: 400, behavior: "smooth" });
+      }, 100);
+    }
+  }, [location.state]);
 
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <Navbar />
 
       {/* Services Banner */}
-      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden">
+      <section className="relative w-full h-[80vh] flex items-center justify-center overflow-hidden" id="services-list">
         <img
-          src="https://images.unsplash.com/photo-1560066984-138dadb4c035?q=80&w=2074&auto=format&fit=crop"
+          src="https://i.ibb.co/x8g8kq9J/IMG-7753-JPG-1.jpg"
           alt="Services Banner"
           className="absolute inset-0 w-full h-full object-cover"
         />

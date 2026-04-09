@@ -62,7 +62,7 @@ const NewsletterPopup = () => {
                     {/* Left Side - Image */}
                     <div className="relative w-full md:w-1/2 h-40 sm:h-48 md:h-auto overflow-hidden">
                         <img
-                            src="/images/salon_banner_1.png"
+                            src="https://i.ibb.co/PvFZFCdQ/IMG-7766-JPG.jpg"
                             alt="Salon Experience"
                             className="absolute inset-0 w-full h-full object-cover"
                         />
