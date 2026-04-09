@@ -156,28 +156,28 @@ const InsideSpaceSection = () => {
 
             title: "Facial",
             category: "Facial",
-            image: "https://i.ibb.co/5NmHy8d/IMG-7762-JPG.jpg",
+            image: "/images/1.jpeg",
             redirect: "/services-simple" // 👈 yaha change karna hai
         },
         {
 
             title: "Laser Hair Removal ",
             category: "Laser",
-            image: "https://i.ibb.co/ZRdGFQkY/IMG-7756-JPG.jpg",
+            image: "/images/2.jpeg",
             redirect: "/services-simple"
         },
         {
 
             title: "Skin Tech",
             category: "Skin Tech",
-            image: "https://i.ibb.co/8nD2rrSq/IMG-7757-JPG.jpg",
+            image: "/images/3.jpeg",
             redirect: "/services-simple"
         },
         {
 
             title: "Skin Care",
             category: null,
-            image: "https://i.ibb.co/gL5rNQ8b/IMG-7760-JPG.jpg",
+            image: "/images/4.jpeg",
             redirect: "/shop"
         }
     ];
