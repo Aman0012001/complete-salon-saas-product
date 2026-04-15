@@ -154,7 +154,7 @@ const InsideSpaceSection = () => {
     const services = [
         {
 
-            title: "Facial",
+            title: "Facials",
             category: "Facial",
             image: "/images/1.jpeg",
             redirect: "/services-simple" // 👈 yaha change karna hai
@@ -168,8 +168,8 @@ const InsideSpaceSection = () => {
         },
         {
 
-            title: "Skin Tech",
-            category: "Skin Tech",
+            title: "Skin Programmes",
+            category: "Skin Programmes",
             image: "/images/3.jpeg",
             redirect: "/services-simple"
         },
@@ -199,7 +199,7 @@ const InsideSpaceSection = () => {
                         className="space-y-4"
                     >
                         <h2 className="text-4xl md:text-5xl lg:text-[3rem] font-bold text-foreground tracking-tight">
-                            Inside Our Space Salons
+                            Inside Our Space
                         </h2>
                     </motion.div>
                 </div>

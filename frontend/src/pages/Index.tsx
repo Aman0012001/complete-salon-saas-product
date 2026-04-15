@@ -53,9 +53,9 @@ const Index = () => {
         <GlowConfidenceSection />
       </div>
 
-      <div id="facial-menu">
+      {/* <div id="facial-menu">
         <FacialMenuSection />
-      </div>
+      </div> */}
 
       <div id="featured-facial">
         <FeaturedFacialSection />

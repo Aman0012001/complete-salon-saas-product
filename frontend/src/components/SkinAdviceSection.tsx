@@ -8,7 +8,7 @@ const SkinAdviceSection = () => {
     return (
         <section className="pb-24 bg-white relative">
             <div className="max-w-[1400px] mx-auto px-4 md:px-12">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16">
                     {/* Option 1: Signature Facial */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -17,9 +17,9 @@ const SkinAdviceSection = () => {
                         transition={{ duration: 0.6 }}
                         className="flex flex-col items-center space-y-4"
                     >
-                        <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] text-center">
-                            NOT SURE WHICH TO CHOOSE?
-                        </span>
+                        {/* <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] text-center">
+                            Noam SKN Custom Facial
+                        </span> */}
                         <button
                             onClick={() => window.location.href = "mailto:skinnoam@gmail.com?subject=Inquiry: Noam's Signature Custom Facial"}
                             className="w-full max-w-sm py-5 px-8 bg-[#F3EFE9] rounded-2xl text-[13px] md:text-sm font-black text-[#1A2338] hover:bg-[#EAE4DB] transition-all tracking-tight"
@@ -28,6 +28,23 @@ const SkinAdviceSection = () => {
                         </button>
                     </motion.div>
 
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="flex flex-col items-center space-y-4"
+                    >
+                        {/* <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] text-center">
+                            Noam SKN Custom Facial
+                        </span> */}
+                        <button
+                            onClick={() => window.location.href = "mailto:skinnoam@gmail.com?subject=Inquiry: Noam's Signature Custom Facial"}
+                            className="w-full max-w-sm py-5 px-8 bg-[#F3EFE9] rounded-2xl text-[13px] md:text-sm font-black text-[#1A2338] hover:bg-[#EAE4DB] transition-all tracking-tight"
+                        >
+                            New Client
+                        </button>
+                    </motion.div>
                     {/* Option 2: Consultation */}
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -36,9 +53,9 @@ const SkinAdviceSection = () => {
                         transition={{ duration: 0.6, delay: 0.1 }}
                         className="flex flex-col items-center space-y-4"
                     >
-                        <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] text-center">
+                        {/* <span className="text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-[0.2em] text-center">
                             PREFER PERSONAL ADVICE FIRST?
-                        </span>
+                        </span> */}
                         <button
                             onClick={() => window.open("https://wa.me/601123198819", "_blank")}
                             className="w-full max-w-sm py-5 px-8 bg-[#F3EFE9] rounded-2xl text-[13px] md:text-sm font-black text-[#1A2338] hover:bg-[#25D366] hover:text-white transition-all tracking-tight flex items-center justify-center gap-3 group"

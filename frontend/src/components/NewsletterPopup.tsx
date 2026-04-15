@@ -56,8 +56,8 @@ const NewsletterPopup = () => {
     };
 
     return (
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-            <DialogContent className="w-[92vw] sm:max-w-4xl p-0 overflow-hidden border-none bg-white rounded-3xl shadow-2xl">
+        <Dialog open={isOpen} onOpenChange={setIsOpen} >
+            <DialogContent className="w-[92vw] sm:max-w-4xl p-0 overflow-hidden border-none rounded-3xl shadow-2xl bg-transparent">
                 <div className="flex flex-col md:flex-row h-full md:min-h-[450px]">
                     {/* Left Side - Image */}
                     <div className="relative w-full md:w-1/2 h-40 sm:h-48 md:h-auto overflow-hidden">

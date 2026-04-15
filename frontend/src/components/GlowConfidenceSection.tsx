@@ -16,7 +16,7 @@ const GlowConfidenceSection = () => {
     const services = [
         { name: "FACIALS", link: "/salons?category=Facials" },
         { name: "HAIR REMOVAL", link: "/salons?category=Hair Removal" },
-        { name: "SKIN TECH", link: "/salons?category=Skin Tech" },
+        { name: "SKIN PROGRAMMES", link: "/salons?category=Skin Programmes" },
     ];
 
     return (
@@ -31,12 +31,10 @@ const GlowConfidenceSection = () => {
                         transition={{ duration: 0.6 }}
                         className="flex flex-col items-center"
                     >
-                        <span className="text-[10px] md:text-xs font-bold text-slate-300 uppercase tracking-[0.3em] mb-4">
-                            GLOW WITH CONFIDENCE
-                        </span>
+
 
                         <h2 className="text-4xl md:text-[3rem] font-black text-[#1A2338] tracking-tight leading-[1.1] uppercase">
-                            GLOW WITH CONFIDENCE<br className="hidden md:block" />
+                            Because Healthy Skin Starts With Care<br className="hidden md:block" />
                         </h2>
                     </motion.div>
 
@@ -48,7 +46,8 @@ const GlowConfidenceSection = () => {
                         transition={{ duration: 0.6, delay: 0.1 }}
                         className="text-base md:text-xl text-slate-500 font-medium leading-relaxed"
                     >
-                        Experience personalized facial care in a calm, welcoming space. Our treatments are designed to refresh, rejuvenate, and enhance your natural glow — while supporting your overall well-being.
+                        We believe great skin begins with thoughtful care.
+                        At NoamSkin, treatments are designed to support healthier, clearer and naturally radiant skin in a calm and welcoming space.
                     </motion.p>
 
                     {/* CTA with Sheet */}
@@ -72,7 +71,7 @@ const GlowConfidenceSection = () => {
                             <SheetContent side="left" className="w-full sm:max-w-md border-r-0 p-12 flex flex-col gap-12">
                                 <SheetHeader className="text-left space-y-8">
                                     <img
-                                        src="/src/assets/logo.png"
+                                        src="https://i.ibb.co/gLDv9pcN/logo.png"
                                         alt="Noamskin Logo"
                                         className="w-28 object-contain"
                                     />

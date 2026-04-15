@@ -225,7 +225,7 @@ const ContactUs = () => {
                 </div>
                 <div>
                   <h4 className="text-[10px] uppercase tracking-[0.2em] font-semibold mb-4 text-muted-foreground">Operating Hours</h4>
-                  <p className="font-light leading-loose text-[15px]">
+                  {/* <p className="font-light leading-loose text-[15px]">
                     Monday: Closed<br />
                     Tuesday: 2 PM - 12 AM<br />
                     Wednesday: 11 AM - 7 PM<br />
@@ -233,6 +233,13 @@ const ContactUs = () => {
                     Friday: 2 PM - 12 AM<br />
                     Saturday: 2 PM - 12 AM<br />
                     Sunday: 11 AM - 7 PM
+                  </p> */}
+
+                  <p className="font-light leading-loose text-[15px]">
+                    Wednesday - Sunday : 11:00 AM - 11 :00 PM<br />
+                    Monday - Tuesday : CLOSED<br />
+
+
                   </p>
                 </div>
                 <div>

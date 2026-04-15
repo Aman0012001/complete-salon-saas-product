@@ -59,14 +59,13 @@ const FeaturedFacialSection = () => {
 
                     {/* Heading */}
                     <h2 className="text-4xl md:text-[3.2rem] leading-[1.1] font-medium text-[#1A2338]">
-                        MIAMI'S #1 <br /> BUCCAL FACIAL <br /> MASSAGE
+                        Noam SKN Custom Facial
+
                     </h2>
 
                     {/* Description */}
                     <p className="text-base md:text-lg text-slate-600 leading-relaxed">
-                        A best-seller and favorite facial among many skincare lovers.
-                        The Buccal Facial Massages allows you to fully target the lower
-                        muscles of the face.
+                        A fully customised facial tailored to your skin needs, using an advanced and intensive approach. Designed to target specific concerns with enhanced techniques and targeted treatment masks for visible, longer-lasting results.
                     </p>
 
                     {/* Button */}

@@ -197,7 +197,7 @@ export default function ServiceDetail() {
                         onClick={() => handleBooking(`/book?salonId=${service.salon_id}&serviceId=${service.id}`)}
                         className="bg-[#214E78] hover:bg-[#1a3d5e] text-white font-bold h-14 px-10 rounded-full shadow-md text-sm uppercase tracking-wider"
                     >
-                        Schedule This Appoitment
+                        Schedule This Appointment
                     </Button>
                 </div>
 
