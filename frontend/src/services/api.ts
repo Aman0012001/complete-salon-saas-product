@@ -217,8 +217,13 @@ export const salonsAPI = {
 
 // Services API
 export const servicesAPI = {
-    async getAll() {
-        const data = await fetchWithAuth('/services');
+    async getAll(filters?: { featured?: boolean | number }) {
+        let url = '/services';
+        const params = new URLSearchParams();
+        if (filters?.featured) params.append('featured', filters.featured ? '1' : '0');
+        if (params.toString()) url += `?${params.toString()}`;
+        
+        const data = await fetchWithAuth(url);
         return toArray(data, 'services');
     },
 

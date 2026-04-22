@@ -78,6 +78,7 @@ interface Service {
   image_url: string | null;
   image_public_id: string | null;
   is_active: boolean;
+  is_featured: boolean;
   cost_price: number;
 }
 
@@ -110,6 +111,7 @@ export default function ServicesPage() {
     image_url: "",
     image_public_id: "",
     is_active: true,
+    is_featured: false,
     cost_price: "",
   });
 
@@ -155,6 +157,7 @@ export default function ServicesPage() {
       image_url: "",
       image_public_id: "",
       is_active: true,
+      is_featured: false,
       cost_price: "",
     });
     setEditingService(null);
@@ -238,6 +241,7 @@ export default function ServicesPage() {
       image_url: service.image_url || "",
       image_public_id: service.image_public_id || "",
       is_active: service.is_active,
+      is_featured: service.is_featured || false,
       cost_price: service.cost_price?.toString() || "0",
     });
     if (service.category && !isPredefined) {
@@ -262,6 +266,7 @@ export default function ServicesPage() {
         image_url: formData.image_url || null,
         image_public_id: formData.image_public_id || null,
         is_active: formData.is_active,
+        is_featured: formData.is_featured,
         cost_price: parseFloat(formData.cost_price) || 0,
         salon_id: currentSalon.id,
       };
@@ -719,6 +724,26 @@ export default function ServicesPage() {
                           setFormData({ ...formData, is_active: checked })
                         }
                         className="data-[state=checked]:bg-accent"
+                      />
+                    </div>
+                    
+                    <div className="flex items-center justify-between p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20 shadow-inner mt-4">
+                      <div className="space-y-0.5">
+                        <Label htmlFor="is_featured" className="text-sm font-bold text-foreground flex items-center gap-2">
+                          <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                          Featured Service
+                        </Label>
+                        <p className="text-xs text-muted-foreground font-medium">
+                          {formData.is_featured ? "Highlighted on the main homepage section" : "Standard service list display"}
+                        </p>
+                      </div>
+                      <Switch
+                        id="is_featured"
+                        checked={formData.is_featured}
+                        onCheckedChange={(checked) =>
+                          setFormData({ ...formData, is_featured: checked })
+                        }
+                        className="data-[state=checked]:bg-amber-500"
                       />
                     </div>
                   </div>

@@ -22,6 +22,7 @@ interface SimpleService {
   staff_count?: number;
   rating?: number;
   review_count?: number;
+  is_featured?: boolean;
 }
 
 const SkinConcernSection = () => {
@@ -33,9 +34,9 @@ const SkinConcernSection = () => {
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const data = await api.services.getAll();
-                // Optionally take top 5 to match original design grid
-                setServices((data || []).slice(0, 5));
+                const data = await api.services.getAll({ featured: 1 });
+                // Optionally take top 6 to map well to the grid
+                setServices((data || []).slice(0, 6));
             } catch (error) {
                 console.error("Error fetching services:", error);
             }
