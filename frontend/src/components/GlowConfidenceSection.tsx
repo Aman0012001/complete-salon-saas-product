@@ -14,10 +14,27 @@ const GlowConfidenceSection = () => {
     const navigate = useNavigate();
 
     const services = [
-        { name: "FACIALS", link: "/salons?category=Facials" },
-        { name: "HAIR REMOVAL", link: "/salons?category=Hair Removal" },
-        { name: "SKIN PROGRAMMES", link: "/salons?category=Skin Programmes" },
+        {
+            name: "FACIALS",
+            category: "Facial",
+            redirect: "/services-simple",
+        },
+        {
+            name: "HAIR REMOVAL",
+            category: "Laser",
+            redirect: "/services-simple",
+        },
+        {
+            name: "SKIN PROGRAMMES",
+            category: "Skin Care",
+            redirect: "/services-simple",
+        },
     ];
+    const handleServiceClick = (service) => {
+        navigate(service.redirect, {
+            state: { category: service.category },
+        });
+    };
 
     return (
         <section className="py-24 bg-white overflow-hidden">
@@ -84,7 +101,7 @@ const GlowConfidenceSection = () => {
                                     {services.map((service) => (
                                         <button
                                             key={service.name}
-                                            onClick={() => navigate(service.link)}
+                                            onClick={() => handleServiceClick(service)}
                                             className="flex items-center justify-between w-full group py-2"
                                         >
                                             <span className="text-lg font-black tracking-widest text-[#1A2338] group-hover:text-accent transition-colors">

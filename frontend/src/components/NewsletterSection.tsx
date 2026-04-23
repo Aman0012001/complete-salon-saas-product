@@ -56,7 +56,7 @@ const NewsletterSection = () => {
 
   return (
     <section className="py-12 md:py-24 px-4 overflow-hidden relative">
-      <div className="container mx-auto">
+      <div className="container mx-auto mobc">
         <div className="bg-[#0A0A0A] text-white rounded-[2.5rem] p-10 md:p-24 text-center  mx-auto relative overflow-hidden shadow-2xl">
           {/* Subtle Inner Glow */}
           <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />

@@ -18,12 +18,20 @@ const FeaturedFacialSection = () => {
         { name: "FACIALS", link: "/salons?category=Facials" },
         { name: "SKIN CONSULT", link: "/salons?category=Consultation" },
     ];
-
+    const facialService = {
+        category: "Facial",
+        redirect: "/services-simple",
+    };
+    const handleBookNow = () => {
+        navigate(facialService.redirect, {
+            state: { category: facialService.category },
+        });
+    };
     return (
         <section className="w-full grid grid-cols-1 md:grid-cols-2 items-center py-20">
 
             {/* LEFT IMAGE */}
-            <div className="flex justify-center md:justify-start pl-6 md:pl-16 lg:pl-24">
+            <div className="flex justify-center md:justify-start pl-6 md:pl-16 lg:pl-24 pl6">
                 <div className="w-full max-w-[650px]">
 
                     <motion.div
@@ -69,7 +77,10 @@ const FeaturedFacialSection = () => {
                     </p>
 
                     {/* Button */}
-                    <button className="mt-4 text-xs uppercase tracking-[0.3em] group">
+                    <button
+                        onClick={handleBookNow}
+                        className="mt-4 text-xs uppercase tracking-[0.3em] group"
+                    >
                         BOOK NOW
                         <span className="block w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full mt-1"></span>
                     </button>

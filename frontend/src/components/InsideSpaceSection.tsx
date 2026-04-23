@@ -169,7 +169,7 @@ const InsideSpaceSection = () => {
         {
 
             title: "Skin Programmes",
-            category: "Skin Programmes",
+            category: "Skin Care",
             image: "/images/3.jpeg",
             redirect: "/services-simple"
         },

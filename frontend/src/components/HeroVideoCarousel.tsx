@@ -30,7 +30,7 @@ const HeroVideoCarousel = () => {
     }, []);
 
     return (
-        <section className="relative w-full h-[700px] md:h-[600px] lg:h-[690px] overflow-hidden bg-[#FAF9F6]">
+        <section className="relative w-full h-[500px] md:h-[600px] lg:h-[690px] overflow-hidden bg-[#FAF9F6]">
             {/* Background Layer */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 overflow-hidden">
@@ -40,14 +40,19 @@ const HeroVideoCarousel = () => {
                         loop
                         playsInline
                         // poster="/images/salon_banner_1.png"
-                        className="w-full h-full object-cover scale-105  contrast-[1.0]"
+                        className="w-full h-full object-cover object-center scale-105 contrast-[1.0]"
                     >
+                        {/* Try MP4 first for broader compatibility (especially Android/Mobile) */}
                         <source
-                            src="/hero.MOV"
-                            // src="/herovideo.MP4"
+                            src="/herovideo.MP4"
                             type="video/mp4"
                         />
-                        Your browser does not support the video tag.
+                        {/* Fallback to MOV */}
+                        <source
+                            src="/hero.MOV"
+                            type="video/quicktime"
+                        />
+                        {/* Your browser does not support the video tag. */}
                     </video>
                 </div>
 
