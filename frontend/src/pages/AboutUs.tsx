@@ -46,7 +46,7 @@ const AboutUs = () => {
               </p>
             </div>
             <div className="rounded-3xl overflow-hidden  h-[400px]">
-              <img src="https://i.ibb.co/QFphMTg9/fcce72cd-a4a6-463f-ad06-8e919dc5c3a8.jpg" alt="Our Philosophy" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+              <img src="https://i.ibb.co/ksjp4tHP/IMG-0208-JPG.jpg" alt="Our Philosophy" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
             </div>
           </div>
 
@@ -58,7 +58,7 @@ const AboutUs = () => {
           {/* Our Approach */}
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1 rounded-3xl overflow-hidden  h-[400px]">
-              <img src="https://i.ibb.co/tPD3qJqM/9b02eb3d-955e-4664-8cc1-732dae646112.jpg" alt="Our Approach" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+              <img src="https://i.ibb.co/HLH9QWNW/IMG-0170-JPG.jpg" alt="Our Approach" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
             </div>
             <div className="order-1 md:order-2">
               <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mb-6">
@@ -88,7 +88,7 @@ const AboutUs = () => {
               </p>
             </div>
             <div className="rounded-3xl overflow-hidden  h-[400px]">
-              <img src="https://i.ibb.co/tMWMhsrT/ce3a5204-deab-4f34-9dbc-e69e9f1bcb29.jpg" alt="Our Studio" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+              <img src="https://i.ibb.co/ZRJ2GfFB/IMG-3007-JPG.jpg" alt="Our Studio" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
             </div>
           </div>
 
@@ -100,7 +100,7 @@ const AboutUs = () => {
           {/* Designed for Your Schedule */}
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <div className="order-2 md:order-1 rounded-3xl overflow-hidden  h-[400px]">
-              <img src="https://i.ibb.co/hJJXXP2S/491575c8-285c-411b-b187-930434e6f7e1.jpg" alt="Designed for Your Schedule" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
+              <img src="https://i.ibb.co/qLQvSgT1/IMG-2868-JPG.jpg" alt="Designed for Your Schedule" className="w-full h-full object-cover transition-transform duration-700 hover:scale-105" />
             </div>
             <div className="order-1 md:order-2">
               <div className="w-14 h-14 bg-accent/10 rounded-2xl flex items-center justify-center mb-6">

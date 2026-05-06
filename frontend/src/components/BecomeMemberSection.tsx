@@ -46,7 +46,7 @@ const BecomeMemberSection = () => {
                 </div>
 
                 {/* Full Bleed Image - Right Side */}
-                <div className="flex justify-center lg:justify-end pr-6 md:pr-16 lg:pr-24 order-1 lg:order-2">
+                <div className="flex justify-center lg:justify-end p-4 md:pr-16 lg:pr-24 order-1 lg:order-2">
                     <div className="w-full max-w-[650px]">
 
                         <motion.div
@@ -56,8 +56,7 @@ const BecomeMemberSection = () => {
                             className="relative rounded-[2.5rem] overflow-hidden "
                         >
                             <img
-                                src="https://i.ibb.co/YFmynKJX/fcce72cd-a4a6-463f-ad06-8e919dc5c3a8.jpg"
-                                alt="Become a Member Experience"
+                                src="https://i.ibb.co/RwVzrMC/IMG-9112-JPG.jpg" alt="Become a Member Experience"
                                 className="w-full h-[500px] md:h-[650px] object-cover"
                             />
                         </motion.div>

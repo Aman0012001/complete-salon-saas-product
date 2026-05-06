@@ -41,7 +41,7 @@ const FeaturedFacialSection = () => {
                         className="relative rounded-[2.5rem] overflow-hidden"
                     >
                         <img
-                            src="https://i.ibb.co/7tmhgNHW/9b02eb3d-955e-4664-8cc1-732dae646112.jpg"
+                            src="https://i.ibb.co/HTySgqhz/IMG-9100-JPG.jpg"
                             alt="facial treatment"
                             className="w-full h-[500px] md:h-[650px] object-cover"
                         />
@@ -77,13 +77,13 @@ const FeaturedFacialSection = () => {
                     </p>
 
                     {/* Button */}
-                    <button
+                    {/* <button
                         onClick={handleBookNow}
                         className="mt-4 text-xs uppercase tracking-[0.3em] group"
                     >
                         BOOK NOW
                         <span className="block w-0 h-[1px] bg-black transition-all duration-300 group-hover:w-full mt-1"></span>
-                    </button>
+                    </button> */}
 
                 </div>
             </motion.div>
