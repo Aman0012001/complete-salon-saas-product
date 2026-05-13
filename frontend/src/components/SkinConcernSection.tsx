@@ -65,15 +65,15 @@ const SkinConcernSection = () => {
                 {/* Header */}
                 <div className="text-center mb-16 space-y-4">
                     <span className="text-[10px] tracking-[0.4em] uppercase text-slate-400">
-                        Skin Concerns & Solutions
+                        Tailored To You
                     </span>
 
                     <h2 className="text-3xl md:text-5xl font-medium text-[#1A2338]">
-                        What's Your Main Skin Concern?
+                       Facials Designed for Real Skin.
                     </h2>
 
                     <p className="text-sm text-slate-400 max-w-xl mx-auto">
-                        Select your concern to view the recommended treatment.
+                       Every treatment is customised to your skin’s unique needs using advanced techniques, professional-grade products, and expert care.
                     </p>
                 </div>
 

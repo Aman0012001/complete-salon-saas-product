@@ -44,7 +44,7 @@ const SkinAdviceSection = () => {
                     <motion.div
                         whileHover={{ scale: 1.02 }}
                         className="bg-[#F3EFE9] flex-1 rounded-2xl p-5 flex items-center justify-between cursor-pointer transition-all"
-                        onClick={() => window.location.href = "/booking"}
+                        onClick={() => window.location.href = "/services-simple"}
                     >
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300">
