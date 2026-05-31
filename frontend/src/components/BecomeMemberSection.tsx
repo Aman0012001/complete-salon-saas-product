@@ -74,7 +74,7 @@ const BecomeMemberSection = () => {
                         Sign up today to start earning rewards for your everyday skincare.
                     </p>
                     <div className="flex justify-center">
-                        <Link to="/book">
+                        <Link to="/membership">
                             <Button size="lg" className="bg-accent hover:bg-accent/90 text-white px-10 py-6 text-lg rounded-xl shadow-xl shadow-accent/20 transition-all hover:-translate-y-1">
                                 Become a Member
                                 <ArrowRight className="w-5 h-5 ml-2" />

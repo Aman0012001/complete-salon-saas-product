@@ -235,3 +235,13 @@ html {
 body {
   overflow-x: hidden;
 }
+
+@media (max-width: 767px) {
+  .mobielvideo {
+    margin-top: 83px !important
+  }
+
+  .mobileinsight {
+    padding-top: 4rem !important
+  }
+}

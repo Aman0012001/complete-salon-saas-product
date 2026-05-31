@@ -188,7 +188,7 @@ const InsideSpaceSection = () => {
     };
 
     return (
-        <section className="py-24 px-4 bg-muted/30 overflow-hidden">
+        <section className="py-24 px-4 bg-muted/30 overflow-hidden mobileinsight">
             <div className="container mx-auto">
                 <div className="max-w-4xl mx-auto text-center mb-16 px-4">
                     <motion.div
