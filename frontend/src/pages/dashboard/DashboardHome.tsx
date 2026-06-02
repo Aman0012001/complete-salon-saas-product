@@ -457,9 +457,9 @@ export default function DashboardHome() {
           ))}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-1 gap-8">
           {/* Live Queue */}
-          <div className="lg:col-span-2 space-y-5">
+          {/* <div className="lg:col-span-2 space-y-5">
             <div className="flex items-center justify-between px-2">
               <div className="flex items-center gap-3">
                 <h3 className="text-xl font-bold text-foreground leading-none">Live Queue</h3>
@@ -548,7 +548,7 @@ export default function DashboardHome() {
                 )}
               </AnimatePresence>
             </div>
-          </div>
+          </div> */}
 
           {/* Quick Controls */}
           <div className="space-y-6">
@@ -557,7 +557,7 @@ export default function DashboardHome() {
               <p className="text-[10px] font-bold uppercase text-muted-foreground tracking-widest mt-1">Direct access to controls</p>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
+            <div className="grid grid-cols-2 gap-4">
               {[
                 { label: "Our Services", icon: Scissors, path: "/salon/services", desc: "Manage treatment catalog", color: "text-orange-500", bg: "bg-orange-500/10" },
                 { label: "Team Management", icon: Users2, path: "/salon/staff", desc: "Staff & specialist profiles", color: "text-blue-500", bg: "bg-blue-500/10" },

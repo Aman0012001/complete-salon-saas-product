@@ -275,32 +275,6 @@ export default function UserProfile() {
                             </Card>
                         </motion.div>
 
-                        {/* Quick Action Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {[
-                                { title: "Find Salons", desc: "Explore elite grooming spots", icon: Search, link: "/salons", color: "bg-accent text-white" },
-                                { title: "Your Sessions", desc: "View detailed treatment records", icon: History, link: "/my-bookings", color: "bg-indigo-600 text-white" }
-                            ].map((action, i) => (
-                                <motion.div
-                                    key={action.title}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ duration: 0.5, delay: 0.4 + (i * 0.1) }}
-                                >
-                                    <Link to={action.link}>
-                                        <Card className="border-none shadow-[0_8px_30px_rgb(0,0,0,0.02)] bg-white rounded-[2rem] overflow-hidden group hover:shadow-xl transition-all duration-300 h-full">
-                                            <CardContent className="p-8">
-                                                <div className={`w-14 h-14 ${action.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg shadow-black/5`}>
-                                                    <action.icon className="w-6 h-6" />
-                                                </div>
-                                                <h3 className="text-xl font-black text-slate-900 tracking-tight">{action.title}</h3>
-                                                <p className="text-slate-400 font-bold text-[10px] uppercase tracking-widest mt-2 leading-relaxed">{action.desc}</p>
-                                            </CardContent>
-                                        </Card>
-                                    </Link>
-                                </motion.div>
-                            ))}
-                        </div>
                     </div>
 
                     {/* Right Column: Health & Loyalty */}

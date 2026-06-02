@@ -335,11 +335,11 @@ const App = () => {
                             <AdminSalons />
                           </RoleProtectedRoute>
                         } />
-                        <Route path="/super-admin/payments" element={
+                        {/* <Route path="/super-admin/payments" element={
                           <RoleProtectedRoute allowedRole="SUPER_ADMIN">
                             <AdminPaymentsEnhanced />
                           </RoleProtectedRoute>
-                        } />
+                        } /> */}
                         <Route path="/super-admin/users" element={
                           <RoleProtectedRoute allowedRole="SUPER_ADMIN">
                             <AdminUsersEnhanced />

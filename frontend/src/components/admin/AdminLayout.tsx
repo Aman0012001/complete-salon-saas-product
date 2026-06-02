@@ -70,7 +70,7 @@ const navigation = [
     title: "Economy & Billing",
     items: [
       { icon: Coins, label: "Point System", path: "/super-admin/settings?tab=economy" },
-      { icon: CreditCard, label: "Payments", path: "/super-admin/payments" },
+      // { icon: CreditCard, label: "Payments", path: "/super-admin/payments" },
       { icon: ShoppingCart, label: "Orders", path: "/super-admin/orders" },
     ]
   },
@@ -81,12 +81,12 @@ const navigation = [
       // { icon: Megaphone, label: "Marketing", path: "/super-admin/marketing" },
     ]
   },
-  {
-    title: "Platform",
-    items: [
-      { icon: Settings, label: "Platform Settings", path: "/super-admin/settings" },
-    ]
-  }
+  // {
+  //   title: "Platform",
+  //   items: [
+  //     { icon: Settings, label: "Platform Settings", path: "/super-admin/settings" },
+  //   ]
+  // }
 ];
 
 export function AdminLayout({ children }: AdminLayoutProps) {
@@ -259,14 +259,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <header className="hidden lg:flex sticky top-0 z-40 h-16 items-center gap-4 border-b border-gray-700 bg-gray-800/80 backdrop-blur-sm px-8 shadow-sm">
           <div className="flex-1" />
 
-          <Button
+          {/* <Button
             variant="ghost"
             size="icon"
             className="text-gray-300 hover:text-white hover:bg-gray-700/50 rounded-xl"
             onClick={toggleTheme}
           >
             {theme === 'light' ? <Moon className="w-5 h-5" /> : <Sun className="w-5 h-5" />}
-          </Button>
+          </Button> */}
 
           <NotificationSystem />
 
